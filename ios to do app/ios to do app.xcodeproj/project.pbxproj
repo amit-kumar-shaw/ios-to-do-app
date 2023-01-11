@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400A2631296D5C6B00FA45E7 /* TodoView.swift */; };
+		404EC67A296ECFF6006E6D59 /* SlideOverCard in Frameworks */ = {isa = PBXBuildFile; productRef = 404EC679296ECFF6006E6D59 /* SlideOverCard */; };
 		7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7CFE82964DD58008F0702 /* ios_to_do_appApp.swift */; };
 		7CE7CFEB2964DD58008F0702 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7CFEA2964DD58008F0702 /* ContentView.swift */; };
 		7CE7CFED2964DD5A008F0702 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CE7CFEC2964DD5A008F0702 /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		400A2631296D5C6B00FA45E7 /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
+		407EB1D8296ED142005F79D8 /* swiftUI-slide-over-card */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "swiftUI-slide-over-card"; path = "../../../swiftUI-slide-over-card"; sourceTree = "<group>"; };
 		7CE7CFE52964DD58008F0702 /* ios to do app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios to do app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE7CFE82964DD58008F0702 /* ios_to_do_appApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ios_to_do_appApp.swift; sourceTree = "<group>"; };
 		7CE7CFEA2964DD58008F0702 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				404EC67A296ECFF6006E6D59 /* SlideOverCard in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,13 +81,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		404EC678296ECFF6006E6D59 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		407EB1D7296ED142005F79D8 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				407EB1D8296ED142005F79D8 /* swiftUI-slide-over-card */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		7CE7CFDC2964DD58008F0702 = {
 			isa = PBXGroup;
 			children = (
+				407EB1D7296ED142005F79D8 /* Packages */,
 				7CE7CFE72964DD58008F0702 /* ios to do app */,
 				7CE7CFFE2964DD5A008F0702 /* ios to do appTests */,
 				7CE7D0082964DD5A008F0702 /* ios to do appUITests */,
 				7CE7CFE62964DD58008F0702 /* Products */,
+				404EC678296ECFF6006E6D59 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -154,6 +174,9 @@
 			dependencies = (
 			);
 			name = "ios to do app";
+			packageProductDependencies = (
+				404EC679296ECFF6006E6D59 /* SlideOverCard */,
+			);
 			productName = "ios to do app";
 			productReference = 7CE7CFE52964DD58008F0702 /* ios to do app.app */;
 			productType = "com.apple.product-type.application";
@@ -226,6 +249,9 @@
 				Base,
 			);
 			mainGroup = 7CE7CFDC2964DD58008F0702;
+			packageReferences = (
+				40B1662F296EC4100071EC12 /* XCRemoteSwiftPackageReference "swiftUI-slide-over-card" */,
+			);
 			productRefGroup = 7CE7CFE62964DD58008F0702 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -597,6 +623,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		40B1662F296EC4100071EC12 /* XCRemoteSwiftPackageReference "swiftUI-slide-over-card" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/moifort/swiftUI-slide-over-card.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		404EC679296ECFF6006E6D59 /* SlideOverCard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40B1662F296EC4100071EC12 /* XCRemoteSwiftPackageReference "swiftUI-slide-over-card" */;
+			productName = SlideOverCard;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		7CE7CFF32964DD5A008F0702 /* ios_to_do_app.xcdatamodeld */ = {
