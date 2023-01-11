@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400A2631296D5C6B00FA45E7 /* TodoView.swift */; };
 		7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7CFE82964DD58008F0702 /* ios_to_do_appApp.swift */; };
 		7CE7CFEB2964DD58008F0702 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7CFEA2964DD58008F0702 /* ContentView.swift */; };
 		7CE7CFED2964DD5A008F0702 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CE7CFEC2964DD5A008F0702 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		400A2631296D5C6B00FA45E7 /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
 		7CE7CFE52964DD58008F0702 /* ios to do app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios to do app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE7CFE82964DD58008F0702 /* ios_to_do_appApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ios_to_do_appApp.swift; sourceTree = "<group>"; };
 		7CE7CFEA2964DD58008F0702 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				7CE7CFF62964DD5A008F0702 /* Info.plist */,
 				7CE7CFF32964DD5A008F0702 /* ios_to_do_app.xcdatamodeld */,
 				7CE7CFEE2964DD5A008F0702 /* Preview Content */,
+				400A2631296D5C6B00FA45E7 /* TodoView.swift */,
 			);
 			path = "ios to do app";
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 			files = (
 				7CE7CFF22964DD5A008F0702 /* Persistence.swift in Sources */,
 				7CE7CFF52964DD5A008F0702 /* ios_to_do_app.xcdatamodeld in Sources */,
+				400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */,
 				7CE7CFEB2964DD58008F0702 /* ContentView.swift in Sources */,
 				7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */,
 			);

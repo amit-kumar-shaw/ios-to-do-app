@@ -20,11 +20,9 @@ struct ContentView: View {
         NavigationView {
             List {
                 ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
+                    NavigationLink(destination: TodoList(), label: {
                         Text(item.timestamp!, formatter: itemFormatter)
-                    }
+                    })
                 }
                 .onDelete(perform: deleteItems)
             }
