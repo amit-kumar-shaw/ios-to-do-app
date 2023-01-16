@@ -113,13 +113,15 @@ struct TodoList: View {
                         Text("Add")
                     }
                     .padding().fullScreenCover(isPresented: $showCard, content: {
-                        TodoEditor(initialTodo: nil){
+                        TodoEditor(initialTodo: nil, onComplete: {
                             modifiedTodo in
                             self.todoList.append(modifiedTodo)
                             self.newTodo = Todo()
                             self.position = .bottom
                             self.showCard = false
-                        }
+                        }, onClose: {
+                            self.showCard = false
+                        })
                     })
                 }
                 .padding()

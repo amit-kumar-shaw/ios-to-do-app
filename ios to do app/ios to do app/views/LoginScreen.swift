@@ -18,12 +18,9 @@ struct SignUpView: View {
     
     var body: some View {
         VStack {
+            Text("Create Accont").font(.largeTitle)
             TextField("Email", text: $email)
-                .padding(12)
-                .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 1))
             SecureField("Password", text: $password)
-                .padding(12)
-                .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 1))
             if (error != "") {
                 Text(error)
                     .font(.caption)
@@ -38,8 +35,8 @@ struct SignUpView: View {
             .padding()
             .disabled(isLoading)
             .opacity(isLoading ? 0.6 : 1)
-            .buttonStyle(PlainButtonStyle())
-        }
+            .buttonStyle(.borderedProminent)
+        }.padding().textFieldStyle(.roundedBorder)
     }
     func signup() {
         self.error = ""
@@ -47,12 +44,15 @@ struct SignUpView: View {
         Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
             self.isLoading = false
             if error != nil {
-                self.error = error!.localizedDescription
+                withAnimation{
+                    self.error = error!.localizedDescription
+                }
                 print("Error signing up: \(String(describing: error))")
             } else {
                 self.isSuccess = true
                 // navigate to home view
-                self.showSignUpView = false
+                //self.showSignUpView = false
+                Auth.auth().signIn(withEmail: email, password: password)
             }
         }
     }
@@ -68,8 +68,6 @@ struct ForgetPasswordView: View {
     var body: some View {
         VStack {
             TextField("Email", text: $email)
-                .padding(12)
-                .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 1))
             if (error != "") {
                 Text(error)
                     .font(.caption)
@@ -84,8 +82,8 @@ struct ForgetPasswordView: View {
             .padding()
             .disabled(isLoading)
             .opacity(isLoading ? 0.6 : 1)
-            .buttonStyle(PlainButtonStyle())
-        }
+            .buttonStyle(.bordered)
+        }.padding().textFieldStyle(.roundedBorder)
     }
     func forgotPassword() {
         self.error = ""
@@ -114,12 +112,9 @@ struct LoginScreen: View {
 
     var body: some View {
         VStack {
+            Text("Log in").font(.largeTitle)
             TextField("Email", text: $email)
-                .padding(12)
-                .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 1))
             SecureField("Password", text: $password)
-                .padding(12)
-                .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 1))
             if (error != "") {
                 Text(error)
                     .font(.caption)
@@ -132,22 +127,22 @@ struct LoginScreen: View {
             .padding()
             .disabled(isLoading)
             .opacity(isLoading ? 0.6 : 1)
-            .buttonStyle(BorderedButtonStyle())
+            .buttonStyle(.borderedProminent)
             Button(action: {
                 self.showSignUpView.toggle()
             }) {
                 Text("Sign Up")
             }
             .padding()
-            .buttonStyle(BorderedButtonStyle())
+            .buttonStyle(.bordered)
             Button(action: {
                 self.showForgetPasswordView.toggle()
             }) {
                 Text("Forget Password")
             }
             .padding()
-            .buttonStyle(BorderlessButtonStyle())
-        }
+            .buttonStyle(.borderless)
+        }.textFieldStyle(.roundedBorder).padding()
         .sheet(isPresented: $showSignUpView) {
             SignUpView(showSignUpView: self.$showSignUpView)
         }
