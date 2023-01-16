@@ -21,6 +21,9 @@
 		7CE7D0252972B9E7008F0702 /* BindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D0242972B9E7008F0702 /* BindingExtension.swift */; };
 		7CE7D0272972BA82008F0702 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D0262972BA82008F0702 /* ToDo.swift */; };
 		7CE7D02B2972C70F008F0702 /* TodoEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D02A2972C70F008F0702 /* TodoEditor.swift */; };
+		CE890B9229758E6500233D7A /* Flashcards.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9129758E6500233D7A /* Flashcards.swift */; };
+		CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9529758FC400233D7A /* FlashcardEditor.swift */; };
+		CE890B982975900300233D7A /* FlashcardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B972975900300233D7A /* FlashcardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +62,9 @@
 		7CE7D0242972B9E7008F0702 /* BindingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingExtension.swift; sourceTree = "<group>"; };
 		7CE7D0262972BA82008F0702 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
 		7CE7D02A2972C70F008F0702 /* TodoEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoEditor.swift; sourceTree = "<group>"; };
+		CE890B9129758E6500233D7A /* Flashcards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcards.swift; sourceTree = "<group>"; };
+		CE890B9529758FC400233D7A /* FlashcardEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardEditor.swift; sourceTree = "<group>"; };
+		CE890B972975900300233D7A /* FlashcardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +177,8 @@
 				7CE7CFEA2964DD58008F0702 /* ContentView.swift */,
 				400A2631296D5C6B00FA45E7 /* TodoView.swift */,
 				7CE7D02A2972C70F008F0702 /* TodoEditor.swift */,
+				CE890B9529758FC400233D7A /* FlashcardEditor.swift */,
+				CE890B972975900300233D7A /* FlashcardView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -179,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				7CE7D0262972BA82008F0702 /* ToDo.swift */,
+				CE890B9129758E6500233D7A /* Flashcards.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -333,6 +342,9 @@
 				400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */,
 				7CE7D0252972B9E7008F0702 /* BindingExtension.swift in Sources */,
 				7CE7D02B2972C70F008F0702 /* TodoEditor.swift in Sources */,
+				CE890B9229758E6500233D7A /* Flashcards.swift in Sources */,
+				CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */,
+				CE890B982975900300233D7A /* FlashcardView.swift in Sources */,
 				7CE7CFEB2964DD58008F0702 /* ContentView.swift in Sources */,
 				7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */,
 			);
@@ -493,7 +505,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ios to do app/Preview Content\"";
-				DEVELOPMENT_TEAM = 2NWV32G3N7;
+				DEVELOPMENT_TEAM = MDBA74Q3PJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -506,7 +518,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ios-to-do-app";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shivamtodouni.lang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -522,7 +534,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ios to do app/Preview Content\"";
-				DEVELOPMENT_TEAM = 2NWV32G3N7;
+				DEVELOPMENT_TEAM = MDBA74Q3PJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -535,7 +547,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ios-to-do-app";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shivamtodouni.lang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

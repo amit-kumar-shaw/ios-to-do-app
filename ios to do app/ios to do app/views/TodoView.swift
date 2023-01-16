@@ -12,13 +12,11 @@ import SlideOverCard
 
 struct TodoList: View {
     @State var newTodo = Todo()
-    // @State var name = ""
     @State var todoList = [Todo]()
-    // @State var task = ""
-    // @State var startDate = Date()
-    // @State var dueDate = Date()
-    // @State var selectedPriority = Priority.allCases.firstIndex(of: .medium) ?? 0
-    // @State var selectedRecurring = Recurring.allCases.firstIndex(of: .none) ?? 0
+    
+    @StateObject var flashcards = Flashcards(cards: [Flashcard(front: "", back: "")])
+    @State private var showFlashcardEditor: Bool = false
+           
     
     @State var showCard = false
     @Environment(\.presentationMode) var presentationMode
@@ -59,15 +57,17 @@ struct TodoList: View {
         //self.newTodo = Todo()
         
     }
+    private func addFlashcard(flashcard: Flashcard) {
+        self.flashcards.cards.append(flashcard)
+    }
     
     var body: some View {
-        ZStack {
             VStack {
                 HStack(alignment: .bottom) {
                     Text("To Buy")
                         .font(.system(size: 50, weight: .ultraLight, design: .rounded))
                         .frame(width: UIScreen.main.bounds.width * 0.6)
-                    
+        
                     VStack {
                         Text("\(Int(progress * 100))%")
                             .font(.system(size: 50, weight: .ultraLight, design: .rounded))
@@ -76,11 +76,7 @@ struct TodoList: View {
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.3)
                 }.padding(.top, 100)
-                //                Picker(selection: $selectedWeekday, label: Text("Weekday")) {
-                //                               ForEach(0..<weekdays.count) {
-                //                                   Text(self.weekdays[$0])
-                //                               }
-                //                }.pickerStyle(SegmentedPickerStyle())
+                
                 List {
                     ForEach(filteredTodos.indices, id: \.self) { index in
                         if self.shouldShow(at: index) {
@@ -95,43 +91,40 @@ struct TodoList: View {
                         self.todoList.remove(atOffsets: indexSet)
                     }
                 }
-            }
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            HStack {
-                Picker(selection: $selectedFilter, label: Text("Filter"), content: {
-                    ForEach(FilterType.allCases, id: \.self) { v in
-                        Text(v.localizedName).tag(v)
+                List {
+                    ForEach(flashcards.cards) { flashcard in
+                        NavigationLink(destination: FlashcardView(flashcards: flashcards)) {
+                            Text(flashcard.front)
+                        }
                     }
-                })
-                Button(action: {
-                    self.showCard = true
-                    self.position = (self.position == .top) ? .bottom : .top
-                }) {
-                    Text("Add")
+                    Button("New Flashcard") {
+                        self.showFlashcardEditor = true
+                    }
+                }.padding(.zero)
+                HStack {
+                    Picker(selection: $selectedFilter, label: Text("Filter"), content: {
+                        ForEach(FilterType.allCases, id: \.self) { v in
+                            Text(v.localizedName).tag(v)
+                        }
+                    })
+                    Button(action: {
+                        self.showCard = true
+                        self.position = (self.position == .top) ? .bottom : .top
+                    }) {
+                        Text("Add")
+                    }
+                    .padding().fullScreenCover(isPresented: $showCard, content: {
+                        TodoEditor(initialTodo: nil){
+                            modifiedTodo in
+                            self.todoList.append(modifiedTodo)
+                            self.newTodo = Todo()
+                            self.position = .bottom
+                            self.showCard = false
+                        }
+                    })
                 }
-                .padding().fullScreenCover(isPresented: $showCard, content: {
-                    TodoEditor(initialTodo: nil){
-                        modifiedTodo in
-                        self.todoList.append(modifiedTodo)
-                        self.newTodo = Todo()
-                        self.position = .bottom
-                        self.showCard = false
-                    }
-                })
+               
             }
-            
-//            if(showCard){
-//                SlideOverCard($position, backgroundStyle: $background) {
-//                    TodoEditor(initialTodo: nil){
-//                        modifiedTodo in
-//                        self.todoList.append(modifiedTodo)
-//                        self.newTodo = Todo()
-//                        self.position = .bottom
-//                        self.showCard = false
-//                    }
-//                }
-//            }
-        }
     }
 }
 
@@ -148,38 +141,3 @@ struct Checkbox: View {
         })
     }
 }
-
-// struct Todo: Identifiable {
-//    var id = UUID()
-//    var task: String
-//    var isCompleted = false
-//    var startDate: Date
-//    var dueDate: Date
-//    var priority: Priority
-//    var recurring: Recurring?
-//    var reminder: Reminder?
-// }
-
-// enum Priority: String, CaseIterable {
-//    case low
-//    case medium
-//    case high
-// }
-//
-// enum Recurring: String, CaseIterable {
-//    case none
-//    case daily
-//    case weekly
-//    case monthly
-// }
-//
-// struct Reminder: Identifiable {
-//    var id = UUID()
-//    var date: Date
-// }
-//
-// enum FilterType: String, CaseIterable {
-//    case all = "All"
-//    case completed = "Completed"
-//    case incomplete = "Incomplete"
-// }
