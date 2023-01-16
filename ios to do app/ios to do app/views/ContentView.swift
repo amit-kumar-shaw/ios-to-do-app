@@ -6,37 +6,57 @@
 //
 
 import SwiftUI
-import CoreData 
+import CoreData
+import FirebaseAuth
 
 struct ContentView: View {
+    
+    
+    
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
         animation: .default)
     private var items: FetchedResults<Item>
+    @State private var isAuthenticated: Bool = Auth.auth().currentUser?.tenantID != nil;
+    
+//    private var authListenerHandle: AuthStateDidChangeListenerHandle ;
+    
+    
+//    init(){
+//        self.authListenerHandle = Auth.auth().addStateDidChangeListener { auth, user in
+//            isAuthenticated = user?.tenantID != nil
+//
+//            print("current user id \(String(describing: user?.tenantID))");
+//        }
+//    }
 
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink(destination: TodoList(), label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    })
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-            Text("Select an item")
+        Group{
+            isAuthenticated ?
+            AnyView(NavigationView{
+                            List {
+                                ForEach(items) { item in
+                                    NavigationLink(destination: TodoList(), label: {
+                                        Text(item.timestamp!, formatter: itemFormatter)
+                                    })
+                                }
+                                .onDelete(perform: deleteItems)
+                            }
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarTrailing) {
+                                    EditButton()
+                                }
+                                ToolbarItem {
+                                    Button(action: addItem) {
+                                        Label("Add Item", systemImage: "plus")
+                                    }
+                                }
+                            }
+                            Text("Select an item")
+            }) :
+            AnyView(LoginScreen())
         }
     }
 

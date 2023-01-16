@@ -15,6 +15,7 @@ class Todo: ObservableObject {
     
     var cancellables: [AnyCancellable] = [];
     
+    @Published var selectedLanguage: Language
     @Published var name = ""
     @Published var description = ""
     @Published var startDate = Date()
@@ -27,10 +28,16 @@ class Todo: ObservableObject {
     @Published var id = UUID()
     
     init(){
-        $startDate.sink { _ in
+        self.selectedLanguage = Language(id: "en", name: "English", nativeName: "English")
+        $startDate.sink { _  in
             self.dueDate = Date()
         }.store(in: &cancellables);
         
+    }
+    
+    convenience init(selectedLanguage: Language){
+        self.init()
+        self.selectedLanguage = selectedLanguage
     }
 }
 
@@ -52,10 +59,7 @@ enum Recurring: String, CaseIterable, Equatable {
     var localizedName: LocalizedStringKey {LocalizedStringKey(rawValue)}
 }
 
-struct Reminder: Identifiable {
-    var id = UUID()
-    var date: Date
-}
+
 
 enum FilterType: String, CaseIterable, Equatable{
     
@@ -65,3 +69,4 @@ enum FilterType: String, CaseIterable, Equatable{
     
     var localizedName: LocalizedStringKey {LocalizedStringKey(rawValue)}
 }
+

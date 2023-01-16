@@ -9,7 +9,12 @@ import SwiftUI
 
 @main
 struct ios_to_do_appApp: App {
+    
+    
+    
     let persistenceController = PersistenceController.shared
+    
+    @UIApplicationDelegateAdaptor(FirebaseAppDelegate.self) var delegate
 
     var body: some Scene {
         WindowGroup {

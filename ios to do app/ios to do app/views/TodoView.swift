@@ -54,10 +54,9 @@ struct TodoList: View {
         }
     }
     
-    private func saveTodo(){
+    private func saveTodo() {
         todoList.append(newTodo)
-        //self.newTodo = Todo()
-        
+        // self.newTodo = Todo()
     }
     
     var body: some View {
@@ -109,14 +108,17 @@ struct TodoList: View {
                 }) {
                     Text("Add")
                 }
-                .padding().fullScreenCover(isPresented: $showCard, content: {
-                    TodoEditor(initialTodo: nil){
+                .padding()
+                .fullScreenCover(isPresented: $showCard, content: {
+                    TodoEditor(initialTodo: nil, onComplete: {
                         modifiedTodo in
                         self.todoList.append(modifiedTodo)
                         self.newTodo = Todo()
                         self.position = .bottom
                         self.showCard = false
-                    }
+                    }, onClose: {
+                        self.showCard = false
+                    })
                 })
             }
             
