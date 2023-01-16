@@ -36,6 +36,9 @@
 		7CE7D03329749641008F0702 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D03229749641008F0702 /* Language.swift */; };
 		7CE7D03629749725008F0702 /* JSONUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D03529749725008F0702 /* JSONUtils.swift */; };
 		7CE7D0382974B0CB008F0702 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D0372974B0CB008F0702 /* Reminder.swift */; };
+		CE890B9229758E6500233D7A /* Flashcards.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9129758E6500233D7A /* Flashcards.swift */; };
+		CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9529758FC400233D7A /* FlashcardEditor.swift */; };
+		CE890B982975900300233D7A /* FlashcardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B972975900300233D7A /* FlashcardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +86,9 @@
 		7CE7D03229749641008F0702 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
 		7CE7D03529749725008F0702 /* JSONUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONUtils.swift; sourceTree = "<group>"; };
 		7CE7D0372974B0CB008F0702 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		CE890B9129758E6500233D7A /* Flashcards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcards.swift; sourceTree = "<group>"; };
+		CE890B9529758FC400233D7A /* FlashcardEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardEditor.swift; sourceTree = "<group>"; };
+		CE890B972975900300233D7A /* FlashcardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +222,8 @@
 				7CE7D02C297305F0008F0702 /* ReminderEditor.swift */,
 				7CE7D02E29749549008F0702 /* LanguageList.swift */,
 				7C6826572975CC3A002DF5C6 /* LoginScreen.swift */,
+				CE890B9529758FC400233D7A /* FlashcardEditor.swift */,
+				CE890B972975900300233D7A /* FlashcardView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -226,6 +234,7 @@
 				7CE7D0262972BA82008F0702 /* ToDo.swift */,
 				7CE7D03229749641008F0702 /* Language.swift */,
 				7CE7D0372974B0CB008F0702 /* Reminder.swift */,
+				CE890B9129758E6500233D7A /* Flashcards.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -402,6 +411,9 @@
 				7CE7D02B2972C70F008F0702 /* TodoEditor.swift in Sources */,
 				7CE7D02F29749549008F0702 /* LanguageList.swift in Sources */,
 				7CE7D0382974B0CB008F0702 /* Reminder.swift in Sources */,
+				CE890B9229758E6500233D7A /* Flashcards.swift in Sources */,
+				CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */,
+				CE890B982975900300233D7A /* FlashcardView.swift in Sources */,
 				7CE7CFEB2964DD58008F0702 /* ContentView.swift in Sources */,
 				7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */,
 				7CE7D03329749641008F0702 /* Language.swift in Sources */,
@@ -492,7 +504,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -546,7 +558,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -564,7 +576,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ios to do app/Preview Content\"";
-				DEVELOPMENT_TEAM = 2NWV32G3N7;
+				DEVELOPMENT_TEAM = MDBA74Q3PJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -578,6 +590,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.todo.languages;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shivamtodouni.lang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -593,7 +606,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ios to do app/Preview Content\"";
-				DEVELOPMENT_TEAM = 2NWV32G3N7;
+				DEVELOPMENT_TEAM = MDBA74Q3PJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
