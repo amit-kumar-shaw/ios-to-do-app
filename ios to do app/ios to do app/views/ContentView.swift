@@ -15,33 +15,110 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
         animation: .default)
     private var items: FetchedResults<Item>
+    
+    @State private var projectName = ""
+    @State private var projectColor = Color.white
+    @State private var showModal = false
 
     var body: some View {
         NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink(destination: TodoList(), label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    })
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+            ZStack{
+                
+                VStack(alignment: .leading,spacing: 0){
+                    
+                    Text("Welcome")
+                        .font(.system(size: 32))
+                        .padding(.leading,20)
+                    
+                    List{
+                        HStack{
+                            NavigationLink(destination: TodoList(), label: {
+                                Image(systemName: "hourglass.circle.fill")
+                                Text("Upcoming")
+                            })
+                        }
+                        
+                        HStack{
+                            NavigationLink(destination: TodoList(), label: {
+                                Image(systemName: "calendar.badge.exclamationmark")
+                                Text("Today")
+                            })
+                        }
+                        
+                        HStack{
+                            NavigationLink(destination: TodoList(), label: {
+                                Image(systemName: "gearshape")
+                                Text("Setting")
+                            })
+                        }
+                        
                     }
-                }
+                    .frame(height: 180)
+                    
+                    List {
+                
+                        ForEach(items) { item in
+                            NavigationLink(destination: TodoList(), label: {
+                               
+                                //Text(item.timestamp!, formatter: itemFormatter)
+                                
+                                Text(item.projectName ?? "Project")
+                            })
+                        }
+                        .onDelete(perform: deleteItems)
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            EditButton()
+                        }
+                        ToolbarItem {
+                           addButton
+                        }
+                    }
+                }.padding(.zero)
             }
-            Text("Select an item")
+            
+        }
+    }
+    
+    private var addButton: some View {
+        Button(action:{ self.showModal = true}) {
+            Label("Add Item", systemImage: "plus")
+        }.sheet(isPresented: $showModal) {
+            VStack {
+                Text("Add a new item")
+                    .font(.title)
+                
+                TextField("Project Name", text: self.$projectName)
+                ColorPicker("Project Color", selection: self.$projectColor)
+                
+                Button(action: {
+                    // Create a new item with the project name and color entered by the user
+                    let newItem = Item(context: self.viewContext)
+                    newItem.projectName = self.projectName
+                    //newItem.projectColor = self.projectColor
+                    newItem.timestamp = Date()
+
+                    do {
+                        try self.viewContext.save()
+                    } catch {
+                       
+                    }
+                    self.showModal = false
+                }) {
+                    Text("Add")
+                }
+            }.padding(.all,50)
         }
     }
 
+
+
+    
     private func addItem() {
+        
         withAnimation {
+            
             let newItem = Item(context: viewContext)
             newItem.timestamp = Date()
 

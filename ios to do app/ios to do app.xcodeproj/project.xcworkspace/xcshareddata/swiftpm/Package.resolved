@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swiftui-slide-over-card",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/moifort/swiftUI-slide-over-card.git",
+      "state" : {
+        "revision" : "8ef209792c080bc1852074f91289ba46339367bb",
+        "version" : "1.2.2"
+      }
+    }
+  ],
+  "version" : 2
+}
