@@ -7,11 +7,11 @@
 
 import Foundation
 
-class Language: Decodable{
+class Language: Codable{
     
     
     var id: String
-        var name: String
+    var name: String
     var nativeName: String
     
     init(id: String, name: String, nativeName: String) {
@@ -39,6 +39,8 @@ extension Language {
 }
 
 extension Language: Hashable, Equatable, Identifiable {
+    
+    
     static func == (lhs: Language, rhs: Language) -> Bool {
         lhs.id == rhs.id
     }

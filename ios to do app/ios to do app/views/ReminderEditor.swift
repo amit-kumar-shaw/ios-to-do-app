@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ReminderEditor: View {
+    @Environment(\.presentationMode) var presentation
     @ObservedObject var reminder: Reminder
     var onComplete: (Reminder)-> Void
     
@@ -18,6 +19,7 @@ struct ReminderEditor: View {
     
     func saveReminder(){
         onComplete(reminder);
+        presentation.wrappedValue.dismiss()
     }
     
     var body: some View {
@@ -31,7 +33,7 @@ struct ReminderEditor: View {
             }
         }.navigationTitle("Add reminder").toolbar{
             ToolbarItem(placement: .cancellationAction){
-                Button("Cancel", action: {})
+                Button("Cancel", action: {presentation.wrappedValue.dismiss()})
                     .padding()
                     .cornerRadius(15)
             }

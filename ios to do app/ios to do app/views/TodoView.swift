@@ -113,7 +113,7 @@ struct TodoList: View {
                         Text("Add")
                     }
                     .padding().fullScreenCover(isPresented: $showCard, content: {
-                        TodoEditor(initialTodo: nil, onComplete: {
+                        TodoEditor(entityId: nil, onComplete: {
                             modifiedTodo in
                             self.todoList.append(modifiedTodo)
                             self.newTodo = Todo()
@@ -126,7 +126,7 @@ struct TodoList: View {
                 }
                 .padding()
                 .fullScreenCover(isPresented: $showCard, content: {
-                    TodoEditor(initialTodo: nil, onComplete: {
+                    TodoEditor(entityId: nil, onComplete: {
                         modifiedTodo in
                         self.todoList.append(modifiedTodo)
                         self.newTodo = Todo()

@@ -21,10 +21,7 @@ class Settings: ObservableObject, Decodable, Encodable{
         case accentColor
     }
     
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(accentColor.rawValue, forKey: .accentColor)
-    }
+    
     
     init(){
         
@@ -35,6 +32,11 @@ class Settings: ObservableObject, Decodable, Encodable{
         let values = try decoder.container(keyedBy: CodingKeys.self)
         accentColor = try values.decode(AccentColor.self, forKey: .accentColor)
     }
+    
+    func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(accentColor.rawValue, forKey: .accentColor)
+        }
 }
 
 class SettingsViewModel: ObservableObject {
