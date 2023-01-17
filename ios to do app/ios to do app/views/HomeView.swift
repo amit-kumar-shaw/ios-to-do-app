@@ -43,7 +43,7 @@ struct HomeView: View {
                         }
                         
                         HStack{
-                            NavigationLink(destination: TodoList(), label: {
+                            NavigationLink(destination: TodoView(), label: {
                                 Image(systemName: "calendar.badge.exclamationmark")
                                 Text("Today")
                             })
@@ -62,7 +62,7 @@ struct HomeView: View {
                     List {
                 
                         ForEach(items) { item in
-                            NavigationLink(destination: TodoList(), label: {
+                            NavigationLink(destination: TodoView(), label: {
                                
                                 //Text(item.timestamp!, formatter: itemFormatter)
                                 

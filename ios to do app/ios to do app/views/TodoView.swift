@@ -10,7 +10,7 @@ import SwiftUI
 
 import SlideOverCard
 
-struct TodoList: View {
+struct TodoView: View {
     @State var newTodo = Todo()
     @State var todoList = [Todo]()
     
@@ -73,69 +73,48 @@ struct TodoList: View {
                         Text("completed")
                             .font(.system(size: 18, design: .rounded))
                     }
-                    .frame(width: UIScreen.main.bounds.width * 0.3)
+                    //.frame(width: UIScreen.main.bounds.width * 0.3)
                 }.padding(.top, 100)
                 
-                List {
-                    ForEach(filteredTodos.indices, id: \.self) { index in
-                        if self.shouldShow(at: index) {
-                            HStack {
-                                Text(self.todoList[index].task)
-                                Spacer()
-                                Checkbox(isChecked: self.$todoList[index].isCompleted)
-                            }
-                        }
-                    }
-                    .onDelete { indexSet in
-                        self.todoList.remove(atOffsets: indexSet)
-                    }
-                }
-                List {
-                    ForEach(flashcards.cards) { flashcard in
-                        NavigationLink(destination: FlashcardView(flashcards: flashcards)) {
-                            Text(flashcard.front)
-                        }
-                    }
-                    Button("New Flashcard") {
-                        self.showFlashcardEditor = true
-                    }
-                }.padding(.zero)
+                TodoList(selectedFilter).listStyle(.inset)
+                
+//                List {
+//                    ForEach(filteredTodos.indices, id: \.self) { index in
+//                        if self.shouldShow(at: index) {
+//                            HStack {
+//                                Text(self.todoList[index].task)
+//                                Spacer()
+//                                Checkbox(isChecked: self.$todoList[index].isCompleted)
+//                            }
+//                        }
+//                    }
+//                    .onDelete { indexSet in
+//                        self.todoList.remove(atOffsets: indexSet)
+//                    }
+//                }
+//                List {
+//                    ForEach(flashcards.cards) { flashcard in
+//                        NavigationLink(destination: FlashcardView(flashcards: flashcards)) {
+//                            Text(flashcard.front)
+//                        }
+//                    }
+//                    Button("New Flashcard") {
+//                        self.showFlashcardEditor = true
+//                    }
+//                }.padding(.zero)
                 HStack {
                     Picker(selection: $selectedFilter, label: Text("Filter"), content: {
                         ForEach(FilterType.allCases, id: \.self) { v in
                             Text(v.localizedName).tag(v)
                         }
                     })
-                    Button(action: {
-                        self.showCard = true
-                        self.position = (self.position == .top) ? .bottom : .top
-                    }) {
-                        Text("Add")
+                    NavigationLink {
+                        TodoEditor(entityId: nil)
+                    } label: {
+                        Text("Add").padding()
                     }
-                    .padding().fullScreenCover(isPresented: $showCard, content: {
-                        TodoEditor(entityId: nil, onComplete: {
-                            modifiedTodo in
-                            self.todoList.append(modifiedTodo)
-                            self.newTodo = Todo()
-                            self.position = .bottom
-                            self.showCard = false
-                        }, onClose: {
-                            self.showCard = false
-                        })
-                    })
                 }
                 .padding()
-                .fullScreenCover(isPresented: $showCard, content: {
-                    TodoEditor(entityId: nil, onComplete: {
-                        modifiedTodo in
-                        self.todoList.append(modifiedTodo)
-                        self.newTodo = Todo()
-                        self.position = .bottom
-                        self.showCard = false
-                    }, onClose: {
-                        self.showCard = false
-                    })
-                })
             }
     }
 }

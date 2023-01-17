@@ -27,6 +27,7 @@ class TodoEditorViewModel: ObservableObject {
     
     @Published var error: Error?
     @Published var showAlert = false
+    @Published var showReminderEditor = false
     
     init(id: String?) {
         self.id = id
@@ -57,6 +58,10 @@ class TodoEditorViewModel: ObservableObject {
         }
     }
     
+    func toggleReminderEditor(){
+        showReminderEditor.toggle()
+    }
+    
     func addReminder(reminder: Reminder) {
         reminderList.append(reminder)
     }
@@ -68,7 +73,7 @@ class TodoEditorViewModel: ObservableObject {
     
     func save() {
         todo.reminders = reminderList
-        todo.userId = auth.tenantID
+        todo.userId = auth.currentUser?.uid;
         guard let documentId = id else {
             let newDocRef = db.collection("todos").document()
             id = newDocRef.documentID
