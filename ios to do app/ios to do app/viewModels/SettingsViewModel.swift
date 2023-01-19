@@ -7,18 +7,31 @@
 
 import Foundation
 import FirebaseAuth
+import SwiftUI
 
-enum AccentColor: String, Decodable {
-    case blue
-    case red
-    case yellow
+
+enum ColorSchemeOption: String, CaseIterable, Decodable {
+    case defaultColor = "Default"
+    case blue = "Blue"
+    case green = "Green"
+    case pink = "Pink"
+}
+struct ColorScheme {
+    let primary: Color
+    let secondary: Color
+    let accent: Color
+    let background: Color
+    let text: Color
+    let error: Color
 }
 
+
+
 class Settings: ObservableObject, Decodable, Encodable{
-    @Published var accentColor: AccentColor = .blue
+    @Published var selectedColorScheme: ColorSchemeOption = .defaultColor
     
     enum CodingKeys: String, CodingKey {
-        case accentColor
+        case selectedColorScheme
     }
     
     
@@ -30,12 +43,12 @@ class Settings: ObservableObject, Decodable, Encodable{
     
     required init(from decoder: Decoder) throws{
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        accentColor = try values.decode(AccentColor.self, forKey: .accentColor)
+        selectedColorScheme = try values.decode(ColorSchemeOption.self, forKey: .selectedColorScheme)
     }
     
     func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(accentColor.rawValue, forKey: .accentColor)
+            try container.encode(selectedColorScheme.rawValue, forKey: .selectedColorScheme)
         }
 }
 

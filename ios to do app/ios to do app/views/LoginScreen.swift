@@ -15,10 +15,14 @@ struct SignUpView: View {
     @State private var isLoading = false
     @State private var isSuccess = false
     @Binding var showSignUpView: Bool
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
     
     var body: some View {
         VStack {
-            Text("Create Accont").font(.largeTitle)
+            Text("Create Account").font(.largeTitle)
+            TextField("First Name", text: $firstName)
+            TextField("Last Name", text: $lastName)
             TextField("Email", text: $email)
             SecureField("Password", text: $password)
             if (error != "") {
