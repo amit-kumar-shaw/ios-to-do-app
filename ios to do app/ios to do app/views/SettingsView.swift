@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var viewModel = SettingsViewModel()
-    
     var body: some View {
         ZStack{
             Form {
@@ -22,7 +21,14 @@ struct SettingsView: View {
                         viewModel.settings.selectedColorScheme = value
                         viewModel.save()
                     }.foregroundColor(ios_to_do_app.colorScheme(for: viewModel.settings.selectedColorScheme).primary)
+                   
                 }
+                Section {
+                    Text("Font Size").font(.system(size: viewModel.settings.fontSize))
+                    Slider(value: $viewModel.settings.fontSize, in: 12...24, step: 1).onChange(of: viewModel.settings.fontSize) { value in
+                        viewModel.settings.fontSize = value
+                        viewModel.save()
+                    }}
                 Section{
                     Button("Log out", action: viewModel.signOut)
                         .foregroundColor(Color.red)

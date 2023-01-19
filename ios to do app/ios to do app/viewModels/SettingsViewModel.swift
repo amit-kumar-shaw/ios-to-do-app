@@ -29,10 +29,12 @@ struct ColorScheme {
 
 class Settings: ObservableObject, Decodable, Encodable{
     @Published var selectedColorScheme: ColorSchemeOption = .defaultColor
-    
-    enum CodingKeys: String, CodingKey {
-        case selectedColorScheme
-    }
+    @Published var fontSize: Double = 18
+
+   enum CodingKeys: String, CodingKey {
+       case selectedColorScheme
+       case fontSize
+   }
     
     
     
@@ -41,15 +43,17 @@ class Settings: ObservableObject, Decodable, Encodable{
     }
     
     
-    required init(from decoder: Decoder) throws{
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        selectedColorScheme = try values.decode(ColorSchemeOption.self, forKey: .selectedColorScheme)
+    required init(from decoder: Decoder) throws {
+            let values = try decoder.container(keyedBy: CodingKeys.self)
+            selectedColorScheme = try values.decode(ColorSchemeOption.self, forKey: .selectedColorScheme)
+            fontSize = try values.decode(Double.self, forKey: .fontSize)
     }
-    
+
     func encode(to encoder: Encoder) throws {
-            var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(selectedColorScheme.rawValue, forKey: .selectedColorScheme)
-        }
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(selectedColorScheme.rawValue, forKey: .selectedColorScheme)
+        try container.encode(fontSize, forKey: .fontSize)
+    }
 }
 
 class SettingsViewModel: ObservableObject {
