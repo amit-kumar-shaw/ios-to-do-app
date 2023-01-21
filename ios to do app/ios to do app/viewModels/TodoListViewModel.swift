@@ -18,6 +18,7 @@ class TodoListViewModel: ObservableObject{
     @Published var showAlert = false
     @Published var error: Error?
     @Published var filter: FilterType = .all
+    @Published var dateFilter: Date?
     
     private var db = Firestore.firestore()
     private var auth = Auth.auth()
@@ -38,6 +39,9 @@ class TodoListViewModel: ObservableObject{
         guard let currentUserId = auth.currentUser?.uid else{
             error = AuthError()
             return
+        }
+        if let filter = dateFilter {
+            todoList = todoList.filter { $0.1.dueDate >= filter }
         }
         
         let collectionRef = Firestore.firestore().collection("todos").whereField("userId", in: [currentUserId])

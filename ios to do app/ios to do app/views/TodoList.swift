@@ -13,9 +13,10 @@ import FirebaseAuth
 struct TodoList: View {
     
     @ObservedObject var viewModel = TodoListViewModel()
+    @Binding var dateFilter: Date?
     
-    
-    init(_ filter: FilterType? = nil){
+    init(dateFilter: Binding<Date?>,_ filter: FilterType? = nil){
+        self._dateFilter = dateFilter 
         viewModel.filter = filter ?? .all
     }
     
@@ -31,6 +32,9 @@ struct TodoList: View {
                     }
                 }
             }
+        }.onAppear {
+            viewModel.dateFilter = dateFilter
+            viewModel.loadList()
         }
         .overlay(content: {if viewModel.todoList.isEmpty {
             VStack{
@@ -49,6 +53,6 @@ struct TodoList: View {
 
 struct TodoList_Previews: PreviewProvider {
     static var previews: some View {
-        TodoList()
+        TodoList(dateFilter: .constant(nil))
     }
 }
