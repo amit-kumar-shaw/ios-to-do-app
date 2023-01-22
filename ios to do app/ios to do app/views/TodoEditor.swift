@@ -14,6 +14,8 @@ struct TodoEditor: View {
     private let editMode: Bool
     
     @ObservedObject private var viewModel: TodoEditorViewModel
+    @State private var showBeforeDueDatePicker = false
+
     
     private var languageList = Language.getAllLanguages()
     
@@ -74,8 +76,32 @@ struct TodoEditor: View {
                 }
                     
                 /// Reminders
-                Section(header: Text("Additional reminders")) {
+                Section(header: Text("Reminders")) {
                     List {
+                        
+                        
+                        Button(action: {
+                            if (viewModel.todo.reminderBeforeDueDate < 0) {
+                                viewModel.todo.reminderBeforeDueDate = -1 * viewModel.todo.reminderBeforeDueDate
+                            }
+                            self.showBeforeDueDatePicker = true
+                        }) {
+                     
+                            Label("\(NotificationUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions() {
+                                    Button {
+                                        viewModel.muteDefaultReminder()
+                                    } label: {
+                                        Label("Mute", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.fill" : "bell.slash.fill")
+                                    }.tint(.indigo)
+                                }
+                            
+                        }.sheet(isPresented: $showBeforeDueDatePicker) {
+                            //TimePicker(selectedTime: self.$selectedTime)TimePicker(selectedTime: $viewModel.todo.reminderBeforeDueDate)
+                           
+                            
+                            RemindMeBeforeDueDatePicker(reminderBeforeDueDate: $viewModel.todo.reminderBeforeDueDate, isPresented: $showBeforeDueDatePicker).presentationDetents([.medium, ])
+                        }
+                        
                         ForEach($viewModel.reminderList, id: \.id) {
                             reminder in
                             Label(reminderDateFormatter.string(from: reminder.date.wrappedValue), systemImage: "bell")
@@ -102,6 +128,37 @@ struct TodoEditor: View {
                     }, message: { Text(self.viewModel.error?.localizedDescription ?? "Unknown error") })
             }
         })
+    }
+}
+
+struct RemindMeBeforeDueDatePicker: View {
+    @Binding var reminderBeforeDueDate: Int
+    @Binding var isPresented: Bool
+
+    var body: some View {
+        VStack {
+            Text("Remind me...")
+                .multilineTextAlignment(TextAlignment.center)
+              
+                .padding()
+        
+            Picker("Select time", selection: $reminderBeforeDueDate) {
+                Text("5 minutes").tag(5)
+                Text("10 minutes").tag(10)
+                Text("15 minutes").tag(15)
+                Text("30 minutes").tag(30)
+                Text("1 hour").tag(60)
+                Text("2 hours").tag(120)
+                Text("1 day").tag(1440)
+            }.pickerStyle(.wheel)
+            Text("...before due date.").multilineTextAlignment(TextAlignment.center)
+                .padding()
+            
+            Button("Save") {
+                // Save the selected time and close the sheet
+                self.isPresented = false
+            }
+        }
     }
 }
     
