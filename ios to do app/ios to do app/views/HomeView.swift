@@ -24,6 +24,8 @@ struct HomeView: View {
     @State private var projectColor = Color.white
     @State private var showModal = false
 
+    @State private var showEnableRemindersModal : Bool = false
+
     var body: some View {
         NavigationView {
             ZStack{
@@ -82,6 +84,15 @@ struct HomeView: View {
                 }.padding(.zero)
             }
             
+        }.onAppear{
+            NotificationUtility.hasPermissions(completion: {hasPermissions in
+                if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
+                    self.showEnableRemindersModal = true
+                }
+            })
+        }
+        .fullScreenCover(isPresented: $showEnableRemindersModal) {
+            EnableRemindersModalView()
         }
     }
     

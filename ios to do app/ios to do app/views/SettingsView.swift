@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var viewModel = SettingsViewModel()
+    @State private var showEnableRemindersButton : Bool = false
+    
     var body: some View {
         ZStack{
             Form {
@@ -21,7 +23,6 @@ struct SettingsView: View {
                         viewModel.settings.selectedColorScheme = value
                         viewModel.save()
                     }.foregroundColor(ios_to_do_app.colorScheme(for: viewModel.settings.selectedColorScheme).primary)
-                   
                 }
                 Section {
                     Text("Font Size").font(.system(size: viewModel.settings.fontSize))
@@ -29,11 +30,27 @@ struct SettingsView: View {
                         viewModel.settings.fontSize = value
                         viewModel.save()
                     }}
+                if (showEnableRemindersButton) {
+                    Section {
+                        Button("Enable reminders", action: {
+                            if (NotificationUtility.didAskForNotificationPermissions()) {
+                                NotificationUtility.openSettings()
+                            } else {
+                                NotificationUtility.askForNotificationPermissions()
+                            }
+                        })
+                    }
+                }
+                
                 Section{
                     Button("Log out", action: viewModel.signOut)
                         .foregroundColor(Color.red)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                 }}
+        }.onAppear {
+            NotificationUtility.hasPermissions(completion: {hasPermission in
+                showEnableRemindersButton = !hasPermission
+            } )
         }
     }
 }

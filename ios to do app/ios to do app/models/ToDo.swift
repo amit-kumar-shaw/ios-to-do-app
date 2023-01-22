@@ -15,6 +15,7 @@ class Todo: ObservableObject, Codable{
     @Published var description = ""
     @Published var startDate = Date()
     @Published var dueDate = Date()
+    @Published var reminderBeforeDueDate : Int = 5 // default: remind me 5 minutes before due date; < 0 indicates the absence of reminders
     @Published var reminders: [Reminder] = []
     @Published var priority: Priority = .medium
     @Published var recurring: Recurring = .none

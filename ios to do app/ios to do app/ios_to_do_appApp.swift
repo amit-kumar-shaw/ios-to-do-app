@@ -16,10 +16,14 @@ struct ios_to_do_appApp: App {
     
     @UIApplicationDelegateAdaptor(FirebaseAppDelegate.self) var delegate
 
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+                    NotificationUtility.schedule()
+                }
         }
     }
 }
