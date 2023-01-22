@@ -38,14 +38,14 @@ struct HomeView: View {
                     
                     List{
                         HStack{
-                            NavigationLink(destination: TodoList(), label: {
+                            NavigationLink(destination: UpcomingView(), label: {
                                 Image(systemName: "hourglass.circle.fill")
                                 Text("Upcoming")
                             })
                         }
                         
                         HStack{
-                            NavigationLink(destination: TodoView(), label: {
+                            NavigationLink(destination: TodayView(), label: {
                                 Image(systemName: "calendar.badge.exclamationmark")
                                 Text("Today")
                             })

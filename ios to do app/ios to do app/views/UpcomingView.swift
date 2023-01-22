@@ -10,10 +10,10 @@ import SwiftUI
 
 import SlideOverCard
 
-struct TodoView: View {
+struct UpcomingView: View {
     @State var newTodo = Todo()
     @State var todoList = [Todo]()
-    
+    @State var dateFilter: Date?
     @StateObject var flashcards = Flashcards(cards: [Flashcard(front: "", back: "")])
     @State private var showFlashcardEditor: Bool = false
            
@@ -28,8 +28,13 @@ struct TodoView: View {
         return Double(completedTodos) / Double(totalTodos)
     }
     
+
     @State var selectedFilter: FilterType = .all
     
+    @State var selectedWeekday = 0
+    let weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    
+   
     
     
     private func shouldShow(at index: Int) -> Bool {
@@ -54,20 +59,43 @@ struct TodoView: View {
     var body: some View {
             VStack {
                 HStack(alignment: .bottom) {
-                    Text("To Buy")
-                        .font(.system(size: 50, weight: .ultraLight, design: .rounded))
-                        .frame(width: UIScreen.main.bounds.width * 0.7)
-        
-                    VStack {
+                    VStack(alignment: .leading) {
+                        Text("Upcoming")
+                            .font(.system(size: 50, weight: .ultraLight, design: .rounded))
+                        
+                    }.frame(width: UIScreen.main.bounds.width * 0.7)
+                    VStack(alignment: .trailing) {
                         Text("\(Int(progress * 100))%")
                             .font(.system(size: 50, weight: .ultraLight, design: .rounded))
                         Text("completed")
                             .font(.system(size: 18, design: .rounded))
+                    }.frame(width: UIScreen.main.bounds.width * 0.3)
+                }.padding(.top,100)
+                HStack {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(0..<weekdays.count, id: \.self) { index in
+                                Button(action: {
+                                    self.selectedWeekday = index
+                                    var calendar = Calendar.current
+                                    calendar.timeZone = TimeZone(abbreviation: "UTC")!
+                                    var components = calendar.dateComponents([.year, .month, .day], from: Date())
+                                    components.weekday = index + 1
+                                    self.dateFilter = calendar.date(from: components)
+                                }) {
+                                    Text(weekdays[index].prefix(3))
+                                        .font(.system(size: 20))
+                                        .foregroundColor(index == selectedWeekday ? .white : .gray)
+                                        .padding(8)
+                                        .background(index == selectedWeekday ? Color.blue : Color.clear)
+                                        .cornerRadius(4)
+                                }
+                            }
+                        }
                     }
-                    .frame(width: UIScreen.main.bounds.width * 0.3)
-                }.padding(.top, 100)
-                
-                TodoList(dateFilter: .constant(nil),selectedFilter).listStyle(.inset)
+                }
+
+                TodoList(dateFilter: .constant(self.dateFilter) , selectedFilter).listStyle(.inset)
                 
 //                List {
 //                    ForEach(filteredTodos.indices, id: \.self) { index in
@@ -93,33 +121,23 @@ struct TodoView: View {
 //                        self.showFlashcardEditor = true
 //                    }
 //                }.padding(.zero)
-                HStack {
-                    Picker(selection: $selectedFilter, label: Text("Filter"), content: {
-                        ForEach(FilterType.allCases, id: \.self) { v in
-                            Text(v.localizedName).tag(v)
-                        }
-                    })
-                    NavigationLink {
-                        TodoEditor(entityId: nil)
-                    } label: {
-                        Text("Add").padding()
-                    }
-                }
-                .padding()
+//                HStack {
+//                    Picker(selection: $selectedFilter, label: Text("Filter"), content: {
+//                        ForEach(FilterType.allCases, id: \.self) { v in
+//                            Text(v.localizedName).tag(v)
+//                        }
+//                    })
+//                    NavigationLink {
+//                        TodoEditor(entityId: nil)
+//                    } label: {
+//                        Text("Add").padding()
+//                    }
+//                }
+//                .padding()
             }
     }
 }
 
-struct Checkbox: View {
-    @Binding var isChecked: Bool
-    
-    var body: some View {
-        Button(action: {
-            self.isChecked.toggle()
-        }, label: {
-            Image(systemName: isChecked ? "checkmark.square" : "square")
-                .resizable()
-                .frame(width: 25, height: 25)
-        })
-    }
-}
+
+
+

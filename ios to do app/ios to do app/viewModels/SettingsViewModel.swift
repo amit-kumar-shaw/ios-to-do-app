@@ -16,6 +16,7 @@ enum ColorSchemeOption: String, CaseIterable, Decodable {
     case green = "Green"
     case pink = "Pink"
 }
+
 struct ColorScheme {
     let primary: Color
     let secondary: Color
@@ -24,8 +25,6 @@ struct ColorScheme {
     let text: Color
     let error: Color
 }
-
-
 
 class Settings: ObservableObject, Decodable, Encodable{
     @Published var selectedColorScheme: ColorSchemeOption = .defaultColor
