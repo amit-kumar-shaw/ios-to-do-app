@@ -13,6 +13,8 @@ import SlideOverCard
 struct TodoView: View {
     @State var newTodo = Todo()
     @State var todoList = [Todo]()
+    @State var project : (String, Project)
+    
     
     @StateObject var flashcards = Flashcards(cards: [Flashcard(front: "", back: "")])
     @State private var showFlashcardEditor: Bool = false
@@ -54,10 +56,11 @@ struct TodoView: View {
     var body: some View {
             VStack {
                 HStack(alignment: .bottom) {
-                    Text("To Buy")
-                        .font(.system(size: 50, weight: .ultraLight, design: .rounded))
-                        .frame(width: UIScreen.main.bounds.width * 0.7)
-        
+                    if let name = self.project.1.projectName {
+                        Text(name)
+                            .font(.system(size: 50, weight: .ultraLight, design: .rounded))
+                            .frame(width: UIScreen.main.bounds.width * 0.6)
+                    }
                     VStack {
                         Text("\(Int(progress * 100))%")
                             .font(.system(size: 50, weight: .ultraLight, design: .rounded))
@@ -67,7 +70,7 @@ struct TodoView: View {
                     .frame(width: UIScreen.main.bounds.width * 0.3)
                 }.padding(.top, 100)
                 
-                TodoList(dateFilter: .constant(nil),selectedFilter).listStyle(.inset)
+                TodoList(selectedFilter, project.0).listStyle(.inset)
                 
 //                List {
 //                    ForEach(filteredTodos.indices, id: \.self) { index in
@@ -100,7 +103,7 @@ struct TodoView: View {
                         }
                     })
                     NavigationLink {
-                        TodoEditor(entityId: nil)
+                        TodoEditor(entityId: nil,projectId :project.0)
                     } label: {
                         Text("Add").padding()
                     }

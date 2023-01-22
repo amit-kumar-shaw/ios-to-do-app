@@ -21,6 +21,7 @@ class TodoEditorViewModel: ObservableObject {
     private var db = Firestore.firestore()
     private var auth = Auth.auth()
     private var id: String?
+    private var projectId:String
     
     @Published var todo: Todo = .init()
     @Published var reminderList: [Reminder] = []
@@ -28,16 +29,17 @@ class TodoEditorViewModel: ObservableObject {
     @Published var error: Error?
     @Published var showAlert = false
     @Published var showReminderEditor = false
-    
-    var cancelable: AnyCancellable? = nil
-    
-    init(id: String?) {
+     var cancelable: AnyCancellable? = nil
+
+    init(id: String?,projectId : String = "") {
         self.id = id
+        self.projectId = projectId
         getTodo()
         self.cancelable = todo.objectWillChange.sink(receiveValue: {
             self.objectWillChange.send()
         })
     }
+    
     
     private func setupRestrictions() {
         todo.$startDate.sink {
@@ -56,6 +58,7 @@ class TodoEditorViewModel: ObservableObject {
                     case .success(let todo):
                         self.todo = todo
                         self.reminderList = todo.reminders
+                        self.todo.projectId = self.projectId
                     case .failure(let error):
                         print("Error getting todo \(error)")
                 }

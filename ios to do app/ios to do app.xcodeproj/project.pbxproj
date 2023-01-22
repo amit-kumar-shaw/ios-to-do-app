@@ -50,6 +50,8 @@
 		7CE7D03329749641008F0702 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D03229749641008F0702 /* Language.swift */; };
 		7CE7D03629749725008F0702 /* JSONUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D03529749725008F0702 /* JSONUtils.swift */; };
 		7CE7D0382974B0CB008F0702 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D0372974B0CB008F0702 /* Reminder.swift */; };
+		CD54992629783E53007F0F3B /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD54992529783E53007F0F3B /* Project.swift */; };
+		CD54992A297843B2007F0F3B /* ProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD549929297843B2007F0F3B /* ProjectViewModel.swift */; };
 		CE890B9229758E6500233D7A /* Flashcards.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9129758E6500233D7A /* Flashcards.swift */; };
 		CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9529758FC400233D7A /* FlashcardEditor.swift */; };
 		CE890B982975900300233D7A /* FlashcardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B972975900300233D7A /* FlashcardView.swift */; };
@@ -114,6 +116,8 @@
 		7CE7D03229749641008F0702 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
 		7CE7D03529749725008F0702 /* JSONUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONUtils.swift; sourceTree = "<group>"; };
 		7CE7D0372974B0CB008F0702 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		CD54992529783E53007F0F3B /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		CD549929297843B2007F0F3B /* ProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewModel.swift; sourceTree = "<group>"; };
 		CE890B9129758E6500233D7A /* Flashcards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcards.swift; sourceTree = "<group>"; };
 		CE890B9529758FC400233D7A /* FlashcardEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardEditor.swift; sourceTree = "<group>"; };
 		CE890B972975900300233D7A /* FlashcardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardView.swift; sourceTree = "<group>"; };
@@ -190,6 +194,7 @@
 				7C6826622976A1CA002DF5C6 /* TodoEditorViewModel.swift */,
 				7C6826662976F2A3002DF5C6 /* TodoDetailViewModel.swift */,
 				7C68266A2977036F002DF5C6 /* TodoListViewModel.swift */,
+				CD549929297843B2007F0F3B /* ProjectViewModel.swift */,
 			);
 			path = viewModels;
 			sourceTree = "<group>";
@@ -292,6 +297,7 @@
 				7CE7D03229749641008F0702 /* Language.swift */,
 				7CE7D0372974B0CB008F0702 /* Reminder.swift */,
 				CE890B9129758E6500233D7A /* Flashcards.swift */,
+				CD54992529783E53007F0F3B /* Project.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -461,6 +467,7 @@
 				7CE7CFF22964DD5A008F0702 /* Persistence.swift in Sources */,
 				7CE7D03629749725008F0702 /* JSONUtils.swift in Sources */,
 				7CE7D0272972BA82008F0702 /* ToDo.swift in Sources */,
+				CD54992A297843B2007F0F3B /* ProjectViewModel.swift in Sources */,
 				7C6826562975CAB2002DF5C6 /* FirebaseAppDelegate.swift in Sources */,
 				7CE7CFF52964DD5A008F0702 /* ios_to_do_app.xcdatamodeld in Sources */,
 				400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */,
@@ -483,6 +490,7 @@
 				7C68265D2975E43F002DF5C6 /* AuthenticationViewModel.swift in Sources */,
 				7C68266D29770523002DF5C6 /* Errors.swift in Sources */,
 				7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */,
+				CD54992629783E53007F0F3B /* Project.swift in Sources */,
 				7CE7D03329749641008F0702 /* Language.swift in Sources */,
 				7C6826582975CC3A002DF5C6 /* LoginScreen.swift in Sources */,
 				7C68265F2975EACB002DF5C6 /* SettingsViewModel.swift in Sources */,

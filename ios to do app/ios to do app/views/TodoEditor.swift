@@ -18,11 +18,11 @@ struct TodoEditor: View {
 
     
     private var languageList = Language.getAllLanguages()
+   
     
-    init(entityId: String?) {
+    init(entityId: String?, projectId: String) {
         editMode = entityId != nil
-        
-        viewModel = TodoEditorViewModel(id: entityId)
+        viewModel = TodoEditorViewModel(id: entityId,projectId: projectId)
     }
     
     private func saveTodo() {
@@ -164,7 +164,7 @@ struct RemindMeBeforeDueDatePicker: View {
     
 struct TodoEditor_Previews: PreviewProvider {
     static var previews: some View {
-        TodoEditor(entityId: nil)
+        TodoEditor(entityId: nil,projectId: "nil")
     }
 }
 

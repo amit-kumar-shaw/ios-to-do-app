@@ -16,7 +16,7 @@ struct TodoDetail: View {
     
     init(entityId: String) {
         self.entityId = entityId
-        viewModel = TodoEditorViewModel(id: entityId)
+        viewModel = TodoEditorViewModel(id: entityId,projectId: "All")
     }
     
     

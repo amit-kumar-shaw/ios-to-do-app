@@ -13,15 +13,30 @@ import FirebaseAuth
 struct TodoList: View {
     
     @ObservedObject var viewModel = TodoListViewModel()
+    @State var projectId : String = ""
+    
     @Binding var dateFilter: Date?
     
+    init(_ filter: FilterType? = nil,_ projectId : String? = nil){
+        
+        self._dateFilter = .constant(Date())
+        viewModel.filter = filter ?? .all
+        
+        if projectId != nil {
+            self.projectId = projectId!
+        }
+        
+    }
+        
     init(dateFilter: Binding<Date?>,_ filter: FilterType? = nil){
         self._dateFilter = dateFilter 
         viewModel.filter = filter ?? .all
     }
     
     var body: some View {
+        
         List{
+            
             ForEach($viewModel.todoList, id: \.0){
                 $item in
                 NavigationLink(destination: TodoDetail(entityId: item.0)){
@@ -40,7 +55,7 @@ struct TodoList: View {
             VStack{
                 Text("No todos created yet")
                 NavigationLink {
-                    TodoEditor(entityId: nil)
+                    TodoEditor(entityId: nil, projectId : self.projectId)
                 } label: {
                     Label("New Todo", systemImage: "plus")
                 }.buttonStyle(.bordered)

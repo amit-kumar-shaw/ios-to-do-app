@@ -12,40 +12,39 @@ import FirebaseAuth
 struct HomeView: View {
     
     
-    
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-    
     @State private var projectName = ""
     @State private var projectColor = Color.white
-    @State private var showModal = false
+    @State private var  showModal = false
+    @ObservedObject var viewModel = ProjectViewModel()
+    
 
     @State private var showEnableRemindersModal : Bool = false
 
     var body: some View {
+        
         NavigationView {
-            ZStack{
+            
+            
+            VStack(alignment: .leading,spacing: 0){
                 
-                VStack(alignment: .leading,spacing: 0){
-                    
-                    Text("Welcome")
-                        .font(.system(size: 32))
-                        .padding(.leading,20)
-                    
+                
+                Text("Welcome")
+                    .font(.system(size: 32))
+                    .padding(.leading,20)
+                    .font(.title)
+                
                     List{
+                        
                         HStack{
-                            NavigationLink(destination: UpcomingView(), label: {
+                            NavigationLink(destination: TodoList(), label: {
                                 Image(systemName: "hourglass.circle.fill")
                                 Text("Upcoming")
                             })
                         }
                         
                         HStack{
-                            NavigationLink(destination: TodayView(), label: {
+                            NavigationLink(destination: TodoView(project:("todayId",Project(projectName: "Today", projectColor: Color.white )) )
+                                           , label: {
                                 Image(systemName: "calendar.badge.exclamationmark")
                                 Text("Today")
                             })
@@ -60,29 +59,44 @@ struct HomeView: View {
                         
                     }
                     .frame(height: 180)
+                    //.scrollDisabled(true)
+                    .scrollContentBackground(.hidden)
+                    
                     
                     List {
-                
-                        ForEach(items) { item in
-                            NavigationLink(destination: TodoView(), label: {
-                               
-                                //Text(item.timestamp!, formatter: itemFormatter)
-                                
-                                Text(item.projectName ?? "Project")
-                            })
+                        
+                        ForEach($viewModel.projects, id: \.0){ $item in
+                            NavigationLink(destination: TodoView( project: (item.0,item.1!))){ // init with Project id
+                                HStack {
+                                    
+                                    Text(nameText(item: item.1))
+                                    
+                                }
+                            }
+                            
                         }
-                        .onDelete(perform: deleteItems)
+                        .onDelete { indexSet in
+                            let index = indexSet.first!
+                            self.viewModel.deleteProject(at: index)
+                        }
+                        
+                        
                     }
+                    .overlay(content: {if viewModel.projects.isEmpty {
+                        VStack{
+                            Text("Creat a new project!")
+                        }
+                    }})
                     .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
+                        ToolbarItem(placement: .automatic) {
                             EditButton()
                         }
-                        ToolbarItem {
-                           addButton
+                        ToolbarItem (placement: .automatic){
+                            self.addButton
                         }
                     }
                 }.padding(.zero)
-            }
+            
             
         }.onAppear{
             NotificationUtility.hasPermissions(completion: {hasPermissions in
@@ -93,83 +107,68 @@ struct HomeView: View {
         }
         .fullScreenCover(isPresented: $showEnableRemindersModal) {
             EnableRemindersModalView()
-        }
-    }
+        }.background(Color(hex:"#FFF9DA"))
+        .padding(.zero)
+
+}
     
-    private var addButton: some View {
-        Button(action:{ self.showModal = true}) {
-            Label("Add Item", systemImage: "plus")
-        }.sheet(isPresented: $showModal) {
-            VStack {
-                Text("Add a new item")
-                    .font(.title)
-                
-                TextField("Project Name", text: self.$projectName)
-                ColorPicker("Project Color", selection: self.$projectColor)
-                
-                Button(action: {
-                    // Create a new item with the project name and color entered by the user
-                    let newItem = Item(context: self.viewContext)
-                    newItem.projectName = self.projectName
-                    //newItem.projectColor = self.projectColor
-                    newItem.timestamp = Date()
-
-                    do {
-                        try self.viewContext.save()
-                    } catch {
-                       
-                    }
-                    self.showModal = false
-                }) {
-                    Text("Add")
-                }
-            }.padding(.all,50)
-        }
-    }
-
-
-
-    
-    private func addItem() {
         
-        withAnimation {
+        
+    private var addButton: some View {
             
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            return AnyView(
+                Button(action:{ self.showModal = true}) {
+                    Label("Add Item", systemImage: "plus")
+                }.sheet(isPresented: $showModal) {
+                    VStack {
+                        Text("Creat a Project!")
+                            .font(.title)
+                        
+                        TextField("Project Name", text: self.$projectName)
+                        ColorPicker("Project Color", selection: self.$projectColor)
+                        
+                        Button(action:   {
+                            
+                            self.viewModel.addProject(name: self.projectName, color: self.projectColor.toHex())
+                            self.showModal = false
+                            
+                        }  ) {
+                            Text("Add")
+                        } .disabled(self.projectName.isEmpty)
+                            .alert("Error add project", isPresented: $viewModel.showAlert, actions: {
+                                Button("Ok", action: { self.viewModel.showAlert = false })
+                            }, message: { Text(self.viewModel.error?.localizedDescription ?? "Unknown error") })
+                        
+                    }.padding(.all,50)
+                    
+                }
+            )
         }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        
+        private func nameText(item : Project?) -> String {
+            
+            if let item = item {
+                
+                if let name = item.projectName {
+                    return name
+                }
+                
             }
+            
+            return "Untitled"
         }
-    }
+        
+        
+        private let itemFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .short
+            formatter.timeStyle = .medium
+            return formatter
+        }()
+        
+        
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

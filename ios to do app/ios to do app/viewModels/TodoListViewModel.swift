@@ -22,6 +22,7 @@ class TodoListViewModel: ObservableObject{
     
     private var db = Firestore.firestore()
     private var auth = Auth.auth()
+    private var projectId : String? = nil
     
     private var cancelables: [AnyCancellable] = []
     
@@ -44,14 +45,22 @@ class TodoListViewModel: ObservableObject{
             todoList = todoList.filter { $0.1.dueDate >= filter }
         }
         
+        guard let projectId = self.projectId else{
+            return
+        }
+        
         let collectionRef = Firestore.firestore().collection("todos").whereField("userId", in: [currentUserId])
         var queryRef: Query
+        
+        
         
         switch(filter){
             case .completed : queryRef = collectionRef.whereField("completed", in: [true])
             case .incomplete : queryRef = collectionRef.whereField("completed", in: [false])
             default: queryRef = collectionRef
         }
+        
+        queryRef = queryRef.whereField(projectId, in: [self.projectId!])
         
         queryRef.addSnapshotListener { querySnapshot, error in
             if error != nil{
