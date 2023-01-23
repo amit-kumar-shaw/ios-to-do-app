@@ -21,9 +21,11 @@ struct TodoList: View {
         
         self._dateFilter = .constant(Date())
         viewModel.filter = filter ?? .all
-        
+       
         if projectId != nil {
             self.projectId = projectId!
+            viewModel.projectId = projectId!
+            print("project :", projectId!  , self.projectId)
         }
         
     }

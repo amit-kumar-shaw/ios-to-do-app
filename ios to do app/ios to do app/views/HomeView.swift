@@ -82,6 +82,7 @@ struct HomeView: View {
                         
                         
                     }
+                    .scrollContentBackground(.hidden)
                     .overlay(content: {if viewModel.projects.isEmpty {
                         VStack{
                             Text("Creat a new project!")
@@ -96,6 +97,7 @@ struct HomeView: View {
                         }
                     }
                 }.padding(.zero)
+                .background(Color(hex:"#FFF9DA"))
             
             
         }.onAppear{
@@ -107,7 +109,7 @@ struct HomeView: View {
         }
         .fullScreenCover(isPresented: $showEnableRemindersModal) {
             EnableRemindersModalView()
-        }.background(Color(hex:"#FFF9DA"))
+        }
         .padding(.zero)
 
 }

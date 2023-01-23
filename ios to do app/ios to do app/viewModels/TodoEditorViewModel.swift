@@ -86,6 +86,7 @@ class TodoEditorViewModel: ObservableObject {
     func save() {
         todo.reminders = reminderList
         todo.userId = auth.currentUser?.uid;
+        todo.projectId = self.projectId
         guard let documentId = id else {
             let newDocRef = db.collection("todos").document()
             id = newDocRef.documentID
