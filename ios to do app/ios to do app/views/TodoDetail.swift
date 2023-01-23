@@ -78,6 +78,7 @@ struct TodoDetail: View {
                                  
                                         Label("\(NotificationUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions() {
                                                 Button {
+                                                    print("weird")
                                                     viewModel.muteDefaultReminder()
                                                 } label: {
                                                     Label("Mute", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.fill" : "bell.slash.fill")
@@ -85,9 +86,6 @@ struct TodoDetail: View {
                                             }
                                         
                                     }.sheet(isPresented: $showBeforeDueDatePicker) {
-                                        //TimePicker(selectedTime: self.$selectedTime)TimePicker(selectedTime: $viewModel.todo.reminderBeforeDueDate)
-                                       
-                                        
                                         RemindMeBeforeDueDatePicker(reminderBeforeDueDate: $viewModel.todo.reminderBeforeDueDate, isPresented: $showBeforeDueDatePicker).presentationDetents([.medium, ])
                                     }
                                     

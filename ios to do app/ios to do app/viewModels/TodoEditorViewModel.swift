@@ -29,15 +29,13 @@ class TodoEditorViewModel: ObservableObject {
     @Published var error: Error?
     @Published var showAlert = false
     @Published var showReminderEditor = false
-     var cancelable: AnyCancellable? = nil
+    
 
     init(id: String?,projectId : String = "") {
         self.id = id
         self.projectId = projectId
         getTodo()
-        self.cancelable = todo.objectWillChange.sink(receiveValue: {
-            self.objectWillChange.send()
-        })
+       
     }
     
     
@@ -68,6 +66,7 @@ class TodoEditorViewModel: ObservableObject {
     
     func muteDefaultReminder() {
         todo.reminderBeforeDueDate.negate()
+        self.objectWillChange.send()
     }
     
     func toggleReminderEditor(){
