@@ -15,11 +15,10 @@ struct TodoList: View {
     @ObservedObject var viewModel = TodoListViewModel()
     @State var projectId : String = ""
     
-    @Binding var dateFilter: Date?
     
-    init(_ filter: FilterType? = nil,_ projectId : String? = nil){
+    init(_ dateFilter: Date? = nil,_ filter: FilterType? = nil,_ projectId : String? = nil){
         
-        self._dateFilter = .constant(Date())
+        viewModel.dateFilter = dateFilter
         viewModel.filter = filter ?? .all
        
         if projectId != nil {
@@ -30,10 +29,6 @@ struct TodoList: View {
         
     }
         
-    init(dateFilter: Binding<Date?>,_ filter: FilterType? = nil){
-        self._dateFilter = dateFilter 
-        viewModel.filter = filter ?? .all
-    }
     
     var body: some View {
         
@@ -49,9 +44,6 @@ struct TodoList: View {
                     }
                 }
             }
-        }.onAppear {
-            viewModel.dateFilter = dateFilter
-            viewModel.loadList()
         }
         .overlay(content: {if viewModel.todoList.isEmpty {
             VStack{
@@ -70,6 +62,6 @@ struct TodoList: View {
 
 struct TodoList_Previews: PreviewProvider {
     static var previews: some View {
-        TodoList(dateFilter: .constant(nil))
+        TodoList()
     }
 }

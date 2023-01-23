@@ -95,7 +95,7 @@ struct UpcomingView: View {
                     }
                 }
 
-                TodoList(dateFilter: .constant(self.dateFilter) , selectedFilter).listStyle(.inset)
+                TodoList(self.dateFilter , selectedFilter).listStyle(.inset)
                 
 //                List {
 //                    ForEach(filteredTodos.indices, id: \.self) { index in
@@ -134,7 +134,7 @@ struct UpcomingView: View {
 //                    }
 //                }
 //                .padding()
-            }
+            }.background(Color(hex:"#FFF9DA"))
     }
 }
 

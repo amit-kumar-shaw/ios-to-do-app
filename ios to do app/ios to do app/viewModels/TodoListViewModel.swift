@@ -42,10 +42,7 @@ class TodoListViewModel: ObservableObject{
             error = AuthError()
             return
         }
-        if let filter = dateFilter {
-            todoList = todoList.filter { $0.1.dueDate >= filter }
-        }
-        
+       
 //        guard let projectId = self.projectId else{
 //            return
 //        }
@@ -64,7 +61,9 @@ class TodoListViewModel: ObservableObject{
         if let projectId = self.projectId{
             queryRef = queryRef.whereField("projectId", isEqualTo : projectId )
         }
-
+        if let dateFilter = dateFilter {
+                queryRef = queryRef.whereField("dueDate", isEqualTo: dateFilter)
+        }
         queryRef.addSnapshotListener { querySnapshot, error in
             if error != nil{
                 self.showAlert = true

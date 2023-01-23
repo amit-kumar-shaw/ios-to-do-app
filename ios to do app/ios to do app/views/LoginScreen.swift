@@ -47,6 +47,7 @@ struct SignUpView: View {
             .opacity(isLoading ? 0.6 : 1)
             .buttonStyle(.borderedProminent)
         }.padding().textFieldStyle(.roundedBorder)
+            .background(Color(hex:"#FFF9DA"))
     }
     // Function to handle the sign up process
     func signup() {
@@ -101,6 +102,7 @@ struct ForgetPasswordView: View {
             .opacity(isLoading ? 0.6 : 1)
             .buttonStyle(.bordered)
         }.padding().textFieldStyle(.roundedBorder)
+            .background(Color(hex:"#FFF9DA"))
     }
     // Function to handle the password reset process
     func forgotPassword() {
@@ -132,39 +134,39 @@ struct LoginScreen: View {
     @State private var showForgetPasswordView = false
 
     var body: some View {
-        VStack {
-            Text("Log in").font(.largeTitle)
-            TextField("Email", text: $email)
-            SecureField("Password", text: $password)
-            // Display error message if there is any
-            if (error != "") {
-                Text(error)
-                    .font(.caption)
-                    .foregroundColor(.red)
-                    .padding()
-            }
-            // Login button
-            Button("Login", action: {
-                self.login()
-            })
-            .padding()
-            .disabled(isLoading)
-            .opacity(isLoading ? 0.6 : 1)
-            .buttonStyle(.borderedProminent)
-            // Sign up button
-            Button("Sign Up", action: {
-                self.showSignUpView = true
-            })
-            .padding()
-            .buttonStyle(.bordered)
-            // Forget password button
-            Button("Forget password", action: {
-                self.showForgetPasswordView = true
-            })
-            .padding()
-            .buttonStyle(.bordered)
-        }.padding().textFieldStyle(.roundedBorder)
-    }
+            VStack{
+                Text("Log in").font(.largeTitle)
+                TextField("Email", text: $email)
+                SecureField("Password", text: $password)
+                // Display error message if there is any
+                if (error != "") {
+                    Text(error)
+                        .font(.caption)
+                        .foregroundColor(.red)
+                        .padding()
+                }
+                // Login button
+                Button("Login", action: {
+                    self.login()
+                })
+                .padding()
+                .disabled(isLoading)
+                .opacity(isLoading ? 0.6 : 1)
+                .buttonStyle(.borderedProminent)
+                // Sign up button
+                Button("Sign Up", action: {
+                    self.showSignUpView = true
+                })
+                .padding()
+                .buttonStyle(.bordered)
+                // Forget password button
+                Button("Forget password", action: {
+                    self.showForgetPasswordView = true
+                })
+                .padding()
+                .buttonStyle(.bordered)
+            }.padding().textFieldStyle(.roundedBorder)
+        }
     // Function to handle the login process
     func login() {
         self.error = ""

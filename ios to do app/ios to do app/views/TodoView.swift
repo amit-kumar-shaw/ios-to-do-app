@@ -70,7 +70,7 @@ struct TodoView: View {
                     .frame(width: UIScreen.main.bounds.width * 0.3)
                 }.padding(.top, 100)
                 
-                TodoList(selectedFilter, self.project.0).listStyle(.inset)
+                TodoList(nil,selectedFilter, self.project.0).listStyle(.inset)
                 
 //                List {
 //                    ForEach(filteredTodos.indices, id: \.self) { index in

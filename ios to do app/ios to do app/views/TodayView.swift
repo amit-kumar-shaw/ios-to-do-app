@@ -67,7 +67,7 @@ struct TodayView: View {
                     }.frame(width: UIScreen.main.bounds.width * 0.3)
                 }.padding(.top, 100)
                
-                TodoList(dateFilter: .constant(Date()) , selectedFilter).listStyle(.inset)
+                TodoList(Date() , selectedFilter).listStyle(.inset)
                 HStack {
                                     Picker(selection: $selectedFilter, label: Text("Filter"), content: {
                                         ForEach(FilterType.allCases, id: \.self) { v in
@@ -77,7 +77,7 @@ struct TodayView: View {
                                     
                                 }
                                 .padding()
-            }
+            }.background(Color(hex:"#FFF9DA"))
     }
 }
 
