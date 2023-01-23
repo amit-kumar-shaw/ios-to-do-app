@@ -30,6 +30,7 @@ class Todo: ObservableObject, Codable{
         case description
         case startDate
         case dueDate
+        case reminderBeforeDueDate
         case reminders
         case priority
         case recurring
@@ -50,6 +51,7 @@ class Todo: ObservableObject, Codable{
         description = try values.decode(String.self, forKey: .description)
         startDate = try values.decode(Date.self, forKey: .startDate)
         dueDate = try values.decode(Date.self, forKey: .dueDate)
+        reminderBeforeDueDate = try values.decode(Int.self, forKey: .reminderBeforeDueDate)
         reminders = try values.decode([Reminder].self, forKey: .reminders)
         priority = try values.decode(Priority.self, forKey: .priority)
         recurring = try values.decode(Recurring.self, forKey: .recurring)
@@ -71,6 +73,7 @@ class Todo: ObservableObject, Codable{
         try container.encode(description, forKey: .description)
         try container.encode(startDate, forKey: .startDate)
         try container.encode(dueDate, forKey: .dueDate)
+        try container.encode(reminderBeforeDueDate, forKey: .reminderBeforeDueDate)
         try container.encode(reminders, forKey: .reminders)
         try container.encode(priority, forKey: .priority)
         try container.encode(recurring, forKey: .recurring)

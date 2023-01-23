@@ -13,6 +13,7 @@ struct TodoDetail: View {
     
     private var entityId: String
     @ObservedObject var viewModel: TodoEditorViewModel
+    @State private var showBeforeDueDatePicker = false
     
     init(entityId: String) {
         self.entityId = entityId
@@ -68,6 +69,28 @@ struct TodoDetail: View {
                                 }
                                 
                                 Section() {
+                                    Button(action: {
+                                        if (viewModel.todo.reminderBeforeDueDate < 0) {
+                                            viewModel.todo.reminderBeforeDueDate = -1 * viewModel.todo.reminderBeforeDueDate
+                                        }
+                                        self.showBeforeDueDatePicker = true
+                                    }) {
+                                 
+                                        Label("\(NotificationUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions() {
+                                                Button {
+                                                    viewModel.muteDefaultReminder()
+                                                } label: {
+                                                    Label("Mute", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.fill" : "bell.slash.fill")
+                                                }.tint(.indigo)
+                                            }
+                                        
+                                    }.sheet(isPresented: $showBeforeDueDatePicker) {
+                                        //TimePicker(selectedTime: self.$selectedTime)TimePicker(selectedTime: $viewModel.todo.reminderBeforeDueDate)
+                                       
+                                        
+                                        RemindMeBeforeDueDatePicker(reminderBeforeDueDate: $viewModel.todo.reminderBeforeDueDate, isPresented: $showBeforeDueDatePicker).presentationDetents([.medium, ])
+                                    }
+                                    
                                         ForEach($viewModel.reminderList, id: \.id) {
                                             reminder in
                                             Label(reminderDateFormatter.string(from: reminder.date.wrappedValue), systemImage: "bell")
