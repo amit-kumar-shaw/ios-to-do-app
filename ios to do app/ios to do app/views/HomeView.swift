@@ -10,13 +10,13 @@ import CoreData
 import FirebaseAuth
 
 struct HomeView: View {
-    
-    
+    @State private var offset: CGFloat = 0
+    @State private var searchTerm = ""
     @State private var projectName = ""
     @State private var projectColor = Color.white
     @State private var  showModal = false
     @ObservedObject var viewModel = ProjectViewModel()
-    
+    @ObservedObject var todoViewModel = TodoListViewModel()
 
     @State private var showEnableRemindersModal : Bool = false
 
@@ -27,11 +27,23 @@ struct HomeView: View {
             
             VStack(alignment: .leading,spacing: 0){
                 
+                if offset > 0 {
+                        HStack {
+                            TextField("Search", text: $todoViewModel.searchTerm)
+
+                            Image(systemName: "magnifyingglass")
+                        }
+                    
+                    .cornerRadius(10)
+                        .padding(20)
+                        
+                }
                 
                 Text("Welcome")
                     .font(.system(size: 32))
                     .padding(.leading,20)
                     .font(.title)
+                
                 
                 List{
                         
@@ -62,24 +74,40 @@ struct HomeView: View {
                     //.scrollDisabled(true)
                     .scrollContentBackground(.hidden)
                     
-                    
+                ScrollView(showsIndicators: false) {
                     List {
-                        
-                        ForEach($viewModel.projects, id: \.0){ $item in
-                            NavigationLink(destination: TodoView( project: (item.0,item.1!))){ // init with Project id
-                                HStack {
-                                    
-                                    Text(nameText(item: item.1))
-                                    
+                        if searchTerm != ""{
+                            ForEach($todoViewModel.todoList, id: \.0){
+                                $item in
+                                NavigationLink(destination: TodoDetail(entityId: item.0)){
+                                    HStack {
+                                        Text(item.1.task)
+                                        Spacer()
+                                        Checkbox(isChecked: $item.1.isCompleted)
+                                    }
                                 }
                             }
+                            .onDelete { indexSet in
+                                let index = indexSet.first!
+                                self.viewModel.deleteProject(at: index)
+                            }
                             
+                        }else{
+                            ForEach($viewModel.projects, id: \.0){ $item in
+                                NavigationLink(destination: TodoView( project: (item.0,item.1!))){ // init with Project id
+                                    HStack {
+                                        
+                                        Text(nameText(item: item.1))
+                                        
+                                    }
+                                }
+                                
+                            }
+                            .onDelete { indexSet in
+                                let index = indexSet.first!
+                                self.viewModel.deleteProject(at: index)
+                            }
                         }
-                        .onDelete { indexSet in
-                            let index = indexSet.first!
-                            self.viewModel.deleteProject(at: index)
-                        }
-                        
                         
                     }
                     .scrollContentBackground(.hidden)
@@ -95,7 +123,12 @@ struct HomeView: View {
                         ToolbarItem (placement: .automatic){
                             self.addButton
                         }
-                    }
+                    }}.gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                self.offset = value.translation.height
+                            }
+                    )
                 }.padding(.zero)
                 .background(Color(hex:"#FFF9DA"))
             

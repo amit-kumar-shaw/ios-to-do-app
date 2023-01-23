@@ -20,6 +20,8 @@ class TodoListViewModel: ObservableObject{
     @Published var filter: FilterType = .all
     @Published var dateFilter: Date?
     @Published var projectId : String? = nil
+    @Published var searchTerm = ""
+
     
     private var db = Firestore.firestore()
     private var auth = Auth.auth()
@@ -60,6 +62,9 @@ class TodoListViewModel: ObservableObject{
         
         if let projectId = self.projectId{
             queryRef = queryRef.whereField("projectId", isEqualTo : projectId )
+        }
+        if !searchTerm.isEmpty {
+                queryRef = queryRef.whereField("name", isEqualTo: searchTerm).whereField("description", isEqualTo: searchTerm)
         }
         if let dateFilter = dateFilter {
                 queryRef = queryRef.whereField("dueDate", isEqualTo: dateFilter)
