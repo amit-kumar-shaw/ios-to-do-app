@@ -105,6 +105,7 @@ struct NotificationUtility{
                 print("Error scheduling notification: \(error)")
             } else {
                 print("scheuduled: ")
+                print(title)
                 print(date.timeIntervalSinceNow)
             }
         }
