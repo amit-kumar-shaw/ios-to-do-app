@@ -33,10 +33,10 @@ struct HomeView: View {
                     .padding(.leading,20)
                     .font(.title)
                 
-                    List{
+                List{
                         
                         HStack{
-                            NavigationLink(destination: TodoList(), label: {
+                            NavigationLink(destination: UpcomingView(), label: {
                                 Image(systemName: "hourglass.circle.fill")
                                 Text("Upcoming")
                             })
