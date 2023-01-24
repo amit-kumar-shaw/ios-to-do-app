@@ -33,7 +33,7 @@ struct TodoList: View {
     var body: some View {
         List{
             
-            ForEach($viewModel.todoList, id: \.0){
+            ForEach($viewModel.todoList, id: \.0, editActions: .all){
                 $item in
                 NavigationLink(destination: TodoDetail(entityId: item.0)){
                     HStack {
