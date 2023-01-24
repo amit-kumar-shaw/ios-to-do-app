@@ -8,33 +8,25 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var viewModel = SettingsViewModel()
     @StateObject var autheniticationViewModel = AuthenticationViewModel()
+    var tintColor: Color
+    
+    init(tintColor: Color){
+        self.tintColor = tintColor
+    }
     
     var body: some View {
         if(autheniticationViewModel.isAuthenticated){
-            HomeView()
+            HomeView().tint(tintColor)
         }else{
-            LoginScreen()
+            LoginScreen().tint(tintColor)
+            
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
-    }
-}
-
-private func colorScheme(for colorScheme: ColorSchemeOption) -> ColorScheme {
-    switch colorScheme {
-    case .defaultColor:
-        return ColorScheme(primary: .black, secondary: .gray, accent: .blue, background: .white, text: .black, error: .red)
-    case .blue:
-        return ColorScheme(primary: .blue, secondary: .white, accent: .orange, background: .white, text: .white, error: .red)
-    case .green:
-        return ColorScheme(primary: .green, secondary: .white, accent: .purple, background: .white, text: .white, error: .red)
-    case .pink:
-        return ColorScheme(primary: .pink, secondary: .white, accent: .yellow, background: .white, text: .white, error: .red)
+        ContentView(tintColor: Color(hex: TINT_COLORS[0]))
     }
 }

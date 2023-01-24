@@ -6,20 +6,21 @@
 //
 
 import SwiftUI
+import FirebaseCore
+import Combine
 
 @main
 struct ios_to_do_appApp: App {
     
-    
-    
     let persistenceController = PersistenceController.shared
-    
     @UIApplicationDelegateAdaptor(FirebaseAppDelegate.self) var delegate
 
+    @AppStorage("tintColorHex") var tintColorHex = TINT_COLORS[0]
+    
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(tintColor: Color(hex: tintColorHex))
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
                     NotificationUtility.schedule()

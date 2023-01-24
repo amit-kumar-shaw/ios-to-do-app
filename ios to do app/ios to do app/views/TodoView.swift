@@ -70,32 +70,11 @@ struct TodoView: View {
                     .frame(width: UIScreen.main.bounds.width * 0.3)
                 }.padding(.top, 100)
                 
-                TodoList(nil,selectedFilter, self.project.0).listStyle(.inset)
-                
-//                List {
-//                    ForEach(filteredTodos.indices, id: \.self) { index in
-//                        if self.shouldShow(at: index) {
-//                            HStack {
-//                                Text(self.todoList[index].task)
-//                                Spacer()
-//                                Checkbox(isChecked: self.$todoList[index].isCompleted)
-//                            }
-//                        }
-//                    }
-//                    .onDelete { indexSet in
-//                        self.todoList.remove(atOffsets: indexSet)
-//                    }
-//                }
-//                List {
-//                    ForEach(flashcards.cards) { flashcard in
-//                        NavigationLink(destination: FlashcardView(flashcards: flashcards)) {
-//                            Text(flashcard.front)
-//                        }
-//                    }
-//                    Button("New Flashcard") {
-//                        self.showFlashcardEditor = true
-//                    }
-//                }.padding(.zero)
+                TodoList(nil,selectedFilter, self.project.0).listStyle(.inset).toolbar(){
+                    ToolbarItem(placement: .automatic) {
+                        EditButton()
+                    }
+                }
                 HStack {
                     Picker(selection: $selectedFilter, label: Text("Filter"), content: {
                         ForEach(FilterType.allCases, id: \.self) { v in

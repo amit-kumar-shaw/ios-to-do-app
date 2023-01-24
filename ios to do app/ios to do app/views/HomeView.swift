@@ -14,7 +14,9 @@ struct HomeView: View {
     @State private var searchTerm = ""
     @State private var projectName = ""
     @State private var projectColor = Color.white
-    @State private var  showModal = false
+    @State private var showModal = false
+    @State private var searchText = ""
+    
     @ObservedObject var viewModel = ProjectViewModel()
     @ObservedObject var todoViewModel = TodoListViewModel()
 
@@ -26,19 +28,6 @@ struct HomeView: View {
             
             
             VStack(alignment: .leading,spacing: 0){
-                
-                if offset > 0 {
-                        HStack {
-                            TextField("Search", text: $todoViewModel.searchTerm)
-
-                            Image(systemName: "magnifyingglass")
-                        }
-                    
-                    .cornerRadius(10)
-                        .padding(20)
-                        
-                }
-                
                 Text("Welcome")
                     .font(.system(size: 32))
                     .padding(.leading,20)
@@ -127,12 +116,7 @@ struct HomeView: View {
                         ToolbarItem (placement: .automatic){
                             self.addButton
                         }
-                    }}.gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                self.offset = value.translation.height
-                            }
-                    )
+                    }}
                 }.padding(.zero)
                 .background(Color(hex:"#FFF9DA"))
             
@@ -148,8 +132,16 @@ struct HomeView: View {
             EnableRemindersModalView()
         }
         .padding(.zero)
+        .searchable(text: $searchText){
+            Text("Search for todos and projects!")
+        }
+        .onSubmit(of: .search, performSearch)
 
 }
+    
+    private func performSearch(){
+        //TODO: implement global search functionality
+    }
     
         
         
@@ -211,6 +203,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        HomeView()
     }
 }
