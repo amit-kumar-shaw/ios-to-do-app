@@ -17,7 +17,6 @@ struct HomeView: View {
     @State private var  showModal = false
     @ObservedObject var viewModel = ProjectViewModel()
     
-
     @State private var showEnableRemindersModal : Bool = false
 
     var body: some View {
@@ -28,61 +27,72 @@ struct HomeView: View {
             VStack(alignment: .leading,spacing: 0){
                 
                 
-                Text("Welcome")
-                    .font(.system(size: 32))
-                    .padding(.leading,20)
-                    .font(.title)
-                
+
                     List{
-                        
-                        HStack{
-                            NavigationLink(destination: TodoList(), label: {
-                                Image(systemName: "hourglass.circle.fill")
-                                Text("Upcoming")
-                            })
-                        }
-                        
-                        HStack{
-                            NavigationLink(destination: TodoView(project:("todayId",Project(projectName: "Today", projectColor: Color.white )) )
-                                           , label: {
-                                Image(systemName: "calendar.badge.exclamationmark")
-                                Text("Today")
-                            })
-                        }
-                        
-                        HStack{
-                            NavigationLink(destination: SettingsView(), label: {
-                                Image(systemName: "gearshape")
-                                Text("Setting")
-                            })
-                        }
-                        
+                        Section("Welcome!")
+                           {
+                                HStack{
+                                    NavigationLink(destination: TodoList(), label: {
+                                        Image(systemName: "hourglass.circle.fill")
+                                        Text("Upcoming")
+                                    })
+                                }
+                              
+                                
+                                HStack{
+                                    NavigationLink(destination: TodoView(project:("todayId",Project(projectName: "Today", projectColor: Color.white )) )
+                                                   , label: {
+                                        Image(systemName: "calendar.badge.exclamationmark")
+                                        Text("Today")
+                                    })
+                                }
+                                
+                                HStack{
+                                    NavigationLink(destination: SettingsView(), label: {
+                                        Image(systemName: "gearshape")
+                                        Text("Setting")
+                                    })
+                                }
+                            } .headerProminence(.increased)
                     }
+                   // .navigationTitle("Welcome")
+                   // .navigationBarTitleDisplayMode(.inline)
                     .frame(height: 180)
-                    //.scrollDisabled(true)
-                    .scrollContentBackground(.hidden)
+                    .scrollDisabled(true)
+                   
                     
                     
                     List {
-                        
-                        ForEach($viewModel.projects, id: \.0){ $item in
-                            NavigationLink(destination: TodoView( project: (item.0,item.1!))){ // init with Project id
-                                HStack {
+                        Section("To-Do Lists"){
+                            ForEach($viewModel.projects, id: \.0){ $item in
+                                NavigationLink(destination: TodoView( project: (item.0,item.1!))){ // init with Project id
+                                    HStack {
+                                        if let colorString = item.1?.colorHexString {
+                                            
+                                            Circle().frame(width: 12, height: 12)
+                                                .overlay(
+                                                    Circle().foregroundColor(Color(hex: colorString))
+                                                        .frame(width: 10, height: 10)
                                     
-                                    Text(nameText(item: item.1))
-                                    
+                                                    )
+                                        }
+                                        Text(nameText(item: item.1))
+                                        
+                                    }
                                 }
+                                
                             }
                             
-                        }
-                        .onDelete { indexSet in
-                            let index = indexSet.first!
-                            self.viewModel.deleteProject(at: index)
-                        }
-                        
+                            .onDelete { indexSet in
+                                let index = indexSet.first!
+                                self.viewModel.deleteProject(at: index)
+                            }
+                            
+                        }.headerProminence(.standard)
+                            
                         
                     }
-                    .scrollContentBackground(.hidden)
+                   // .scrollContentBackground(.hidden)
                     .overlay(content: {if viewModel.projects.isEmpty {
                         VStack{
                             Text("Creat a new project!")
@@ -97,10 +107,9 @@ struct HomeView: View {
                         }
                     }
                 }.padding(.zero)
-                .background(Color(hex:"#FFF9DA"))
             
-            
-        }.onAppear{
+        }
+        .onAppear{
             NotificationUtility.hasPermissions(completion: {hasPermissions in
                 if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
                     self.showEnableRemindersModal = true
@@ -110,14 +119,16 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $showEnableRemindersModal) {
             EnableRemindersModalView()
         }
+        //.background(Color(hex:"#FFF9DA"))
         .padding(.zero)
+        
 
 }
     
         
         
     private var addButton: some View {
-            
+    
             return AnyView(
                 Button(action:{ self.showModal = true}) {
                     Label("Add Item", systemImage: "plus")
@@ -132,6 +143,9 @@ struct HomeView: View {
                         Button(action:   {
                             
                             self.viewModel.addProject(name: self.projectName, color: self.projectColor.toHex())
+                            
+                            self.projectName = ""
+                            self.projectColor = Color.white
                             self.showModal = false
                             
                         }  ) {

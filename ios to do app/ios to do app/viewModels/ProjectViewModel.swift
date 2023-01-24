@@ -73,9 +73,9 @@ class ProjectViewModel : ObservableObject {
                     }
                 })
 
-                self.projects = docs!
-               
-                
+            self.projects = docs!
+
+            self.projects = self.projects.sorted(by: { $0.1?.timestamp ?? Date() < $1.1?.timestamp ?? Date() })
             
         }
     }
@@ -104,13 +104,16 @@ class ProjectViewModel : ObservableObject {
         project.userId = auth.currentUser?.uid;
         project.projectName = name
         project.colorHexString = color
+        project.timestamp = Date()
         
             guard let documentId = id else {
+                // add new project
                 let newDocRef = db.collection("projects").document()
                 id = newDocRef.documentID
                 
                 do {
                     try newDocRef.setData(from: project)
+                    id = nil
                 } catch {
                     self.error = error
                     self.showAlert = true
@@ -122,7 +125,8 @@ class ProjectViewModel : ObservableObject {
             do {
                 
                 try db.collection("projects").document(documentId).setData(from: project)
-                getProject()
+            
+                
             } catch {
                 self.error = error
                 self.showAlert = true

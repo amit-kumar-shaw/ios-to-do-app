@@ -19,14 +19,17 @@ struct TodoList: View {
     
     init(_ filter: FilterType? = nil,_ projectId : String? = nil){
         
+        
         self._dateFilter = .constant(Date())
-        viewModel.filter = filter ?? .all
-       
+     
         if projectId != nil {
+            
             self.projectId = projectId!
             viewModel.projectId = projectId!
-            print("project :", projectId!  , self.projectId)
+       
         }
+        
+        viewModel.filter = filter ?? .all
         
     }
         
@@ -51,6 +54,7 @@ struct TodoList: View {
             }
         }.onAppear {
             viewModel.dateFilter = dateFilter
+            viewModel.projectId = self.projectId
             viewModel.loadList()
         }
         .overlay(content: {if viewModel.todoList.isEmpty {

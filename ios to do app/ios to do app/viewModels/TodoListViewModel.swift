@@ -19,23 +19,24 @@ class TodoListViewModel: ObservableObject{
     @Published var error: Error?
     @Published var filter: FilterType = .all
     @Published var dateFilter: Date?
-    @Published var projectId : String? = nil
+    @Published var projectId : String?
     
+    private var m_projectId : String = ""
     private var db = Firestore.firestore()
     private var auth = Auth.auth()
- 
+    
     private var cancelables: [AnyCancellable] = []
     
     init() {
-        //loadList()
         
         $filter.sink { filter in
-            
             self.loadList()
         }.store(in: &cancelables)
+        
     }
-   
-
+    
+    
+    
     func loadList(){
         
         guard let currentUserId = auth.currentUser?.uid else{
@@ -46,9 +47,6 @@ class TodoListViewModel: ObservableObject{
             todoList = todoList.filter { $0.1.dueDate >= filter }
         }
         
-//        guard let projectId = self.projectId else{
-//            return
-//        }
         
         let collectionRef = Firestore.firestore().collection("todos").whereField("userId", in: [currentUserId])
         var queryRef: Query
@@ -56,14 +54,16 @@ class TodoListViewModel: ObservableObject{
         
         
         switch(filter){
-            case .completed : queryRef = collectionRef.whereField("completed", in: [true])
-            case .incomplete : queryRef = collectionRef.whereField("completed", in: [false])
-            default: queryRef = collectionRef
+        case .completed : queryRef = collectionRef.whereField("completed", in: [true])
+        case .incomplete : queryRef = collectionRef.whereField("completed", in: [false])
+        default: queryRef = collectionRef
         }
         
-        if let projectId = self.projectId{
-            queryRef = queryRef.whereField("projectId", isEqualTo : projectId )
+        if let projectId = projectId {
+            
+            queryRef = queryRef.whereField("projectId", isEqualTo : projectId)
         }
+        
 
         queryRef.addSnapshotListener { querySnapshot, error in
             if error != nil{
@@ -83,5 +83,8 @@ class TodoListViewModel: ObservableObject{
                 self.showAlert = true
             }
         }
+  
     }
+
+   
 }

@@ -44,11 +44,11 @@ struct TodoView: View {
             return !todoList[index].isCompleted
         }
     }
-    
-    private func saveTodo() {
-        todoList.append(newTodo)
-        // self.newTodo = Todo()
-    }
+//
+//    private func saveTodo() {
+//        todoList.append(newTodo)
+//        // self.newTodo = Todo()
+//    }
     private func addFlashcard(flashcard: Flashcard) {
         self.flashcards.cards.append(flashcard)
     }
@@ -103,7 +103,7 @@ struct TodoView: View {
                         }
                     })
                     NavigationLink {
-                        TodoEditor(entityId: nil,projectId :project.0)
+                        TodoEditor(entityId: nil, projectId :project.0)
                     } label: {
                         Text("Add").padding()
                     }
