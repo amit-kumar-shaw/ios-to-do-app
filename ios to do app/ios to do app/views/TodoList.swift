@@ -24,14 +24,13 @@ struct TodoList: View {
         if projectId != nil {
             self.projectId = projectId!
             viewModel.projectId = projectId!
-            print("project :", projectId!  , self.projectId)
+            //print("project :", projectId!  , self.projectId)
         }
         
     }
         
     
     var body: some View {
-        
         List{
             
             ForEach($viewModel.todoList, id: \.0){
@@ -41,7 +40,9 @@ struct TodoList: View {
                         Text(item.1.task)
                         Spacer()
                         Button(action: {}) {
-                            Checkbox(isChecked: ($item.1.isCompleted))
+                            Checkbox(isChecked: ($item.1.isCompleted), onToggle: {
+                                viewModel.saveTodo(entityId: item.0, todo: item.1)
+                            })
                         }
                         
                     }

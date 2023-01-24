@@ -116,9 +116,12 @@ struct TodoView: View {
 struct Checkbox: View {
     @Binding var isChecked: Bool
     
+    public var onToggle: () -> Void
+    
     var body: some View {
         Button(action: {
             self.isChecked.toggle()
+            self.onToggle()
         }, label: {
             Image(systemName: isChecked ? "checkmark.square" : "square")
                 .resizable()

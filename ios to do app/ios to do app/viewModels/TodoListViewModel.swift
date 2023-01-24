@@ -36,6 +36,17 @@ class TodoListViewModel: ObservableObject{
             self.loadList()
         }.store(in: &cancelables)
     }
+    
+    func saveTodo(entityId : String, todo : Todo) {
+    
+        do {
+            try db.collection("todos").document(entityId).setData(from: todo)
+        } catch {
+            self.error = error
+            self.showAlert = true
+        }
+        
+    }
    
 
     func loadList(){

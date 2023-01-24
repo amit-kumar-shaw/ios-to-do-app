@@ -83,7 +83,11 @@ struct HomeView: View {
                                     HStack {
                                         Text(item.1.task)
                                         Spacer()
-                                        Checkbox(isChecked: $item.1.isCompleted)
+                                        Button(action: {}) {
+                                            Checkbox(isChecked: $item.1.isCompleted, onToggle: {
+                                                todoViewModel.saveTodo(entityId: item.0, todo: item.1)
+                                            })
+                                        }
                                     }
                                 }
                             }
