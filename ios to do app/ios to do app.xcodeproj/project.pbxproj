@@ -32,6 +32,8 @@
 		7C6826692976F850002DF5C6 /* TodoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6826682976F850002DF5C6 /* TodoList.swift */; };
 		7C68266B2977036F002DF5C6 /* TodoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C68266A2977036F002DF5C6 /* TodoListViewModel.swift */; };
 		7C68266D29770523002DF5C6 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C68266C29770523002DF5C6 /* Errors.swift */; };
+		7C682671297FF1D9002DF5C6 /* ProjectListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C682670297FF1D9002DF5C6 /* ProjectListView.swift */; };
+		7C682673297FF1E8002DF5C6 /* ProjectListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C682672297FF1E8002DF5C6 /* ProjectListViewModel.swift */; };
 		7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7CFE82964DD58008F0702 /* ios_to_do_appApp.swift */; };
 		7CE7CFEB2964DD58008F0702 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7CFEA2964DD58008F0702 /* HomeView.swift */; };
 		7CE7CFED2964DD5A008F0702 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CE7CFEC2964DD5A008F0702 /* Assets.xcassets */; };
@@ -94,6 +96,8 @@
 		7C6826682976F850002DF5C6 /* TodoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoList.swift; sourceTree = "<group>"; };
 		7C68266A2977036F002DF5C6 /* TodoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewModel.swift; sourceTree = "<group>"; };
 		7C68266C29770523002DF5C6 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		7C682670297FF1D9002DF5C6 /* ProjectListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListView.swift; sourceTree = "<group>"; };
+		7C682672297FF1E8002DF5C6 /* ProjectListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListViewModel.swift; sourceTree = "<group>"; };
 		7CE7CFE52964DD58008F0702 /* ios to do app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios to do app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE7CFE82964DD58008F0702 /* ios_to_do_appApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ios_to_do_appApp.swift; sourceTree = "<group>"; };
 		7CE7CFEA2964DD58008F0702 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -195,6 +199,7 @@
 				7C6826662976F2A3002DF5C6 /* TodoDetailViewModel.swift */,
 				7C68266A2977036F002DF5C6 /* TodoListViewModel.swift */,
 				CD549929297843B2007F0F3B /* ProjectViewModel.swift */,
+				7C682672297FF1E8002DF5C6 /* ProjectListViewModel.swift */,
 			);
 			path = viewModels;
 			sourceTree = "<group>";
@@ -286,6 +291,7 @@
 				7C6826642976F1FB002DF5C6 /* TodoDetail.swift */,
 				7C6826682976F850002DF5C6 /* TodoList.swift */,
 				50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */,
+				7C682670297FF1D9002DF5C6 /* ProjectListView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -468,8 +474,10 @@
 				7CE7D03629749725008F0702 /* JSONUtils.swift in Sources */,
 				7CE7D0272972BA82008F0702 /* ToDo.swift in Sources */,
 				CD54992A297843B2007F0F3B /* ProjectViewModel.swift in Sources */,
+				7C682673297FF1E8002DF5C6 /* ProjectListViewModel.swift in Sources */,
 				7C6826562975CAB2002DF5C6 /* FirebaseAppDelegate.swift in Sources */,
 				7CE7CFF52964DD5A008F0702 /* ios_to_do_app.xcdatamodeld in Sources */,
+				7C682671297FF1D9002DF5C6 /* ProjectListView.swift in Sources */,
 				400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */,
 				501E1C8D297DBA4000DC2D4E /* TodayView.swift in Sources */,
 				7CE7D0252972B9E7008F0702 /* BindingExtension.swift in Sources */,

@@ -11,8 +11,7 @@ import SwiftUI
 import SlideOverCard
 
 struct TodoView: View {
-    @State var newTodo = Todo()
-    @State var todoList = [Todo]()
+    @ObservedObject var todoListViewModel = TodoListViewModel()
     @State var project : (String, Project)
     
     
@@ -23,27 +22,23 @@ struct TodoView: View {
     @State var showCard = false
     @Environment(\.presentationMode) var presentationMode
     
-    var progress: Double {
-        let totalTodos = todoList.count
-        guard totalTodos != 0 else { return 0 }
-        let completedTodos = todoList.filter { $0.isCompleted }.count
-        return Double(completedTodos) / Double(totalTodos)
-    }
-    
     @State var selectedFilter: FilterType = .all
     
     
     
-    private func shouldShow(at index: Int) -> Bool {
-        switch selectedFilter {
-        case .all:
-            return true
-        case .completed:
-            return todoList[index].isCompleted
-        case .incomplete:
-            return !todoList[index].isCompleted
-        }
-    }
+    
+    
+    
+//    private func shouldShow(at index: Int) -> Bool {
+//        switch selectedFilter {
+//        case .all:
+//            return true
+//        case .completed:
+//            return todoList[index].isCompleted
+//        case .incomplete:
+//            return !todoList[index].isCompleted
+//        }
+//    }
 //
 //    private func saveTodo() {
 //        todoList.append(newTodo)
@@ -62,7 +57,7 @@ struct TodoView: View {
                             .frame(width: UIScreen.main.bounds.width * 0.6)
                     }
                     VStack {
-                        Text("\(Int(progress * 100))%")
+                        Text("\(Int(todoListViewModel.progress * 100))%")
                             .font(.system(size: 50, weight: .ultraLight, design: .rounded))
                         Text("completed")
                             .font(.system(size: 18, design: .rounded))
@@ -70,7 +65,34 @@ struct TodoView: View {
                     .frame(width: UIScreen.main.bounds.width * 0.3)
                 }.padding(.top, 100)
                 
-                TodoList(selectedFilter, self.project.0).listStyle(.inset)
+                List{
+                    
+                    ForEach($todoListViewModel.todoList, id: \.0){
+                        $item in
+                        NavigationLink(destination: TodoDetail(entityId: item.0)){
+                            HStack {
+                                Text(item.1.task)
+                                Spacer()
+                                Checkbox(isChecked: $item.1.isCompleted)
+                            }
+                        }
+                    }
+                }.onAppear {
+                    //todoListViewModel.dateFilter = dateFilter
+                    todoListViewModel.projectId = project.0
+                }
+                .overlay(content: {if todoListViewModel.todoList.isEmpty {
+                    VStack{
+                        Text("No todos created yet")
+                        NavigationLink {
+                            TodoEditor(entityId: nil, projectId : project.0)
+                        } label: {
+                            Label("New Todo", systemImage: "plus")
+                        }.buttonStyle(.bordered)
+                    }
+                }})
+                
+                //TodoList(selectedFilter, self.project.0).listStyle(.inset)
                 
 //                List {
 //                    ForEach(filteredTodos.indices, id: \.self) { index in

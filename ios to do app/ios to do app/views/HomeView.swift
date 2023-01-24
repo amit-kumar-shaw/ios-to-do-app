@@ -63,10 +63,10 @@ struct HomeView: View {
                     
                     
                     List {
-                        Section("To-Do Lists"){
+                        Section("Languages"){
                             ForEach($viewModel.projects, id: \.0){ $item in
-                                NavigationLink(destination: TodoView( project: (item.0,item.1!))){ // init with Project id
-                                    HStack {
+                                // navigate to Project to do list
+                                NavigationLink(destination: ProjectListView(projectId: item.0)){                                     HStack {
                                         if let colorString = item.1?.colorHexString {
                                             
                                             Circle().frame(width: 12, height: 12)

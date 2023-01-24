@@ -31,14 +31,14 @@ class TodoEditorViewModel: ObservableObject {
     @Published var showReminderEditor = false
      var cancelable: AnyCancellable? = nil
 
-    init(id: String?,projectId : String?) {
+    init(id: String?, projectId : String?) {
         self.id = id
         self.projectId = projectId
         
         getTodo()
-        self.cancelable = todo.objectWillChange.sink(receiveValue: {
-            self.objectWillChange.send()
-        })
+//        self.cancelable = todo.objectWillChange.sink(receiveValue: {
+//            self.objectWillChange.send()
+//        })
     }
     
     

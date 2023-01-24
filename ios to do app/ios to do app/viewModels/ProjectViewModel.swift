@@ -21,7 +21,7 @@ class ProjectViewModel : ObservableObject {
     @Published var filter: FilterType = .all
 
     @Published var projects: [(String, Project?)] = []
-    @Published var project: Project = .init()
+    @Published var newProject: Project = .init()
     
     @Published var error: Error?
     @Published var showAlert = false
@@ -54,26 +54,21 @@ class ProjectViewModel : ObservableObject {
             if error != nil{
                 self.showAlert = true
                 self.error = error
-               
                 return
             }
             
-            
-                let docs = querySnapshot?.documents.map({ docSnapshot -> (String, Project?) in
-                    do {
-                        
+            do{
+                let docs = try querySnapshot?.documents.map({ docSnapshot -> (String, Project) in
                         let project = try docSnapshot.data(as: Project.self)
                         return (docSnapshot.documentID, project)
-                        
-                        
-                    } catch {
-                            self.showAlert = true
-                        return (docSnapshot.documentID, nil)
-                        
-                    }
-                })
+                });
+                self.projects = docs!
+            }catch {
+                self.error = error
+                self.showAlert = true
+            }
 
-            self.projects = docs!
+            
 
             self.projects = self.projects.sorted(by: { $0.1?.timestamp ?? Date() < $1.1?.timestamp ?? Date() })
             
@@ -88,7 +83,7 @@ class ProjectViewModel : ObservableObject {
                 
                 switch result {
                     case .success(let project):
-                        self.project = project
+                        self.newProject = project
                     
                     case .failure(let error):
                         print("Error getting project \(error)")
@@ -101,10 +96,10 @@ class ProjectViewModel : ObservableObject {
     func addProject(name: String, color : String) {
             
       
-        project.userId = auth.currentUser?.uid;
-        project.projectName = name
-        project.colorHexString = color
-        project.timestamp = Date()
+        newProject.userId = auth.currentUser?.uid;
+        newProject.projectName = name
+        newProject.colorHexString = color
+        newProject.timestamp = Date()
         
             guard let documentId = id else {
                 // add new project
@@ -112,7 +107,7 @@ class ProjectViewModel : ObservableObject {
                 id = newDocRef.documentID
                 
                 do {
-                    try newDocRef.setData(from: project)
+                    try newDocRef.setData(from: newProject)
                     id = nil
                 } catch {
                     self.error = error
@@ -124,7 +119,7 @@ class ProjectViewModel : ObservableObject {
             
             do {
                 
-                try db.collection("projects").document(documentId).setData(from: project)
+                try db.collection("projects").document(documentId).setData(from: newProject)
             
                 
             } catch {
