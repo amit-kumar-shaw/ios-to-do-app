@@ -24,7 +24,6 @@ class TagViewModel : ObservableObject {
     
     @Published var error: Error?
     @Published var showAlert = false
-//    @Published var showReminderEditor = false
     
     private var cancelables: [AnyCancellable] = []
     
@@ -137,7 +136,52 @@ class TagViewModel : ObservableObject {
             
         tags.remove(at: index)
     }
+    
+    func addTodo(id: String, todo: String) {
+       
+        let docRef = db.collection("tags").document(id)
+        print(docRef)
+        docRef.getDocument(as: Tag.self) { result in
+            
+            switch result {
+                case .success(let tag):
+                    
+                tag.todos.append(todo)
+                do {
+                    try docRef.setData(from: tag)
+                } catch {
+                    self.error = error
+                    self.showAlert = true
+                }
+                
+                case .failure(let error):
+                    print("Error getting tag \(error)")
+            }
+        }
+    }
 
+    func removeTodo(id: String, todo: String) {
+       
+        let docRef = db.collection("tags").document(id)
+        print(docRef)
+        docRef.getDocument(as: Tag.self) { result in
+            
+            switch result {
+                case .success(let tag):
+                    
+                tag.todos = tag.todos.filter {$0 != todo}
+                do {
+                    try docRef.setData(from: tag)
+                } catch {
+                    self.error = error
+                    self.showAlert = true
+                }
+                
+                case .failure(let error):
+                    print("Error getting tag \(error)")
+            }
+        }
+    }
     
     private let itemFormatter: DateFormatter = {
         let formatter = DateFormatter()
