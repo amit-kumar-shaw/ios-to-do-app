@@ -94,17 +94,25 @@ struct HomeView: View {
                             VStack{
                                 Text("Create a new project!")
                             }}})
-                        .toolbar {
-                            ToolbarItem(placement: .automatic) {
-                                EditButton()
-                            }
-                            ToolbarItem (placement: .automatic){
-                                self.addButton
-                            }
-                        }
+//                        .toolbar {
+//                            ToolbarItem(placement: .automatic) {
+//                                EditButton()
+//                            }
+//                            ToolbarItem (placement: .automatic){
+//                                self.addButton
+//                            }
+//                        }
                         
                     }.padding(.zero)
                 }
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    EditButton()
+                }
+                ToolbarItem (placement: .bottomBar){
+                    self.addButton
+                }
+            }
                 .onAppear{
                     NotificationUtility.hasPermissions(completion: {hasPermissions in
                         if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
