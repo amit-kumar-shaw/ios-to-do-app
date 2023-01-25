@@ -63,7 +63,7 @@ struct HomeView: View {
                     Section("Languages"){
                         ForEach($viewModel.projects, id: \.0){ $item in
                             // navigate to Project to do list
-                            NavigationLink(destination: ProjectListView(projectId: item.0)){                                     HStack {
+                            NavigationLink(destination: ProjectListView(projectId: item.0)){         HStack {
                                 if let colorString = item.1?.colorHexString {
                                     
                                     Circle().frame(width: 12, height: 12)
@@ -73,58 +73,59 @@ struct HomeView: View {
                                             
                                         )
                                 }
+                                
                                 Text(nameText(item: item.1))
                                 
+                                }
+                                
                             }
+                            
                             }
-                        
-                        
-                        .onDelete { indexSet in
-                            let index = indexSet.first!
-                            self.viewModel.deleteProject(at: index)
+                            .onDelete { indexSet in
+                                let index = indexSet.first!
+                                self.viewModel.deleteProject(at: index)
+                            }
+                            .headerProminence(.standard)
+                            
+                            
+                        }
+                        // .scrollContentBackground(.hidden)
+                        .overlay(content: {if viewModel.projects.isEmpty {
+                            VStack{
+                                Text("Create a new project!")
+                            }}})
+                        .toolbar {
+                            ToolbarItem(placement: .automatic) {
+                                EditButton()
+                            }
+                            ToolbarItem (placement: .automatic){
+                                self.addButton
+                            }
                         }
                         
-                    }.headerProminence(.standard)
-                    
-                    
+                    }.padding(.zero)
                 }
-                // .scrollContentBackground(.hidden)
-                .overlay(content: {if viewModel.projects.isEmpty {
-                    VStack{
-                        Text("Create a new project!")
-                    }
-                }})
-                .toolbar {
-                    ToolbarItem(placement: .automatic) {
-                        EditButton()
-                    }
-                    ToolbarItem (placement: .automatic){
-                        self.addButton
-                    }
+                .onAppear{
+                    NotificationUtility.hasPermissions(completion: {hasPermissions in
+                        if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
+                            self.showEnableRemindersModal = true
+                        }
+                    })
                 }
+                .fullScreenCover(isPresented: $showEnableRemindersModal) {
+                    EnableRemindersModalView()
+                }
+                //.background(Color(hex:"#FFF9DA"))
+                .padding(.zero)
+                .searchable(text: $searchText){
+                    Text("Search for todos and projects!")
+                }
+                .onSubmit(of: .search, performSearch)
                 
-        }.padding(.zero)
-    
-        }
-        .onAppear{
-            NotificationUtility.hasPermissions(completion: {hasPermissions in
-                if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
-                    self.showEnableRemindersModal = true
-                }
-            })
-        }
-        .fullScreenCover(isPresented: $showEnableRemindersModal) {
-            EnableRemindersModalView()
-        }
-        //.background(Color(hex:"#FFF9DA"))
-        .padding(.zero)
-        .searchable(text: $searchText){
-            Text("Search for todos and projects!")
-        }
-        .onSubmit(of: .search, performSearch)
-
-        }
-    
+            }
+    }
+        
+        
     
     private func performSearch(){
         //TODO: implement global search functionality
