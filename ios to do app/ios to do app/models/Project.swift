@@ -16,6 +16,7 @@ class Project: ObservableObject, Codable {
     @Published var userId: String?
     @Published var projectName: String?
     @Published var colorHexString: String?
+    @Published var selectedLanguage: Language = Language(id: "en", name: "English", nativeName: "English")
     @Published var timestamp: Date?
     
     
@@ -25,7 +26,7 @@ class Project: ObservableObject, Codable {
         case projectName
         case colorHexString
         case timestamp
-        
+        case selectedLanguage
     }
     
     init(){
@@ -49,7 +50,7 @@ class Project: ObservableObject, Codable {
         projectName = try values.decode(String.self, forKey: .projectName)
         colorHexString = try values.decode(String.self, forKey: .colorHexString)
         timestamp = try values.decode(Date.self, forKey: .timestamp)
-      
+        selectedLanguage = try values.decode(Language.self, forKey: .selectedLanguage)
        
     }
     
@@ -59,6 +60,7 @@ class Project: ObservableObject, Codable {
         try container.encode(projectName, forKey: .projectName)
         try container.encode(colorHexString, forKey: .colorHexString)
         try container.encode(timestamp, forKey: .timestamp)
+        try container.encode(selectedLanguage, forKey: .selectedLanguage)
     
     }
     

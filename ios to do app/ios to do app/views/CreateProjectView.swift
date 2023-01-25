@@ -8,81 +8,98 @@
 import SwiftUI
 
 struct CreateProjectView: View {
+        
     
-    @State private var projectName = ""
-    @State private var projectColor = Color.white
+    @State private var _newProject = newProject()
+    
     @Binding var showModal: Bool
     @ObservedObject var viewModel = ProjectViewModel()
     
-    private let colorPalette : [Color] = [.red, .yellow, .orange, .purple, .blue, .indigo, .green, .mint, .black, .white]
+    private let colorPalette : [String] = ["#FFCA3A","#109648","#264653","#B8B8FF","#F4A261","#FF595E","#8338EC","#3A86FF","#00AFB9"]
     private let columns = [GridItem(.adaptive(minimum: 80))]
+    
+    fileprivate func extractedFunc() -> some View {
+        return VStack{
+            ColorPicker("Color", selection: self.$_newProject.projectColor)
+            
+            
+            LazyVGrid(columns: columns, spacing: 20) {
+                ForEach(colorPalette, id: \.self){ colorHex in
+                    
+                    let color = Color(hex: colorHex)
+                    
+                    Circle()
+                        .foregroundColor(color)
+                        .frame(width: 45, height: 45)
+                        .opacity(color == self._newProject.projectColor ? 0.5 : 1.0)
+                        .onTapGesture {
+                            self._newProject.projectColor = color
+                        }
+                    
+                }
+            }
+            .padding(.vertical, 30)
+        }
+    }
     
     var body: some View {
         VStack(alignment: .leading,spacing: 20){
             
-                Text("Create a project")
-                    .bold()
-                    .font(.title)
-                    .padding(.all,30)
-                    .padding(.bottom,-25)
-                
-             
-            TextField("Project Name", text: self.$projectName)
-                    .frame(height: 55)
-                    .background(.white)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .padding([.horizontal], 4)
-                    .cornerRadius(16)
-                    
-                    .overlay(RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color(UIColor.systemGroupedBackground))
-                            )
-                 
-                        .padding(.horizontal,30)
-                     
-                      
-                    
-                
-                    ColorPicker("Color", selection: self.$projectColor)
-                        .padding(.all,30)
-                        .padding(.bottom,-30)
-                        .font(.title)
-                        .bold()
-                    
-                    LazyVGrid(columns: columns, spacing: 20) {
-                        ForEach(colorPalette, id: \.self){ color in
+            Form{
+                Section{
+
+                        VStack{
+                            Text("Create a project")
+                                .bold()
+                                .font(.title)
                             
-                            Circle()
-                                .foregroundColor(color)
-                                .frame(width: 45, height: 45)
-                                .opacity(color == projectColor ? 0.5 : 1.0)
-                                .onTapGesture {
-                                    self.projectColor = color
-                                }
+                            
+                            
+                            TextField("Project Name", text: self.$_newProject.projectName)
+                                .frame(height: 55)
+                                .textFieldStyle(PlainTextFieldStyle())
+                                .padding([.horizontal], 4)
+                                .background(Color(UIColor.systemGroupedBackground))
+                                .cornerRadius(16)
+                                .overlay(RoundedRectangle(cornerRadius: 16)
+                                    .stroke(Color(UIColor.systemGroupedBackground))
+                                )
                             
                         }
-                    }
-                    .padding(.top,30)
-                    .background(Rectangle().cornerRadius(16).foregroundColor(.white))
-                    .padding(.horizontal,30)
                     
-                  
+                }
+               
+        
+                Section{
+                    Picker(selection: self.$_newProject.selectedLanguage, label: Text("Language")) {
+                        LanguageList()
+                    }.onReceive([self._newProject.selectedLanguage].publisher.first()) { (value) in
+                        self._newProject.selectedLanguage = value
+                        
+                    }
+                }
                 
-                Spacer()
+                Section{
+                    extractedFunc()
+                
+                }
+                
+            }
+            
+            Spacer()
             
             HStack{
                 Spacer()
                 Button(action:   {
                     
-                    self.viewModel.addProject(name: self.projectName, color: self.projectColor.toHex())
+                    self.viewModel.addProject(name: _newProject.projectName, color: _newProject.projectColor.toHex(), language:_newProject.selectedLanguage)
                     
-                    self.projectName = ""
-                    self.projectColor = Color.white
+                    self._newProject = .init()
                     self.showModal = false
                     
                 }  ) {
                     Text("Add")
-                } .disabled(self.projectName.isEmpty)
+                } .disabled(self._newProject.projectName.isEmpty)
                     .alert("Error add project", isPresented: $viewModel.showAlert, actions: {
                         Button("Ok", action: { self.viewModel.showAlert = false })
                     }, message: { Text(self.viewModel.error?.localizedDescription ?? "Unknown error") })
@@ -90,10 +107,26 @@ struct CreateProjectView: View {
             }
             
         }.background(Color(UIColor.systemGroupedBackground))
-      //  .padding(.all,50)
-        //.navigationBarTitle("Create a project")
-            
+       
+        
     }
+    
+    
+    
+}
+
+struct newProject {
+    
+    var projectName : String
+    var projectColor : Color
+    var selectedLanguage : Language
+    
+    init(){
+        projectName = ""
+        projectColor = Color.white
+        selectedLanguage = Language(id: "en", name: "English", nativeName: "English")
+    }
+    
     
 }
 

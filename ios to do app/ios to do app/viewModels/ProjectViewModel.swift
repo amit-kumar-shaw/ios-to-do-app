@@ -27,6 +27,8 @@ class ProjectViewModel : ObservableObject {
     @Published var showAlert = false
     @Published var showReminderEditor = false
     
+    
+    
     private var cancelables: [AnyCancellable] = []
     
     init(id: String?) {
@@ -93,12 +95,13 @@ class ProjectViewModel : ObservableObject {
     }
     
     
-    func addProject(name: String, color : String) {
+    func addProject(name: String, color : String, language: Language) {
             
       
         newProject.userId = auth.currentUser?.uid;
         newProject.projectName = name
         newProject.colorHexString = color
+        newProject.selectedLanguage = language
         newProject.timestamp = Date()
         
             guard let documentId = id else {
