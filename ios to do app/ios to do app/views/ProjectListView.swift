@@ -51,7 +51,7 @@ struct ProjectListView: View {
                     viewModel.loadList(filter: newFilter)
                 }
                 NavigationLink {
-                    TodoEditor(entityId: nil, projectId :projectId)
+                    CreateTodoView(projectId: projectId)
                 } label: {
                     Text("Add").padding()
                 }
@@ -91,7 +91,7 @@ struct ProjectListView: View {
                 case .all: return AnyView(VStack{
                     
                     NavigationLink {
-                        TodoEditor(entityId: nil, projectId: self.projectId)
+                        CreateTodoView(projectId: projectId)
                     } label: {
                         Label("New Todo", systemImage: "plus")
                     }.buttonStyle(.bordered)
