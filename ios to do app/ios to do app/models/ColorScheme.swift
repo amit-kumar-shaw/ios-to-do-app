@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-let TINT_COLORS = ["#025ee8", "#18eb09","#e802e0","#eb7a09"]
+let TINT_COLORS = ["#007AFF", "#18eb09","#e802e0","#eb7a09"]
 
 struct TintColor {
     let name: String

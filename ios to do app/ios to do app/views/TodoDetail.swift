@@ -5,8 +5,8 @@
 //  Created by Amit Kumar Shaw on 16.01.23.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 struct TodoDetail: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -17,111 +17,99 @@ struct TodoDetail: View {
     
     init(entityId: String) {
         self.entityId = entityId
-        viewModel = TodoEditorViewModel(id: entityId,projectId: "All")
+        viewModel = TodoEditorViewModel(id: entityId)
     }
     
-    
     var body: some View {
-
-        
-        NavigationView {
-                    VStack{
-                        if(viewModel.error != nil){
-                            Text(viewModel.error?.localizedDescription ?? "")
-                        }else{
-                            List {
-                                Section() {
-                                    TextField("Task Name", text: $viewModel.todo.task)
-                                    Picker(selection: $viewModel.todo.selectedLanguage, label: Text("Language")) {
-                                        LanguageList()
-                                    }
-                                    TextField("Description",text: $viewModel.todo.description)
-                                }
-                                
-                                Section() {
-                                        DatePicker(selection: $viewModel.todo.startDate, displayedComponents: [.date, .hourAndMinute]) {
-                                            Text("Start Date")
-                                        }
-                                        DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
-                                            Text("Due Date")
-                                        }
-                                        Picker(selection: $viewModel.todo.recurring, label: Text("Recurring")) {
-                                            ForEach(Recurring.allCases, id: \.self) { v in
-                                                Text(v.localizedName).tag(v)
-                                            }
-                                        }
-                                }
-                                
-                                Section() {
-                                        Picker(selection: $viewModel.todo.priority, label: Text("Priority")) {
-                                            ForEach(Priority.allCases, id: \.self) { v in
-                                                Text(v.localizedName).tag(v)
-                                            }
-                                        }
-                                        .pickerStyle(SegmentedPickerStyle())
-                                        
-                                        // TODO: Add tags picker
-                                        HStack{
-                                            Text("Tags")
-                                            Spacer()
-                                            Text("5 Tags")
-                                        }
-                                }
-                                
-                                Section() {
-                                    Button(action: {
-                                        if (viewModel.todo.reminderBeforeDueDate < 0) {
-                                            viewModel.todo.reminderBeforeDueDate = -1 * viewModel.todo.reminderBeforeDueDate
-                                        }
-                                        self.showBeforeDueDatePicker = true
-                                    }) {
-                                 
-                                        Label("\(NotificationUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions() {
-                                                Button {
-                                                    print("weird")
-                                                    viewModel.muteDefaultReminder()
-                                                } label: {
-                                                    Label("Mute", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.fill" : "bell.slash.fill")
-                                                }.tint(.indigo)
-                                            }
-                                        
-                                    }.sheet(isPresented: $showBeforeDueDatePicker) {
-                                        RemindMeBeforeDueDatePicker(reminderBeforeDueDate: $viewModel.todo.reminderBeforeDueDate, isPresented: $showBeforeDueDatePicker).presentationDetents([.medium, ])
-                                    }
-                                    
-                                        ForEach($viewModel.reminderList, id: \.id) {
-                                            reminder in
-                                            Label(reminderDateFormatter.string(from: reminder.date.wrappedValue), systemImage: "bell")
-                                        }.onDelete(perform: { viewModel.deleteReminders(offsets: $0) })
-                                            
-                                        Button(action: viewModel.toggleReminderEditor) {
-                                            Label("Add reminder", systemImage: "plus")
-                                        }.sheet(isPresented: $viewModel.showReminderEditor){
-                                            ReminderEditor(reminder: nil, onComplete: viewModel.addReminder)
-                                        }
-                                }
-                                
-                            }
-                            
+        VStack {
+            if viewModel.error != nil {
+                Text(viewModel.error?.localizedDescription ?? "")
+            } else {
+                List {
+                    Section {
+                        TextField("Task Name", text: $viewModel.todo.task)
+                        Picker(selection: $viewModel.todo.selectedLanguage, label: Text("Language")) {
+                            LanguageList()
                         }
-                        
+                        TextField("Description", text: $viewModel.todo.description)
                     }
-                    .navigationTitle("Details")
-                    .navigationBarBackButtonHidden(true)
-                                .navigationBarItems(
-                                    trailing:
-                                        Button(action : {
-                                            viewModel.save()
-                                            self.presentationMode.wrappedValue.dismiss()
+                                
+                    Section {
+                        DatePicker(selection: $viewModel.todo.startDate, displayedComponents: [.date, .hourAndMinute]) {
+                            Text("Start Date")
+                        }
+                        DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
+                            Text("Due Date")
+                        }
+                        Picker(selection: $viewModel.todo.recurring, label: Text("Recurring")) {
+                            ForEach(Recurring.allCases, id: \.self) { v in
+                                Text(v.localizedName).tag(v)
+                            }
+                        }
+                    }
+                                
+                    Section {
+                        Picker(selection: $viewModel.todo.priority, label: Text("Priority")) {
+                            ForEach(Priority.allCases, id: \.self) { v in
+                                Text(v.localizedName).tag(v)
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                                        
+                        // TODO: Add tags picker
+                        HStack {
+                            Text("Tags")
+                            Spacer()
+                            Text("5 Tags")
+                        }
+                    }
+                                
+                    Section {
+                        Button(action: {
+                            if viewModel.todo.reminderBeforeDueDate < 0 {
+                                viewModel.todo.reminderBeforeDueDate = -1 * viewModel.todo.reminderBeforeDueDate
+                            }
+                            self.showBeforeDueDatePicker = true
+                        }) {
+                            Label("\(NotificationUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions {
+                                Button {
+                                    print("weird")
+                                    viewModel.muteDefaultReminder()
+                                } label: {
+                                    Label("Mute", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.fill" : "bell.slash.fill")
+                                }.tint(.indigo)
+                            }
+                                        
+                        }.sheet(isPresented: $showBeforeDueDatePicker) {
+                            RemindMeBeforeDueDatePicker(reminderBeforeDueDate: $viewModel.todo.reminderBeforeDueDate, isPresented: $showBeforeDueDatePicker).presentationDetents([.medium])
+                        }
+                                    
+                        ForEach($viewModel.reminderList, id: \.id) {
+                            reminder in
+                            Label(reminderDateFormatter.string(from: reminder.date.wrappedValue), systemImage: "bell")
+                        }.onDelete(perform: { viewModel.deleteReminders(offsets: $0) })
                                             
-                                        }){
-                                            Text("Done")
-                                        }
-                                )
-
-                }.background(Color(hex:"#FFF9DA"))
-
-        
+                        Button(action: viewModel.toggleReminderEditor) {
+                            Label("Add reminder", systemImage: "plus")
+                        }.sheet(isPresented: $viewModel.showReminderEditor) {
+                            ReminderEditor(reminder: nil, onComplete: viewModel.addReminder)
+                        }
+                    }
+                }
+            }
+        }
+        .navigationTitle("Details")
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            trailing:
+            Button(action: {
+                viewModel.save()
+                self.presentationMode.wrappedValue.dismiss()
+                                            
+            }) {
+                Text("Done")
+            }
+        )
     }
 }
 

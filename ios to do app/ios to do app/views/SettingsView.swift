@@ -21,11 +21,20 @@ struct SettingsView: View {
     var body: some View {
         ZStack{
             Form {
-                Section {
-                    Picker("Color Scheme", selection: $tintColorHex) {
+                Section("Theme") {
+                    Picker("Accent color", selection: $tintColorHex) {
                         ForEach(TINT_COLORS, id: \.self) { colorHex in
-                            var tintColor = TintColor(colorHex: colorHex)
+                            let tintColor = TintColor(colorHex: colorHex)
                             Text(tintColor.name).foregroundColor(tintColor.color)
+                        }
+                    }
+                    
+                }
+                
+                if viewModel.showEnableRemindersButton {
+                    Section("Notifications"){
+                        Button( action: viewModel.requestNotificationsPermission){
+                            Label("Enable reminders", systemImage: "bell")
                         }
                     }
                 }
@@ -35,11 +44,7 @@ struct SettingsView: View {
                         .foregroundColor(Color.red)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                 }}
-        }.onAppear {
-            NotificationUtility.hasPermissions(completion: {hasPermission in
-                showEnableRemindersButton = !hasPermission
-            } )
-        }
+        }.navigationTitle("Settings")
     }
 }
   

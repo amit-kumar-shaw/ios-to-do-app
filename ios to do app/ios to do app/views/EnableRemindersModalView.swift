@@ -10,6 +10,7 @@ import SwiftUI
 
 struct EnableRemindersModalView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.tintColor) var tintColor
     @State private var didAskForNotifications : Bool = false
     @State private var appearanceCount : Int = 0
     
@@ -30,10 +31,7 @@ struct EnableRemindersModalView: View {
                 }
         
                 Spacer()
-                Text("🔔")
-                    .font(.system(size: 100))
-                    .multilineTextAlignment(TextAlignment.center)
-                    .padding()
+                Image(systemName: "bell.fill").font(.system(size: 100)).foregroundColor(tintColor).padding()
                 
                 Text("Never miss a due date again!")
                     .font(.title2)
@@ -47,7 +45,7 @@ struct EnableRemindersModalView: View {
                 
                 Spacer()
                 
-                Button(action: {
+                Button( action: {
                     if (didAskForNotifications) {
                         NotificationUtility.openSettings()
                     } else {
@@ -58,7 +56,7 @@ struct EnableRemindersModalView: View {
                     Text(!didAskForNotifications ? "Enable reminders" : "Open settings")
                         .font(.headline)
                         .padding()
-                        .background(Color.blue)
+                        .background(tintColor)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -86,8 +84,8 @@ struct EnableRemindersModalView: View {
     }
 }
 
-//struct EnableRemindersModalView_Previews: PreviewProvider {
-  //  static var previews: some View {
-    //    EnableRemindersModalView(modal: EnableRemindersModal())
-  //  }
-//}
+struct EnableRemindersModalView_Previews: PreviewProvider {
+    static var previews: some View {
+        EnableRemindersModalView()
+    }
+}

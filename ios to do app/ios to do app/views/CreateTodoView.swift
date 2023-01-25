@@ -8,10 +8,9 @@
 import Combine
 import SwiftUI
 
-struct TodoEditor: View {
+///View which allows the creation of todos
+struct CreateTodoView: View {
     @Environment(\.presentationMode) var presentation
-    
-    private let editMode: Bool
     
     @ObservedObject private var viewModel: TodoEditorViewModel
     @State private var showBeforeDueDatePicker = false
@@ -19,10 +18,18 @@ struct TodoEditor: View {
     
     private var languageList = Language.getAllLanguages()
    
+    ///Initialize CreateTodoView.
+    ///
+    ///Associated project will be chosen later
+    init() {
+        viewModel = TodoEditorViewModel()
+    }
     
-    init(entityId: String?, projectId: String) {
-        editMode = entityId != nil
-        viewModel = TodoEditorViewModel(id: entityId,projectId: projectId)
+    ///Initialize CreateTodoView and associte the new to do to the specified project
+    ///- Parameters
+    ///    - projectId: id of the project to associate with
+    init(projectId: String){
+        viewModel = TodoEditorViewModel(projectId: projectId)
     }
     
     private func saveTodo() {
@@ -117,7 +124,8 @@ struct TodoEditor: View {
                 }
             }
         }
-        .navigationTitle(editMode ? "Edit Todo" : "New Todo").navigationBarTitleDisplayMode(.large)
+        .navigationTitle("New Todo")
+        .navigationBarTitleDisplayMode(.large)
         .toolbar(content: {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Add", action: saveTodo)
@@ -165,7 +173,7 @@ struct RemindMeBeforeDueDatePicker: View {
     
 struct TodoEditor_Previews: PreviewProvider {
     static var previews: some View {
-        TodoEditor(entityId: nil,projectId: "nil")
+        CreateTodoView()
     }
 }
 

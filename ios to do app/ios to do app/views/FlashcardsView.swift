@@ -10,11 +10,9 @@ import SwiftUI
 
 import SlideOverCard
 
-struct TodoView: View {
+struct FlashcardsView: View {
     @State var newTodo = Todo()
     @State var todoList = [Todo]()
-    @State var project : (String, Project)
-    
     
     @StateObject var flashcards = Flashcards(cards: [Flashcard(front: "", back: "")])
     @State private var showFlashcardEditor: Bool = false
@@ -31,7 +29,6 @@ struct TodoView: View {
     }
     
     @State var selectedFilter: FilterType = .all
-    
     
     
     private func shouldShow(at index: Int) -> Bool {
@@ -56,45 +53,33 @@ struct TodoView: View {
     var body: some View {
             VStack {
                 HStack(alignment: .bottom) {
-                    if let name = self.project.1.projectName {
-                        Text(name)
+                    VStack(alignment: .leading) {
+                        Text("Today")
                             .font(.system(size: 50, weight: .ultraLight, design: .rounded))
-                            .frame(width: UIScreen.main.bounds.width * 0.6)
-                    }
-                    VStack {
+                        Text(Date().formatted(date: .abbreviated, time: .omitted))
+                            .font(.system(size: 18, design: .rounded))
+                    }.frame(width: UIScreen.main.bounds.width * 0.7)
+                    VStack(alignment: .trailing) {
                         Text("\(Int(progress * 100))%")
                             .font(.system(size: 50, weight: .ultraLight, design: .rounded))
                         Text("completed")
                             .font(.system(size: 18, design: .rounded))
-                    }
-                    .frame(width: UIScreen.main.bounds.width * 0.3)
+                    }.frame(width: UIScreen.main.bounds.width * 0.3)
                 }.padding(.top, 100)
-                
-                TodoList(nil,selectedFilter, self.project.0).listStyle(.inset).toolbar(){
-                    ToolbarItem(placement: .automatic) {
-                        EditButton()
-                    }
-                }
+               
+                TodoList(Date() , selectedFilter).listStyle(.inset)
                 HStack {
-                    Picker(selection: $selectedFilter, label: Text("Filter"), content: {
-                        ForEach(FilterType.allCases, id: \.self) { v in
-                            Text(v.localizedName).tag(v)
-                        }
-                    })
-                    NavigationLink {
-                        CreateTodoView(projectId :project.0)
-                    } label: {
-                        Text("Add").padding()
-                    }
-                }
-                .padding()
+                                    Picker(selection: $selectedFilter, label: Text("Filter"), content: {
+                                        ForEach(FilterType.allCases, id: \.self) { v in
+                                            Text(v.localizedName).tag(v)
+                                        }
+                                    })
+                                    
+                                }
+                                .padding()
             }
     }
 }
 
 
-struct TodoView_Previews: PreviewProvider {
-    static var previews: some View {
-        TodoView(project: ("",Project(projectName: "Preview", projectColor: Color.brown)))
-    }
-}
+

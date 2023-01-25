@@ -22,6 +22,7 @@ struct ios_to_do_appApp: App {
         WindowGroup {
             ContentView(tintColor: Color(hex: tintColorHex))
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.tintColor, Color(hex: tintColorHex))
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
                     NotificationUtility.schedule()
                 }
