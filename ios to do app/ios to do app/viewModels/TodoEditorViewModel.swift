@@ -21,7 +21,6 @@ class TodoEditorViewModel: ObservableObject {
     private var db = Firestore.firestore()
     private var auth = Auth.auth()
     private var id: String?
-    private var projectId:String?
     
     @Published var todo: Todo = .init()
     @Published var reminderList: [Reminder] = []
@@ -30,15 +29,15 @@ class TodoEditorViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var showReminderEditor = false
     
-
-    init(id: String?, projectId : String?) {
+    
+    init(id: String?) {
         self.id = id
-        self.projectId = projectId
-        
         getTodo()
-//        self.cancelable = todo.objectWillChange.sink(receiveValue: {
-//            self.objectWillChange.send()
-//        })
+        setupRestrictions()
+    }
+    
+    init(projectId: String = ""){
+        todo.projectId = projectId
     }
     
     
@@ -50,19 +49,20 @@ class TodoEditorViewModel: ObservableObject {
     }
         
     private func getTodo() {
-        if id != nil {
-            let docRef = db.collection("todos").document(id!)
+        guard let id = self.id else {
+            return
+        }
+        
+        let docRef = db.collection("todos").document(id)
+        
+        docRef.getDocument(as: Todo.self) { result in
             
-            docRef.getDocument(as: Todo.self) { result in
-                
-                switch result {
-                    case .success(let todo):
-                        self.todo = todo
-                        self.reminderList = todo.reminders
-                        self.todo.projectId = self.projectId
-                    case .failure(let error):
-                        print("Error getting todo \(error)")
-                }
+            switch result {
+                case .success(let todo):
+                    self.todo = todo
+                    self.reminderList = todo.reminders
+                case .failure(let error):
+                    print("Error getting todo \(error)")
             }
         }
     }
@@ -88,9 +88,6 @@ class TodoEditorViewModel: ObservableObject {
     func save() {
         todo.reminders = reminderList
         todo.userId = auth.currentUser?.uid;
-        todo.projectId = self.projectId
-        
-        
         guard let documentId = id else {
             let newDocRef = db.collection("todos").document()
             id = newDocRef.documentID
@@ -105,7 +102,7 @@ class TodoEditorViewModel: ObservableObject {
             return
         }
         
-        guard self.projectId != nil else {
+        guard todo.projectId != nil else {
             
             print("project id nill")
             

@@ -56,7 +56,7 @@ struct TodoList: View {
             VStack{
                 Text("No todos created yet")
                 NavigationLink {
-                    TodoEditor(entityId: nil, projectId : self.projectId)
+                    CreateTodoView(projectId : self.projectId)
                 } label: {
                     Label("New Todo", systemImage: "plus")
                 }.buttonStyle(.bordered)

@@ -77,7 +77,7 @@ struct TodoView: View {
                         }
                     })
                     NavigationLink {
-                        TodoEditor(entityId: nil, projectId :project.0)
+                        CreateTodoView(projectId :project.0)
                     } label: {
                         Text("Add").padding()
                     }
@@ -87,19 +87,9 @@ struct TodoView: View {
     }
 }
 
-struct Checkbox: View {
-    @Binding var isChecked: Bool
-    
-   public var onToggle: () -> Void
-    
-    var body: some View {
-        Button(action: {
-            self.isChecked.toggle()
-            self.onToggle()
-        }, label: {
-            Image(systemName: isChecked ? "checkmark.square" : "square")
-                .resizable()
-                .frame(width: 25, height: 25)
-        })
+
+struct TodoView_Previews: PreviewProvider {
+    static var previews: some View {
+        TodoView(project: ("",Project(projectName: "Preview", projectColor: Color.brown)))
     }
 }
