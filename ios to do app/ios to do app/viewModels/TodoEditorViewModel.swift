@@ -21,7 +21,7 @@ class TodoEditorViewModel: ObservableObject {
     private var db = Firestore.firestore()
     private var auth = Auth.auth()
     private var id: String?
-    private var projectId:String
+    private var projectId:String?
     
     @Published var todo: Todo = .init()
     @Published var reminderList: [Reminder] = []
@@ -31,11 +31,14 @@ class TodoEditorViewModel: ObservableObject {
     @Published var showReminderEditor = false
     
 
-    init(id: String?,projectId : String = "") {
+    init(id: String?, projectId : String?) {
         self.id = id
         self.projectId = projectId
+        
         getTodo()
-       
+//        self.cancelable = todo.objectWillChange.sink(receiveValue: {
+//            self.objectWillChange.send()
+//        })
     }
     
     
@@ -86,6 +89,8 @@ class TodoEditorViewModel: ObservableObject {
         todo.reminders = reminderList
         todo.userId = auth.currentUser?.uid;
         todo.projectId = self.projectId
+        
+        
         guard let documentId = id else {
             let newDocRef = db.collection("todos").document()
             id = newDocRef.documentID
@@ -96,6 +101,13 @@ class TodoEditorViewModel: ObservableObject {
                 self.error = error
                 self.showAlert = true
             }
+            
+            return
+        }
+        
+        guard self.projectId != nil else {
+            
+            print("project id nill")
             
             return
         }

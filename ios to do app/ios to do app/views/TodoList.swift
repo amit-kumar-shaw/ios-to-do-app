@@ -22,10 +22,13 @@ struct TodoList: View {
         viewModel.filter = filter ?? .all
        
         if projectId != nil {
+            
             self.projectId = projectId!
             viewModel.projectId = projectId!
-            //print("project :", projectId!  , self.projectId)
+       
         }
+        
+        viewModel.filter = filter ?? .all
         
     }
         

@@ -11,8 +11,7 @@ import SwiftUI
 import SlideOverCard
 
 struct TodoView: View {
-    @State var newTodo = Todo()
-    @State var todoList = [Todo]()
+    @ObservedObject var todoListViewModel = TodoListViewModel()
     @State var project : (String, Project)
     
     
@@ -23,32 +22,28 @@ struct TodoView: View {
     @State var showCard = false
     @Environment(\.presentationMode) var presentationMode
     
-    var progress: Double {
-        let totalTodos = todoList.count
-        guard totalTodos != 0 else { return 0 }
-        let completedTodos = todoList.filter { $0.isCompleted }.count
-        return Double(completedTodos) / Double(totalTodos)
-    }
-    
     @State var selectedFilter: FilterType = .all
     
     
     
-    private func shouldShow(at index: Int) -> Bool {
-        switch selectedFilter {
-        case .all:
-            return true
-        case .completed:
-            return todoList[index].isCompleted
-        case .incomplete:
-            return !todoList[index].isCompleted
-        }
-    }
     
-    private func saveTodo() {
-        todoList.append(newTodo)
-        // self.newTodo = Todo()
-    }
+    
+    
+//    private func shouldShow(at index: Int) -> Bool {
+//        switch selectedFilter {
+//        case .all:
+//            return true
+//        case .completed:
+//            return todoList[index].isCompleted
+//        case .incomplete:
+//            return !todoList[index].isCompleted
+//        }
+//    }
+//
+//    private func saveTodo() {
+//        todoList.append(newTodo)
+//        // self.newTodo = Todo()
+//    }
     private func addFlashcard(flashcard: Flashcard) {
         self.flashcards.cards.append(flashcard)
     }
@@ -62,7 +57,7 @@ struct TodoView: View {
                             .frame(width: UIScreen.main.bounds.width * 0.6)
                     }
                     VStack {
-                        Text("\(Int(progress * 100))%")
+                        Text("\(Int(todoListViewModel.progress * 100))%")
                             .font(.system(size: 50, weight: .ultraLight, design: .rounded))
                         Text("completed")
                             .font(.system(size: 18, design: .rounded))
@@ -82,7 +77,7 @@ struct TodoView: View {
                         }
                     })
                     NavigationLink {
-                        TodoEditor(entityId: nil,projectId :project.0)
+                        TodoEditor(entityId: nil, projectId :project.0)
                     } label: {
                         Text("Add").padding()
                     }
@@ -95,7 +90,7 @@ struct TodoView: View {
 struct Checkbox: View {
     @Binding var isChecked: Bool
     
-    public var onToggle: () -> Void
+   public var onToggle: () -> Void
     
     var body: some View {
         Button(action: {
