@@ -25,7 +25,11 @@ struct CreateTagView: View {
     
     var body: some View {
         VStack{
-            TextField("Tag", text: self.$tag)
+            List {
+                Section{
+                    TextField("Tag", text: self.$tag)
+                }
+            }
             Button(action:  {
                 
                 self.viewModel.addTag(tag: self.tag, todo: self.todo)

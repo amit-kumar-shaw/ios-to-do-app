@@ -95,7 +95,7 @@ class TagViewModel : ObservableObject {
       
         newTag.userId = auth.currentUser?.uid;
         newTag.tag = tag
-        newTag.todoId.append(todo!)
+        newTag.todos.append(todo!)
         newTag.timestamp = Date()
         
             guard let documentId = id else {

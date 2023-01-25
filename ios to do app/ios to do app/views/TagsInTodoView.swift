@@ -25,12 +25,18 @@ struct TagsInTodoView: View {
             } else {
                 List {
                     Section(header: Text("Selected Tags")) {
-                        
+                        ForEach($viewModel.tags, id: \.0) { $item in
+                            if item.1!.todos.contains(todoId) {
+                                Text(item.1!.tag!)
+                            }
+                        }
                     }
                                 
                     Section(header: Text("Available Tags")) {
                         ForEach($viewModel.tags, id: \.0) { $item in
-                            Text(item.1!.tag!)
+                            if !item.1!.todos.contains(todoId) {
+                                Text(item.1!.tag!)
+                            }
                         }
                         NavigationLink(destination: CreateTagView(todoId: self.todoId))
                         {
