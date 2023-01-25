@@ -11,9 +11,6 @@ import FirebaseAuth
 
 struct HomeView: View {
     
-    
-    @State private var projectName = ""
-    @State private var projectColor = Color.white
     @State private var  showModal = false
     @ObservedObject var viewModel = ProjectViewModel()
     
@@ -26,8 +23,6 @@ struct HomeView: View {
             
             VStack(alignment: .leading,spacing: 0){
                 
-                
-
                     List{
                         Section("Welcome!")
                            {
@@ -55,13 +50,10 @@ struct HomeView: View {
                                 }
                             } .headerProminence(.increased)
                     }
-                   // .navigationTitle("Welcome")
-                   // .navigationBarTitleDisplayMode(.inline)
                     .frame(height: 180)
                     .scrollDisabled(true)
-                   
-                    
-                    
+        
+                
                     List {
                         Section("Languages"){
                             ForEach($viewModel.projects, id: \.0){ $item in
@@ -95,7 +87,7 @@ struct HomeView: View {
                    // .scrollContentBackground(.hidden)
                     .overlay(content: {if viewModel.projects.isEmpty {
                         VStack{
-                            Text("Creat a new project!")
+                            Text("Create a new project!")
                         }
                     }})
                     .toolbar {
@@ -133,30 +125,9 @@ struct HomeView: View {
                 Button(action:{ self.showModal = true}) {
                     Label("Add Item", systemImage: "plus")
                 }.sheet(isPresented: $showModal) {
-                    VStack {
-                        Text("Creat a Project!")
-                            .font(.title)
-                        
-                        TextField("Project Name", text: self.$projectName)
-                        ColorPicker("Project Color", selection: self.$projectColor)
-                        
-                        Button(action:   {
-                            
-                            self.viewModel.addProject(name: self.projectName, color: self.projectColor.toHex())
-                            
-                            self.projectName = ""
-                            self.projectColor = Color.white
-                            self.showModal = false
-                            
-                        }  ) {
-                            Text("Add")
-                        } .disabled(self.projectName.isEmpty)
-                            .alert("Error add project", isPresented: $viewModel.showAlert, actions: {
-                                Button("Ok", action: { self.viewModel.showAlert = false })
-                            }, message: { Text(self.viewModel.error?.localizedDescription ?? "Unknown error") })
-                        
-                    }.padding(.all,50)
                     
+                    CreateProjectView(showModal: $showModal)
+                                 
                 }
             )
         }
@@ -174,14 +145,14 @@ struct HomeView: View {
             return "Untitled"
         }
         
-        
-        private let itemFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .short
-            formatter.timeStyle = .medium
-            return formatter
-        }()
-        
+//
+//        private let itemFormatter: DateFormatter = {
+//            let formatter = DateFormatter()
+//            formatter.dateStyle = .short
+//            formatter.timeStyle = .medium
+//            return formatter
+//        }()
+//
         
 }
 

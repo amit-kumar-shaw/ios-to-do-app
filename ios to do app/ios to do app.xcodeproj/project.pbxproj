@@ -54,6 +54,7 @@
 		7CE7D0382974B0CB008F0702 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D0372974B0CB008F0702 /* Reminder.swift */; };
 		CD54992629783E53007F0F3B /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD54992529783E53007F0F3B /* Project.swift */; };
 		CD54992A297843B2007F0F3B /* ProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD549929297843B2007F0F3B /* ProjectViewModel.swift */; };
+		CD92AF7629807CF3002CCF2D /* CreateProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD92AF7529807CF3002CCF2D /* CreateProjectView.swift */; };
 		CE890B9229758E6500233D7A /* Flashcards.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9129758E6500233D7A /* Flashcards.swift */; };
 		CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9529758FC400233D7A /* FlashcardEditor.swift */; };
 		CE890B982975900300233D7A /* FlashcardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B972975900300233D7A /* FlashcardView.swift */; };
@@ -122,6 +123,7 @@
 		7CE7D0372974B0CB008F0702 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		CD54992529783E53007F0F3B /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		CD549929297843B2007F0F3B /* ProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewModel.swift; sourceTree = "<group>"; };
+		CD92AF7529807CF3002CCF2D /* CreateProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProjectView.swift; sourceTree = "<group>"; };
 		CE890B9129758E6500233D7A /* Flashcards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcards.swift; sourceTree = "<group>"; };
 		CE890B9529758FC400233D7A /* FlashcardEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardEditor.swift; sourceTree = "<group>"; };
 		CE890B972975900300233D7A /* FlashcardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardView.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 				7C6826682976F850002DF5C6 /* TodoList.swift */,
 				50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */,
 				7C682670297FF1D9002DF5C6 /* ProjectListView.swift */,
+				CD92AF7529807CF3002CCF2D /* CreateProjectView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -476,6 +479,7 @@
 				CD54992A297843B2007F0F3B /* ProjectViewModel.swift in Sources */,
 				7C682673297FF1E8002DF5C6 /* ProjectListViewModel.swift in Sources */,
 				7C6826562975CAB2002DF5C6 /* FirebaseAppDelegate.swift in Sources */,
+				CD92AF7629807CF3002CCF2D /* CreateProjectView.swift in Sources */,
 				7CE7CFF52964DD5A008F0702 /* ios_to_do_app.xcdatamodeld in Sources */,
 				7C682671297FF1D9002DF5C6 /* ProjectListView.swift in Sources */,
 				400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */,
