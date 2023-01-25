@@ -106,20 +106,18 @@ struct TodoDetail: View {
                         }
                         
                     }
-                    .navigationTitle("Details")
                     .navigationBarBackButtonHidden(true)
-                                .navigationBarItems(
-                                    trailing:
-                                        Button(action : {
-                                            viewModel.save()
-                                            self.presentationMode.wrappedValue.dismiss()
-                                            
-                                        }){
-                                            Text("Done")
-                                        }
-                                )
-
-                }
+                }.navigationTitle("Details")
+                .navigationBarItems(
+                    trailing:
+                        Button(action : {
+                            viewModel.save()
+                            self.presentationMode.wrappedValue.dismiss()
+                            
+                        }){
+                            Text("Done")
+                        }
+                )
 
         
     }
