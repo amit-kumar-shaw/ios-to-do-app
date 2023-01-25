@@ -37,9 +37,38 @@ class UpcomingViewModel: ObservableObject {
     init(){
         
         setupBindings()
-        loadList(filter: filter)
+        selectedWeekday = Calendar.current.component(.weekdayOrdinal, from: Date()) - 1
+        do{
+            let (s, e) = try determineDateRange(weekday: selectedWeekday+1)
+            loadList(filter: filter, startDate: s, endDate: e)
+        }catch{
+            self.error = error
+            self.showAlert = true
+        }
+    }
+    
+    private func determineDateRange(weekday: Int) throws ->  (Date, Date){
+        let currentDate = Date()
         
-        selectedWeekday = Calendar.current.component(.weekdayOrdinal, from: Date())
+        var calender = Calendar.current
+        
+        let currentWeekday = calender.component(.weekday, from: currentDate)
+        let currentHour = calender.component(.hour, from: currentDate)
+        let currentMinute = calender.component(.minute, from: currentDate)
+        
+        var componentsToSubtract = DateComponents()
+        componentsToSubtract.weekday = weekday - currentWeekday
+        
+        guard let selectedDate = calender.date(byAdding: componentsToSubtract, to: currentDate) else {
+            throw DateError()
+        }
+        
+        
+        guard let startHour = calender.date(bySettingHour: 0, minute: 0, second: 0, of: selectedDate ),
+              let endHour = calender.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate ) else{
+            throw DateError()
+        }
+        return (startHour,endHour)
     }
     
     func setupBindings(){
@@ -52,6 +81,17 @@ class UpcomingViewModel: ObservableObject {
             }
             let completedTodos = self.todoList.filter { $0.1.isCompleted }.count
             self.progress = Double(completedTodos) / Double(totalTodos)
+        }.store(in: &cancelables)
+        
+        
+        $selectedWeekday.receive(on: DispatchQueue.main).sink { weekday in
+            do{
+                let (s, e) = try self.determineDateRange(weekday: weekday + 1)
+                self.loadList(filter: self.filter, startDate: s, endDate: e)
+            }catch {
+                self.error = error
+                self.showAlert = true
+            }
         }.store(in: &cancelables)
     }
     
@@ -66,7 +106,7 @@ class UpcomingViewModel: ObservableObject {
     }
     
     
-    func loadList(filter: FilterType){
+    func loadList(filter: FilterType, startDate: Date, endDate: Date){
         querySubscription?.remove()
         
         guard let currentUserId = Auth.auth().currentUser?.uid else{
@@ -74,7 +114,10 @@ class UpcomingViewModel: ObservableObject {
             return
         }
         
-        let collectionRef = Firestore.firestore().collection("todos").whereField("userId", isEqualTo: currentUserId)
+        let collectionRef = Firestore.firestore().collection("todos")
+            .whereField("userId", isEqualTo: currentUserId)
+            .whereField("dueDate", isGreaterThanOrEqualTo: startDate.ISO8601Format())
+            .whereField("dueDate", isLessThanOrEqualTo: endDate.ISO8601Format())
         
         var queryRef: Query
         

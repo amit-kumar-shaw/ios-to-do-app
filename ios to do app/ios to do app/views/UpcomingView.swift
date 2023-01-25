@@ -14,8 +14,6 @@ struct UpcomingView: View {
     @ObservedObject var viewModel = UpcomingViewModel()
     @Environment(\.tintColor) var tintColor
 
-    let weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
     var body: some View {
         List {
             Section{
@@ -53,8 +51,8 @@ struct UpcomingView: View {
             Text("completed")
                 .font(.system(size: 18, design: .rounded))
             Picker(selection: $viewModel.selectedWeekday) {
-                ForEach(weekdays.indices, id: \.self) { index in
-                    Text(weekdays[index].prefix(3))
+                ForEach(WEEKDAYS.indices, id: \.self) { index in
+                    Text(WEEKDAYS[index].prefix(3))
                 }
             } label: {
                 EmptyView()
