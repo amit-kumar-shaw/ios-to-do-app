@@ -57,11 +57,14 @@ struct TodoDetail: View {
                         .pickerStyle(SegmentedPickerStyle())
                                         
                         // TODO: Add tags picker
-                        HStack {
-                            Text("Tags")
-                            Spacer()
-                            Text("5 Tags")
+                        NavigationLink(destination: TagsInTodoView(todoId: entityId)){
+                            HStack {
+                                Text("Tags")
+                                Spacer()
+                                Text("5 Tags")
+                            }
                         }
+                        
                     }
                                 
                     Section {

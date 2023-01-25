@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28B9F45429819A46008C9150 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F45329819A46008C9150 /* Tag.swift */; };
+		28B9F45629819D14008C9150 /* TagViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F45529819D14008C9150 /* TagViewModel.swift */; };
+		28B9F4582981A122008C9150 /* TagsInTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F4572981A122008C9150 /* TagsInTodoView.swift */; };
+		28B9F45A2981A6D1008C9150 /* CreateTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F4592981A6D1008C9150 /* CreateTagView.swift */; };
 		400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400A2631296D5C6B00FA45E7 /* TodoView.swift */; };
 		404EC67A296ECFF6006E6D59 /* SlideOverCard in Frameworks */ = {isa = PBXBuildFile; productRef = 404EC679296ECFF6006E6D59 /* SlideOverCard */; };
 		501E1C89297DB9ED00DC2D4E /* UpcomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C88297DB9ED00DC2D4E /* UpcomingView.swift */; };
@@ -86,6 +90,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		28B9F45329819A46008C9150 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		28B9F45529819D14008C9150 /* TagViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewModel.swift; sourceTree = "<group>"; };
+		28B9F4572981A122008C9150 /* TagsInTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsInTodoView.swift; sourceTree = "<group>"; };
+		28B9F4592981A6D1008C9150 /* CreateTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTagView.swift; sourceTree = "<group>"; };
 		400A2631296D5C6B00FA45E7 /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
 		407EB1D8296ED142005F79D8 /* swiftUI-slide-over-card */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "swiftUI-slide-over-card"; path = "../../../swiftUI-slide-over-card"; sourceTree = "<group>"; };
 		501E1C88297DB9ED00DC2D4E /* UpcomingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingView.swift; sourceTree = "<group>"; };
@@ -220,6 +228,7 @@
 				CD549929297843B2007F0F3B /* ProjectViewModel.swift */,
 				7C3B578F29815014000815CD /* TodayViewModel.swift */,
 				7C3B579529817E56000815CD /* UpcomingViewModel.swift */,
+				28B9F45529819D14008C9150 /* TagViewModel.swift */,
 			);
 			path = viewModels;
 			sourceTree = "<group>";
@@ -315,6 +324,8 @@
 				7C6826682976F850002DF5C6 /* TodoList.swift */,
 				400A2631296D5C6B00FA45E7 /* TodoView.swift */,
 				501E1C88297DB9ED00DC2D4E /* UpcomingView.swift */,
+				28B9F4572981A122008C9150 /* TagsInTodoView.swift */,
+				28B9F4592981A6D1008C9150 /* CreateTagView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -329,6 +340,7 @@
 				7CE7D0262972BA82008F0702 /* ToDo.swift */,
 				7C3B578129802B5E000815CD /* ColorScheme.swift */,
 				7C3B579729817EF8000815CD /* Weekday.swift */,
+				28B9F45329819A46008C9150 /* Tag.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -502,9 +514,11 @@
 				7CE7D03629749725008F0702 /* JSONUtils.swift in Sources */,
 				7CE7D0272972BA82008F0702 /* ToDo.swift in Sources */,
 				CD54992A297843B2007F0F3B /* ProjectViewModel.swift in Sources */,
+				28B9F45629819D14008C9150 /* TagViewModel.swift in Sources */,
 				7C3B578229802B5E000815CD /* ColorScheme.swift in Sources */,
 				7CE7CFF52964DD5A008F0702 /* ios_to_do_app.xcdatamodeld in Sources */,
 				CD646DB3298134C20061A380 /* CreateProjectView.swift in Sources */,
+				28B9F45A2981A6D1008C9150 /* CreateTagView.swift in Sources */,
 				400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */,
 				7C3B578429802BC7000815CD /* EnvironmentValues.swift in Sources */,
 				7C3B579829817EF8000815CD /* Weekday.swift in Sources */,
@@ -513,9 +527,11 @@
 				7CE7D02D297305F0008F0702 /* ReminderEditor.swift in Sources */,
 				7C68265A2975E2B2002DF5C6 /* ContentView.swift in Sources */,
 				501E1C89297DB9ED00DC2D4E /* UpcomingView.swift in Sources */,
+				28B9F4582981A122008C9150 /* TagsInTodoView.swift in Sources */,
+				28B9F45429819A46008C9150 /* Tag.swift in Sources */,
 				7C3B579429816F7D000815CD /* Color.swift in Sources */,
 				7CE7D02B2972C70F008F0702 /* CreateTodoView.swift in Sources */,
-				7CE7D02B2972C70F008F0702 /* TodoEditor.swift in Sources */,
+				7CE7D02B2972C70F008F0702 /* CreateTodoView.swift in Sources */,
 				CD646DB6298134E40061A380 /* ProjectListViewModel.swift in Sources */,
 				7CE7D02F29749549008F0702 /* LanguageList.swift in Sources */,
 				7C3B578E29815001000815CD /* TodayView.swift in Sources */,
