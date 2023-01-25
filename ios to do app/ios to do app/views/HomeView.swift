@@ -32,7 +32,7 @@ struct HomeView: View {
                     Section("Welcome!")
                     {
                         HStack{
-                            NavigationLink(destination: TodoList(), label: {
+                            NavigationLink(destination: UpcomingView(), label: {
                                 Image(systemName: "hourglass.circle.fill")
                                 Text("Upcoming")
                             })
