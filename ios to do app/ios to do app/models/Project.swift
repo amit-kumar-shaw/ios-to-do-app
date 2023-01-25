@@ -44,10 +44,18 @@ class Project: ObservableObject, Codable {
     
     required init(from decoder: Decoder) throws{
         let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let isoFormatter = ISO8601DateFormatter()
+        
         userId = try values.decode(String.self, forKey: .userId)
         projectName = try values.decode(String.self, forKey: .projectName)
         colorHexString = try values.decode(String.self, forKey: .colorHexString)
-        timestamp = try values.decode(Date.self, forKey: .timestamp)
+        
+        let timestampIso = try values.decode(String.self, forKey: .timestamp)
+        guard let timestamp = isoFormatter.date(from: timestampIso) else {
+            throw DateError()
+        }
+        self.timestamp = timestamp
       
        
     }
@@ -57,7 +65,7 @@ class Project: ObservableObject, Codable {
         try container.encode(userId, forKey: .userId)
         try container.encode(projectName, forKey: .projectName)
         try container.encode(colorHexString, forKey: .colorHexString)
-        try container.encode(timestamp, forKey: .timestamp)
+        try container.encode(timestamp?.ISO8601Format(), forKey: .timestamp)
     
     }
     

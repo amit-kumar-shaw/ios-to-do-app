@@ -26,16 +26,22 @@ class Reminder: Identifiable, ObservableObject, Codable {
     
     
     required init(from decoder: Decoder) throws {
-        
+        let isoFormatter = ISO8601DateFormatter()
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        date = try values.decode(Date.self, forKey: .date)
+        
+        let dateIso = try values.decode(String.self, forKey: .date)
+        guard let date = isoFormatter.date(from: dateIso) else {
+            throw DateError()
+        }
+        self.date = date
+        
         id = try values.decode(String.self, forKey: .id)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
-        try container.encode(date, forKey: .date)
+        try container.encode(date.ISO8601Format(), forKey: .date)
     }
 }
 
