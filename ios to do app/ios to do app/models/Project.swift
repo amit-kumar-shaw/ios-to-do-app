@@ -15,7 +15,7 @@ class Project: ObservableObject, Codable {
     @Published var userId: String?
     @Published var projectName: String?
     @Published var colorHexString: String?
-   // @Published var timestamp: Date?
+    @Published var timestamp: Date?
     
     
     enum CodingKeys: CodingKey {
@@ -47,7 +47,7 @@ class Project: ObservableObject, Codable {
         userId = try values.decode(String.self, forKey: .userId)
         projectName = try values.decode(String.self, forKey: .projectName)
         colorHexString = try values.decode(String.self, forKey: .colorHexString)
-      //  timestamp = try values.decode(Date.self, forKey: .timestamp)
+        timestamp = try values.decode(Date.self, forKey: .timestamp)
       
        
     }
@@ -57,7 +57,7 @@ class Project: ObservableObject, Codable {
         try container.encode(userId, forKey: .userId)
         try container.encode(projectName, forKey: .projectName)
         try container.encode(colorHexString, forKey: .colorHexString)
-       // try container.encode(timestamp, forKey: .timestamp)
+        try container.encode(timestamp, forKey: .timestamp)
     
     }
     

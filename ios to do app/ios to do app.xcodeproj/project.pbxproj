@@ -60,6 +60,9 @@
 		7CE7D0382974B0CB008F0702 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D0372974B0CB008F0702 /* Reminder.swift */; };
 		CD54992629783E53007F0F3B /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD54992529783E53007F0F3B /* Project.swift */; };
 		CD54992A297843B2007F0F3B /* ProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD549929297843B2007F0F3B /* ProjectViewModel.swift */; };
+		CD646DB3298134C20061A380 /* CreateProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD646DB1298134C20061A380 /* CreateProjectView.swift */; };
+		CD646DB4298134C20061A380 /* ProjectListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD646DB2298134C20061A380 /* ProjectListView.swift */; };
+		CD646DB6298134E40061A380 /* ProjectListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD646DB5298134E40061A380 /* ProjectListViewModel.swift */; };
 		CE890B9229758E6500233D7A /* Flashcards.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9129758E6500233D7A /* Flashcards.swift */; };
 		CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9529758FC400233D7A /* FlashcardEditor.swift */; };
 		CE890B982975900300233D7A /* FlashcardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B972975900300233D7A /* FlashcardView.swift */; };
@@ -134,6 +137,9 @@
 		7CE7D0372974B0CB008F0702 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		CD54992529783E53007F0F3B /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		CD549929297843B2007F0F3B /* ProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewModel.swift; sourceTree = "<group>"; };
+		CD646DB1298134C20061A380 /* CreateProjectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateProjectView.swift; sourceTree = "<group>"; };
+		CD646DB2298134C20061A380 /* ProjectListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectListView.swift; sourceTree = "<group>"; };
+		CD646DB5298134E40061A380 /* ProjectListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectListViewModel.swift; sourceTree = "<group>"; };
 		CE890B9129758E6500233D7A /* Flashcards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcards.swift; sourceTree = "<group>"; };
 		CE890B9529758FC400233D7A /* FlashcardEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardEditor.swift; sourceTree = "<group>"; };
 		CE890B972975900300233D7A /* FlashcardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardView.swift; sourceTree = "<group>"; };
@@ -205,6 +211,7 @@
 		7C68265B2975E424002DF5C6 /* viewModels */ = {
 			isa = PBXGroup;
 			children = (
+				CD646DB5298134E40061A380 /* ProjectListViewModel.swift */,
 				7C68265C2975E43F002DF5C6 /* AuthenticationViewModel.swift */,
 				7C68265E2975EACB002DF5C6 /* SettingsViewModel.swift */,
 				7C6826622976A1CA002DF5C6 /* TodoEditorViewModel.swift */,
@@ -290,6 +297,8 @@
 			isa = PBXGroup;
 			children = (
 				7C3B5791298159C0000815CD /* Checkbox.swift */,
+				CD646DB1298134C20061A380 /* CreateProjectView.swift */,
+				CD646DB2298134C20061A380 /* ProjectListView.swift */,
 				7C6826592975E2B2002DF5C6 /* ContentView.swift */,
 				7CE7D02A2972C70F008F0702 /* CreateTodoView.swift */,
 				50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */,
@@ -488,12 +497,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD646DB4298134C20061A380 /* ProjectListView.swift in Sources */,
 				7CE7CFF22964DD5A008F0702 /* Persistence.swift in Sources */,
 				7CE7D03629749725008F0702 /* JSONUtils.swift in Sources */,
 				7CE7D0272972BA82008F0702 /* ToDo.swift in Sources */,
 				CD54992A297843B2007F0F3B /* ProjectViewModel.swift in Sources */,
 				7C3B578229802B5E000815CD /* ColorScheme.swift in Sources */,
 				7CE7CFF52964DD5A008F0702 /* ios_to_do_app.xcdatamodeld in Sources */,
+				CD646DB3298134C20061A380 /* CreateProjectView.swift in Sources */,
 				400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */,
 				7C3B578429802BC7000815CD /* EnvironmentValues.swift in Sources */,
 				7C3B579829817EF8000815CD /* Weekday.swift in Sources */,
@@ -504,6 +515,8 @@
 				501E1C89297DB9ED00DC2D4E /* UpcomingView.swift in Sources */,
 				7C3B579429816F7D000815CD /* Color.swift in Sources */,
 				7CE7D02B2972C70F008F0702 /* CreateTodoView.swift in Sources */,
+				7CE7D02B2972C70F008F0702 /* TodoEditor.swift in Sources */,
+				CD646DB6298134E40061A380 /* ProjectListViewModel.swift in Sources */,
 				7CE7D02F29749549008F0702 /* LanguageList.swift in Sources */,
 				7C3B578E29815001000815CD /* TodayView.swift in Sources */,
 				7CE7D0382974B0CB008F0702 /* Reminder.swift in Sources */,

@@ -19,10 +19,9 @@ struct HomeView: View {
     @State private var searchText = ""
     
     @ObservedObject var viewModel = ProjectViewModel()
-    @ObservedObject var todoViewModel = TodoListViewModel()
-
+    
     @State private var showEnableRemindersModal: Bool = false
-
+    
     var body: some View {
         NavigationView {
             List {
@@ -33,7 +32,7 @@ struct HomeView: View {
                             Text("Upcoming")
                         })
                     }
-                        
+                    
                     HStack {
                         NavigationLink(destination: TodayView(),
                                        label: {
@@ -41,7 +40,7 @@ struct HomeView: View {
                                            Text("Today")
                                        })
                     }
-                        
+                    
                     HStack {
                         NavigationLink(destination: SettingsView(), label: {
                             Image(systemName: "gearshape")
@@ -49,54 +48,65 @@ struct HomeView: View {
                         })
                     }
                 }
-                    
-                Section{
+                
+                Section {
                     if viewModel.projects.isEmpty {
                         addButton
                     } else {
                         ForEach($viewModel.projects, id: \.0) { $item in
-                            NavigationLink(destination: TodoView(project: (item.0, item.1!))) { // init with Project id
+                            // navigate to Project to do list
+                            NavigationLink(destination: ProjectListView(projectId: item.0)) {
                                 HStack {
+                                    if let colorString = item.1?.colorHexString {
+                                        Circle().frame(width: 12, height: 12)
+                                            .overlay(
+                                                Circle().foregroundColor(Color(hex: colorString))
+                                                    .frame(width: 10, height: 10)
+                                            )
+                                    }
+                                    
                                     Text(nameText(item: item.1))
                                 }
                             }
-                                
-                        }.onDelete { indexSet in
+                        }
+                        .onDelete { indexSet in
                             let index = indexSet.first!
                             self.viewModel.deleteProject(at: index)
                         }
+                        .headerProminence(.standard)
                     }
                 } header: {
                     Text("Projects").font(.headline).foregroundColor(.accentColor)
                 }
             }
-                
+            .listStyle(.insetGrouped)
+            .padding(.zero)
+            
             .toolbar {
                 ToolbarItem(placement: .automatic) {
                     EditButton()
                 }
                 ToolbarItem(placement: .automatic) {
-                    self.addButton
+                    addButton
                 }
             }
             .navigationTitle("Welcome")
+            .searchable(text: $searchText) {
+                Text("Search for todos and projects!")
+            }
+            .onSubmit(of: .search, performSearch)
+            .onAppear {
+                NotificationUtility.hasPermissions(completion: { hasPermissions in
+                    if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
+                        self.showEnableRemindersModal = true
+                    }
+                })
+            }
+            .fullScreenCover(isPresented: $showEnableRemindersModal) {
+                EnableRemindersModalView().tint(tintColor)
+            }
+            .padding(.zero)
         }
-        .searchable(text: $searchText) {
-            Text("Search for todos and projects!")
-        }
-        .onSubmit(of: .search, performSearch)
-        .onAppear {
-            NotificationUtility.hasPermissions(completion: { hasPermissions in
-                if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
-                    self.showEnableRemindersModal = true
-                }
-            })
-        }
-        .fullScreenCover(isPresented: $showEnableRemindersModal) {
-            EnableRemindersModalView().tint(tintColor)
-        }
-        .padding(.zero)
-
     }
     
     private func performSearch() {
@@ -106,48 +116,30 @@ struct HomeView: View {
     private var addButton: some View {
         return AnyView(
             Button(action: { self.showModal = true }) {
-                Label("Create project", systemImage: "plus")
+                Label("Add Item", systemImage: "plus")
             }.sheet(isPresented: $showModal) {
-                VStack {
-                    Text("Creat a Project!")
-                        .font(.title)
-                        
-                    TextField("Project Name", text: self.$projectName)
-                    ColorPicker("Project Color", selection: self.$projectColor)
-                        
-                    Button(action: {
-                        self.viewModel.addProject(name: self.projectName, color: self.projectColor.toHex())
-                        self.showModal = false
-                            
-                    }) {
-                        Text("Add")
-                    }.disabled(self.projectName.isEmpty)
-                        .alert("Error add project", isPresented: $viewModel.showAlert, actions: {
-                            Button("Ok", action: { self.viewModel.showAlert = false })
-                        }, message: { Text(self.viewModel.error?.localizedDescription ?? "Unknown error") })
-                        
-                }.padding(.all, 50)
+                CreateProjectView(showModal: $showModal)
             }
         )
     }
-        
+    
     private func nameText(item: Project?) -> String {
-        if let item = item {
-            if let name = item.projectName {
-                return name
-            }
+        guard let item = item, let name = item.projectName else {
+            return "Untitled"
         }
-            
-        return "Untitled"
-    }
         
-    private let itemFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .medium
-        return formatter
-    }()
+        return name
+    }
 }
+        
+//
+//        private let itemFormatter: DateFormatter = {
+//            let formatter = DateFormatter()
+//            formatter.dateStyle = .short
+//            formatter.timeStyle = .medium
+//            return formatter
+//        }()
+//
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

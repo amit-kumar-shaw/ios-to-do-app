@@ -102,6 +102,13 @@ class TodoEditorViewModel: ObservableObject {
             return
         }
         
+        guard todo.projectId != nil else {
+            
+            print("project id nill")
+            
+            return
+        }
+        
         do {
             try db.collection("todos").document(documentId).setData(from: todo)
         } catch {

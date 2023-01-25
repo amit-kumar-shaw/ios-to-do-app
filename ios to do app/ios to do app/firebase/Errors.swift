@@ -11,3 +11,7 @@ struct AuthError: Error{
     var localizedDescription = "Error loading todos, user not logged in"
     
 }
+
+struct ProjectNotFoundError: Error{
+    var localizedDescription = "Project not found"
+}
