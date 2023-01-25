@@ -26,6 +26,7 @@ class Reminder: Identifiable, ObservableObject, Codable {
     
     
     required init(from decoder: Decoder) throws {
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         date = try values.decode(Date.self, forKey: .date)
         id = try values.decode(String.self, forKey: .id)

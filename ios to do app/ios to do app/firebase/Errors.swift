@@ -15,3 +15,7 @@ struct AuthError: Error{
 struct ProjectNotFoundError: Error{
     var localizedDescription = "Project not found"
 }
+
+struct DateError: Error{
+    var localizedDescription = "Provided dates are not valid"
+}

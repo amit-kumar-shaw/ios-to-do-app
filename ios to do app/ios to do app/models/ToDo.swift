@@ -46,11 +46,25 @@ class Todo: ObservableObject, Codable{
     }
     
     required init(from decoder: Decoder) throws{
+        let isoFormatter = ISO8601DateFormatter()
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         selectedLanguage = try values.decode(Language.self, forKey: .selectedLanguage)
         description = try values.decode(String.self, forKey: .description)
-        startDate = try values.decode(Date.self, forKey: .startDate)
-        dueDate = try values.decode(Date.self, forKey: .dueDate)
+        let startDateISO = try values.decode(String.self, forKey: .startDate)
+        let dueDateISO = try values.decode(String.self, forKey: .dueDate)
+        
+        
+        guard let startDate = isoFormatter.date(from: startDateISO) else {
+            throw DateError()
+        }
+        guard let dueDate = isoFormatter.date(from: dueDateISO) else {
+            throw DateError()
+        }
+        
+        self.startDate = startDate
+        self.dueDate = dueDate
+        
         reminderBeforeDueDate = try values.decode(Int.self, forKey: .reminderBeforeDueDate)
         reminders = try values.decode([Reminder].self, forKey: .reminders)
         priority = try values.decode(Priority.self, forKey: .priority)
@@ -71,8 +85,8 @@ class Todo: ObservableObject, Codable{
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(selectedLanguage, forKey: .selectedLanguage)
         try container.encode(description, forKey: .description)
-        try container.encode(startDate, forKey: .startDate)
-        try container.encode(dueDate, forKey: .dueDate)
+        try container.encode(startDate.ISO8601Format(), forKey: .startDate)
+        try container.encode(dueDate.ISO8601Format(), forKey: .dueDate)
         try container.encode(reminderBeforeDueDate, forKey: .reminderBeforeDueDate)
         try container.encode(reminders, forKey: .reminders)
         try container.encode(priority, forKey: .priority)
