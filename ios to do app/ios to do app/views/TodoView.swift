@@ -63,7 +63,7 @@ struct TodoView: View {
                             .font(.system(size: 18, design: .rounded))
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.3)
-                }.padding(.top, 100)
+                }.padding()
                 
                 TodoList(nil,selectedFilter, self.project.0).listStyle(.inset).toolbar(){
                     ToolbarItem(placement: .automatic) {

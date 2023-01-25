@@ -30,7 +30,6 @@ struct TodayView: View {
     
     @State var selectedFilter: FilterType = .all
     
-    
     private func shouldShow(at index: Int) -> Bool {
         switch selectedFilter {
         case .all:
@@ -65,7 +64,7 @@ struct TodayView: View {
                         Text("completed")
                             .font(.system(size: 18, design: .rounded))
                     }.frame(width: UIScreen.main.bounds.width * 0.3)
-                }.padding(.top, 100)
+                }.padding()
                
                 TodoList(Date() , selectedFilter).listStyle(.inset)
                 HStack {
@@ -77,7 +76,7 @@ struct TodayView: View {
                                     
                                 }
                                 .padding()
-            }.background(Color(hex:"#FFF9DA"))
+            }
     }
 }
 

@@ -119,7 +119,7 @@ struct TodoDetail: View {
                                         }
                                 )
 
-                }.background(Color(hex:"#FFF9DA"))
+                }
 
         
     }

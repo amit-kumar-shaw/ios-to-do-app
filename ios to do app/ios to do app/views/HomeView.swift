@@ -77,12 +77,7 @@ struct HomeView: View {
                                 
                             }
                             }
-                            
-                        }
-                        .onDelete { indexSet in
-                            let index = indexSet.first!
-                            self.viewModel.deleteProject(at: index)
-                        }
+                        
                         
                         .onDelete { indexSet in
                             let index = indexSet.first!

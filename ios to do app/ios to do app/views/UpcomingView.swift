@@ -70,7 +70,7 @@ struct UpcomingView: View {
                         Text("completed")
                             .font(.system(size: 18, design: .rounded))
                     }.frame(width: UIScreen.main.bounds.width * 0.3)
-                }.padding(.top,100)
+                }.padding()
                 HStack {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
@@ -134,7 +134,7 @@ struct UpcomingView: View {
 //                    }
 //                }
 //                .padding()
-            }.background(Color(hex:"#FFF9DA"))
+            }
     }
 }
 
