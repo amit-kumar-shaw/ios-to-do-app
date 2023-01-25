@@ -23,13 +23,6 @@ struct TodoView: View {
     @State var showCard = false
     @Environment(\.presentationMode) var presentationMode
     
-    var progress: Double {
-        let totalTodos = todoList.count
-        guard totalTodos != 0 else { return 0 }
-        let completedTodos = todoList.filter { $0.isCompleted }.count
-        return Double(completedTodos) / Double(totalTodos)
-    }
-    
     @State var selectedFilter: FilterType = .all
     
     
@@ -62,13 +55,13 @@ struct TodoView: View {
                             .frame(width: UIScreen.main.bounds.width * 0.6)
                     }
                     VStack {
-                        Text("\(Int(progress * 100))%")
-                            .font(.system(size: 50, weight: .ultraLight, design: .rounded))
+//                        Text("\(Int(progress * 100))%")
+//                            .font(.system(size: 50, weight: .ultraLight, design: .rounded))
                         Text("completed")
                             .font(.system(size: 18, design: .rounded))
                     }
                     .frame(width: UIScreen.main.bounds.width * 0.3)
-                }.padding(.top, 100)
+                }.padding()
                 
                 TodoList(nil,selectedFilter, self.project.0).listStyle(.inset).toolbar(){
                     ToolbarItem(placement: .automatic) {

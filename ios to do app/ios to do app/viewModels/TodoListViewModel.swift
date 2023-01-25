@@ -28,6 +28,13 @@ class TodoListViewModel: ObservableObject{
  
     private var cancelables: [AnyCancellable] = []
     
+    var progress: Double {
+        let totalTodos = todoList.count
+        guard totalTodos != 0 else { return 0 }
+        let completedTodos = todoList.filter { $1.isCompleted }.count
+        return Double(completedTodos) / Double(totalTodos)
+    }
+    
     init() {
         //loadList()
         

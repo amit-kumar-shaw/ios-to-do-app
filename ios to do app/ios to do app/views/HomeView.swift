@@ -63,29 +63,7 @@ struct HomeView: View {
                     //.scrollDisabled(true)
                     .scrollContentBackground(.hidden)
                     
-                ScrollView(showsIndicators: false) {
                     List {
-                        if searchTerm != ""{
-                            ForEach($todoViewModel.todoList, id: \.0){
-                                $item in
-                                NavigationLink(destination: TodoDetail(entityId: item.0)){
-                                    HStack {
-                                        Text(item.1.task)
-                                        Spacer()
-                                        Button(action: {}) {
-                                            Checkbox(isChecked: $item.1.isCompleted, onToggle: {
-                                                todoViewModel.saveTodo(entityId: item.0, todo: item.1)
-                                            })
-                                        }
-                                    }
-                                }
-                            }
-                            .onDelete { indexSet in
-                                let index = indexSet.first!
-                                self.viewModel.deleteProject(at: index)
-                            }
-                            
-                        }else{
                             ForEach($viewModel.projects, id: \.0){ $item in
                                 NavigationLink(destination: TodoView( project: (item.0,item.1!))){ // init with Project id
                                     HStack {
@@ -100,7 +78,7 @@ struct HomeView: View {
                                 let index = indexSet.first!
                                 self.viewModel.deleteProject(at: index)
                             }
-                        }
+                        
                         
                     }
                     .scrollContentBackground(.hidden)
@@ -116,9 +94,8 @@ struct HomeView: View {
                         ToolbarItem (placement: .automatic){
                             self.addButton
                         }
-                    }}
+                    }
                 }.padding(.zero)
-                .background(Color(hex:"#FFF9DA"))
             
             
         }.onAppear{

@@ -47,7 +47,6 @@ struct SignUpView: View {
             .opacity(isLoading ? 0.6 : 1)
             .buttonStyle(.borderedProminent)
         }.padding().textFieldStyle(.roundedBorder)
-            .background(Color(hex:"#FFF9DA"))
     }
     // Function to handle the sign up process
     func signup() {
@@ -102,7 +101,6 @@ struct ForgetPasswordView: View {
             .opacity(isLoading ? 0.6 : 1)
             .buttonStyle(.bordered)
         }.padding().textFieldStyle(.roundedBorder)
-            .background(Color(hex:"#FFF9DA"))
     }
     // Function to handle the password reset process
     func forgotPassword() {
