@@ -13,6 +13,7 @@ struct TagsInTodoView: View {
     
     private var todoId: String
     @ObservedObject var viewModel: TagViewModel
+    @State private var showModal = false
     
     init(todoId: String) {
         self.todoId = todoId
@@ -49,6 +50,16 @@ struct TagsInTodoView: View {
                                 }
                             }
                         }
+                        if showModal {
+                            CreateTagView(todoId: self.todoId, show: $showModal)
+                            
+                        } else {
+                            Label("Add Tag", systemImage: "plus")
+                                .foregroundColor(tintColor)
+                                .onTapGesture {
+                                    showModal = true
+                                }
+                        }
                     }
                                 
                     Section(header: Text("Available Tags")) {
@@ -74,11 +85,6 @@ struct TagsInTodoView: View {
                                 }
                                 
                             }
-                        }
-                        NavigationLink(destination: CreateTagView(todoId: self.todoId))
-                        {
-                            Label("Add Tag", systemImage: "plus")
-                            
                         }
                         
                     }
