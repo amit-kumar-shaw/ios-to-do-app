@@ -124,7 +124,7 @@ struct TodoDetail: View {
             }
         }
         .navigationTitle("Details")
-        .navigationBarBackButtonHidden(true)
+        .navigationBarBackButtonHidden(false)
         .navigationBarItems(
             trailing:
             Button(action: {
