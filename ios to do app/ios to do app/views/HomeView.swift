@@ -45,7 +45,7 @@ struct HomeView: View {
                     HStack {
                         NavigationLink(destination: SettingsView(), label: {
                             Image(systemName: "gearshape")
-                            Text("Setting")
+                            Text("Settings")
                         })
                     }
                 }

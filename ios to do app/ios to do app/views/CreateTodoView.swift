@@ -53,41 +53,41 @@ struct CreateTodoView: View {
                         Picker(selection: $viewModel.todo.selectedLanguage, label: Text("Language")) {
                             LanguageList()
                         }
-                        
-                        if dynamicTypeSize > DynamicTypeSize.medium {
-                            VStack(alignment: .leading){
-                                Text("Start Date")
-                                DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
-                                    
-                                }
-                            }
-                            VStack(alignment: .leading){
-                                Text("Due Date")
-                                DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
-                                    
-                                }
-                            }
-                        } else {
-                            HStack{
-                                Text("Start Date")
-                                DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
-
-                                }
-                            }
-                            HStack{
-                                Text("Due Date")
-                                DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
-
-                                }
-                            }
-                        }
-                        
+                        /// Description
+                        TextEditor(text: $viewModel.todo.description)
                         
                     }
                 }
                     
                 /// Aditional Details
                 Section(header: Text("Additional Details")) {
+                    if dynamicTypeSize > DynamicTypeSize.medium {
+                        VStack(alignment: .leading){
+                            Text("Start Date")
+                            DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
+                                
+                            }
+                        }
+                        VStack(alignment: .leading){
+                            Text("Due Date")
+                            DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
+                                
+                            }
+                        }
+                    } else {
+                        HStack{
+                            Text("Start Date")
+                            DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
+
+                            }
+                        }
+                        HStack{
+                            Text("Due Date")
+                            DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
+
+                            }
+                        }
+                    }
                     Group {
                         Picker(selection: $viewModel.todo.priority, label: Text("Priority")) {
                             ForEach(Priority.allCases, id: \.self) { v in
@@ -103,10 +103,7 @@ struct CreateTodoView: View {
                     }
                 }
                     
-                /// Description
-                Section(header: Text("Description")) {
-                    TextEditor(text: $viewModel.todo.description)
-                }
+                
                     
                 /// Reminders
                 Section(header: Text("Reminders")) {

@@ -22,7 +22,10 @@ struct ProjectListView: View {
     var body: some View {
         VStack {
             List{
-                Section(header: header){
+                Section{
+                    header
+                }
+                Section{
                     ForEach($viewModel.todoList, id: \.0, editActions: .all){
                         $item in
                         NavigationLink(destination: TodoDetail(entityId: item.0)){
@@ -64,24 +67,16 @@ struct ProjectListView: View {
             }
         }.toolbar {
             EditButton()
-        }
+        }.navigationTitle(viewModel.project?.projectName ?? "Project Title")
     }
     
     var header: some View {
-        HStack(alignment: .bottom) {
-            if let projectName = viewModel.project?.projectName {
-                Text(projectName)
-                    .font(.system(size: 50, weight: .ultraLight, design: .rounded))
-                    .frame(width: UIScreen.main.bounds.width * 0.6)
-            }
-            VStack {
+        VStack(alignment: .center) {
                 Text("\(Int(viewModel.progress * 100))%")
                     .font(.system(size: 50, weight: .ultraLight, design: .rounded))
                 Text("completed")
                     .font(.system(size: 18, design: .rounded))
-            }
-            .frame(width: UIScreen.main.bounds.width * 0.3)
-        }.padding(.top, 100)
+            }.frame(width: UIScreen.main.bounds.width)
     }
     
     func emptyView()-> AnyView {
