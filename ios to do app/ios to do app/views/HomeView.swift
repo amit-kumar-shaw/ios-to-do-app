@@ -92,7 +92,7 @@ struct HomeView: View {
             }
             .navigationTitle("Welcome")
             .searchable(text: $searchText) {
-                Text("Search for todos and projects!")
+                SearchView()
             }
             .onSubmit(of: .search, performSearch)
             .onAppear {

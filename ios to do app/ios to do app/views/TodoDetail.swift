@@ -10,6 +10,7 @@ import SwiftUI
 
 struct TodoDetail: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
     private var entityId: String
     @ObservedObject var viewModel: TodoEditorViewModel
@@ -35,11 +36,32 @@ struct TodoDetail: View {
                     }
                                 
                     Section {
-                        DatePicker(selection: $viewModel.todo.startDate, displayedComponents: [.date, .hourAndMinute]) {
-                            Text("Start Date")
-                        }
-                        DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
-                            Text("Due Date")
+                        if dynamicTypeSize > DynamicTypeSize.medium {
+                            VStack(alignment: .leading){
+                                Text("Start Date")
+                                DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
+                                    
+                                }
+                            }
+                            VStack(alignment: .leading){
+                                Text("Due Date")
+                                DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
+                                    
+                                }
+                            }
+                        } else {
+                            HStack{
+                                Text("Start Date")
+                                DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
+
+                                }
+                            }
+                            HStack{
+                                Text("Due Date")
+                                DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
+
+                                }
+                            }
                         }
                         Picker(selection: $viewModel.todo.recurring, label: Text("Recurring")) {
                             ForEach(Recurring.allCases, id: \.self) { v in

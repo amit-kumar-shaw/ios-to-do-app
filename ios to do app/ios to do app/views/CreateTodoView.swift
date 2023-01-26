@@ -11,6 +11,7 @@ import SwiftUI
 ///View which allows the creation of todos
 struct CreateTodoView: View {
     @Environment(\.presentationMode) var presentation
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
     @ObservedObject private var viewModel: TodoEditorViewModel
     @State private var showBeforeDueDatePicker = false
@@ -52,12 +53,36 @@ struct CreateTodoView: View {
                         Picker(selection: $viewModel.todo.selectedLanguage, label: Text("Language")) {
                             LanguageList()
                         }
-                        DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
-                            Text("Start Date")
+                        
+                        if dynamicTypeSize > DynamicTypeSize.medium {
+                            VStack(alignment: .leading){
+                                Text("Start Date")
+                                DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
+                                    
+                                }
+                            }
+                            VStack(alignment: .leading){
+                                Text("Due Date")
+                                DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
+                                    
+                                }
+                            }
+                        } else {
+                            HStack{
+                                Text("Start Date")
+                                DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
+
+                                }
+                            }
+                            HStack{
+                                Text("Due Date")
+                                DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
+
+                                }
+                            }
                         }
-                        DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
-                            Text("Due Date")
-                        }
+                        
+                        
                     }
                 }
                     
