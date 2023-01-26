@@ -124,9 +124,9 @@ class TagViewModel : ObservableObject {
         
     }
     
-    func deleteTag(at index: Int) {
+    func deleteTag(id: String) {
         
-        let tagId = tags[index].0
+        let tagId = id
         
         // Delete the tag
         db.collection("tags").document(tagId).delete() { err in
@@ -134,7 +134,7 @@ class TagViewModel : ObservableObject {
                 self.showAlert = true
         }
             
-        tags.remove(at: index)
+        self.loadList()
     }
     
     func addTodo(id: String, todo: String) {
