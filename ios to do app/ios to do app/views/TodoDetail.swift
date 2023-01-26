@@ -35,6 +35,8 @@ struct TodoDetail: View {
                         }
                         TextField("Description", text: $viewModel.todo.description)
                     }
+                    
+                    FlashcardsView(flashcards: viewModel.todo.flashcards, showFlashcardEditor: false)
                                 
                     Section {
                         if dynamicTypeSize > DynamicTypeSize.medium {

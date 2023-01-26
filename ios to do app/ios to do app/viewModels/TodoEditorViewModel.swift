@@ -24,7 +24,7 @@ class TodoEditorViewModel: ObservableObject {
     
     @Published var todo: Todo = .init()
     @Published var reminderList: [Reminder] = []
-    
+    @Published var flashcards: Flashcards = Flashcards(cards: [])
     @Published var error: Error?
     @Published var showAlert = false
     @Published var showReminderEditor = false
@@ -85,8 +85,10 @@ class TodoEditorViewModel: ObservableObject {
         reminderList.remove(atOffsets: offsets)
     }
     
+    
     func save() {
         todo.reminders = reminderList
+        todo.flashcards = flashcards
         todo.userId = auth.currentUser?.uid;
         guard let documentId = id else {
             let newDocRef = db.collection("todos").document()

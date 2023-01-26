@@ -19,6 +19,7 @@ class Todo: ObservableObject, Codable{
     @Published var reminders: [Reminder] = []
     @Published var priority: Priority = .medium
     @Published var recurring: Recurring = .none
+    @Published var flashcards : Flashcards = Flashcards(cards: [Flashcard()])
     @Published var isCompleted = false
     @Published var task = ""
     @Published var userId: String?
@@ -28,6 +29,7 @@ class Todo: ObservableObject, Codable{
     enum CodingKeys: CodingKey {
         case selectedLanguage
         case description
+        case flashcards
         case startDate
         case dueDate
         case reminderBeforeDueDate
@@ -66,6 +68,7 @@ class Todo: ObservableObject, Codable{
         self.dueDate = dueDate
         
         reminderBeforeDueDate = try values.decode(Int.self, forKey: .reminderBeforeDueDate)
+        flashcards = try values.decode(Flashcards.self, forKey: .flashcards)
         reminders = try values.decode([Reminder].self, forKey: .reminders)
         priority = try values.decode(Priority.self, forKey: .priority)
         recurring = try values.decode(Recurring.self, forKey: .recurring)
@@ -84,6 +87,7 @@ class Todo: ObservableObject, Codable{
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(selectedLanguage, forKey: .selectedLanguage)
+        try container.encode(flashcards, forKey: .flashcards)
         try container.encode(description, forKey: .description)
         try container.encode(startDate.ISO8601Format(), forKey: .startDate)
         try container.encode(dueDate.ISO8601Format(), forKey: .dueDate)

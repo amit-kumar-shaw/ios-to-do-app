@@ -15,7 +15,7 @@ struct TodoView: View {
     @State var project : (String, Project)
     
     
-    @StateObject var flashcards = Flashcards(cards: [Flashcard(front: "", back: "")])
+    @StateObject var flashcards = Flashcards(cards: [Flashcard()])
     @State private var showFlashcardEditor: Bool = false
            
     
