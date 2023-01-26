@@ -14,6 +14,7 @@ struct TodoDetail: View {
     
     private var entityId: String
     @ObservedObject var viewModel: TodoEditorViewModel
+    @ObservedObject var tagViewModel = TagViewModel()
     @State private var showBeforeDueDatePicker = false
     
     init(entityId: String) {
@@ -78,12 +79,11 @@ struct TodoDetail: View {
                         }
                         .pickerStyle(SegmentedPickerStyle())
                                         
-                        // TODO: Add tags picker
                         NavigationLink(destination: TagsInTodoView(todoId: entityId)){
                             HStack {
                                 Text("Tags")
                                 Spacer()
-                                Text("5 Tags")
+                                Text("\(tagViewModel.tagCount(todo: entityId)) Tags")
                             }
                         }
                         

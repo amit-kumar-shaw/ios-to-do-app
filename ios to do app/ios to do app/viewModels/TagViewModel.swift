@@ -10,6 +10,7 @@ import Combine
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import SwiftUI
 
 class TagViewModel : ObservableObject {
 
@@ -181,6 +182,18 @@ class TagViewModel : ObservableObject {
                     print("Error getting tag \(error)")
             }
         }
+    }
+    
+    func tagCount(todo: String) -> Int {
+        var count = 0
+      
+        tags.forEach { item in
+            if item.1!.todos.contains(todo) {
+                count += 1
+            }
+        }
+        
+        return count
     }
     
     private let itemFormatter: DateFormatter = {
