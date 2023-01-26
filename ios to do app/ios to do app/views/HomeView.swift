@@ -83,10 +83,10 @@ struct HomeView: View {
                 }
             }
             .navigationTitle("Welcome")
-            .searchable(text: $searchText) {
-                SearchView()
-            }
-            .onSubmit(of: .search, performSearch)
+//            .searchable(text: $searchText) {
+//                SearchView(searchText: $searchText)
+//            }
+//            .onSubmit(of: .search, performSearch)
             .onAppear {
                 NotificationUtility.hasPermissions(completion: { hasPermissions in
                     if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
@@ -99,6 +99,10 @@ struct HomeView: View {
             }
             .padding(.zero)
         }
+        .searchable(text: $searchText) {
+            SearchView(searchText: $searchText)
+        }
+        .onSubmit(of: .search, performSearch)
     }
     
     private func performSearch() {
