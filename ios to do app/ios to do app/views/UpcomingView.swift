@@ -56,7 +56,7 @@ struct UpcomingView: View {
                 }
             } label: {
                 EmptyView()
-            }.pickerStyle(.segmented).padding(30)
+            }.pickerStyle(.segmented).padding(.horizontal,30)
         }.frame(width: UIScreen.main.bounds.width)
         
     }

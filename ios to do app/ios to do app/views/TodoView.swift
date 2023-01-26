@@ -88,6 +88,7 @@ struct TodoView: View {
 }
 
 
+
 struct TodoView_Previews: PreviewProvider {
     static var previews: some View {
         TodoView(project: ("",Project(projectName: "Preview", projectColor: Color.brown)))
