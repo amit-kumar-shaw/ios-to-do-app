@@ -14,7 +14,7 @@ class Tag: ObservableObject, Codable {
     
     @Published var userId: String?
     @Published var tag: String?
-    @Published var todoId: [String] = []
+    @Published var todos: [String] = []
     @Published var timestamp: Date?
     
     
@@ -40,7 +40,7 @@ class Tag: ObservableObject, Codable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         userId = try values.decode(String.self, forKey: .userId)
         tag = try values.decode(String.self, forKey: .tag)
-        todoId = try values.decode([String].self, forKey: .todoId)
+        todos = try values.decode([String].self, forKey: .todoId)
         timestamp = try values.decode(Date.self, forKey: .timestamp)
     }
     
@@ -48,7 +48,7 @@ class Tag: ObservableObject, Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(userId, forKey: .userId)
         try container.encode(tag, forKey: .tag)
-        try container.encode(todoId, forKey: .todoId)
+        try container.encode(todos, forKey: .todoId)
         try container.encode(timestamp, forKey: .timestamp)
     }
     

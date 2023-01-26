@@ -19,8 +19,9 @@ struct HomeView: View {
     @State private var searchText = ""
     
     @ObservedObject var viewModel = ProjectViewModel()
+    @ObservedObject var todoViewModel = TodoListViewModel()
     
-    @State private var showEnableRemindersModal: Bool = false
+    @State private var showEnableRemindersModal : Bool = false
     
     var body: some View {
         NavigationView {
@@ -36,9 +37,9 @@ struct HomeView: View {
                     HStack {
                         NavigationLink(destination: TodayView(),
                                        label: {
-                                           Image(systemName: "calendar.badge.exclamationmark")
-                                           Text("Today")
-                                       })
+                            Image(systemName: "calendar.badge.exclamationmark")
+                            Text("Today")
+                        })
                     }
                     
                     HStack {
@@ -53,20 +54,11 @@ struct HomeView: View {
                     if viewModel.projects.isEmpty {
                         addButton
                     } else {
+                        
                         ForEach($viewModel.projects, id: \.0) { $item in
                             // navigate to Project to do list
                             NavigationLink(destination: ProjectListView(projectId: item.0)) {
-                                HStack {
-                                    if let colorString = item.1?.colorHexString {
-                                        Circle().frame(width: 12, height: 12)
-                                            .overlay(
-                                                Circle().foregroundColor(Color(hex: colorString))
-                                                    .frame(width: 10, height: 10)
-                                            )
-                                    }
-                                    
-                                    Text(nameText(item: item.1))
-                                }
+                                ProjectListRow(project: item.1!)
                             }
                         }
                         .onDelete { indexSet in
@@ -74,10 +66,10 @@ struct HomeView: View {
                             self.viewModel.deleteProject(at: index)
                         }
                         .headerProminence(.standard)
+                        
+                    } }header: {
+                        Text("Projects").font(.headline).foregroundColor(.accentColor)
                     }
-                } header: {
-                    Text("Projects").font(.headline).foregroundColor(.accentColor)
-                }
             }
             .listStyle(.insetGrouped)
             .padding(.zero)
@@ -130,16 +122,42 @@ struct HomeView: View {
         
         return name
     }
+    
+    
+    //
+    //        private let itemFormatter: DateFormatter = {
+    //            let formatter = DateFormatter()
+    //            formatter.dateStyle = .short
+    //            formatter.timeStyle = .medium
+    //            return formatter
+    //        }()
+    //
+    
 }
-        
-//
-//        private let itemFormatter: DateFormatter = {
-//            let formatter = DateFormatter()
-//            formatter.dateStyle = .short
-//            formatter.timeStyle = .medium
-//            return formatter
-//        }()
-//
+
+struct ProjectListRow: View {
+    
+    
+    var project: Project
+    
+    
+    var body: some View {
+        HStack {
+            Circle().frame(width: 12, height: 12)
+                .overlay(
+                    Circle().foregroundColor(Color(hex: project.colorHexString ?? "#FFFFFF"))
+                        .frame(width: 10, height: 10)
+                )
+            
+            Text(project.projectName ?? "Untitled")
+            Text(project.selectedLanguage.name)
+                .foregroundColor(.gray)
+        }
+    }
+    
+}
+
+
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

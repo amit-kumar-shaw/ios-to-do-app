@@ -12,7 +12,7 @@ struct LanguageList: View {
     
     var body: some View {
         ForEach(languages, id: \.id) { language in
-                Text(language.name)
+                Text(language.name).tag(language)
             }
     }
 }
