@@ -10,66 +10,97 @@ import FirebaseAuth
 import SwiftUI
 
 struct HomeView: View {
+    @State private var searchText = ""
+    var body: some View {
+        NavigationView {
+            SearchableView(searchText:$searchText)
+        }
+        .searchable(text: $searchText)
+        .disableAutocorrection(true)
+        .onSubmit(of: .search, performSearch)
+        
+    }
+      
+    private func performSearch() {
+        // TODO: implement global search functionality
+    }
+}
+
+struct SearchableView: View {
     @Environment(\.tintColor) var tintColor
     @State private var offset: CGFloat = 0
     @State private var searchTerm = ""
     @State private var projectName = ""
     @State private var projectColor = Color.white
     @State private var showModal = false
-    @State private var searchText = ""
+    @Binding public var searchText : String
     
     @ObservedObject var viewModel = ProjectViewModel()
     @ObservedObject var todoViewModel = TodoListViewModel()
     
     @State private var showEnableRemindersModal : Bool = false
     
+    
+    @Environment(\.isSearching) private var isSearching
+    
+    @Environment(\.dismissSearch) private var dismissSearch
+    
     var body: some View {
-        NavigationView {
+
+            
             List {
-                Section {
-                    HStack {
-                        NavigationLink(destination: UpcomingView(), label: {
-                            Image(systemName: "hourglass.circle.fill")
-                            Text("Upcoming")
-                        })
+               
+                if (!isSearching) {
+                    Section {
+                        HStack {
+                            
+                            NavigationLink(destination: UpcomingView(), label: {
+                                Image(systemName: "hourglass.circle.fill")
+                                Text("Upcoming")
+                            })
+                            
+                        }
+                        
+                        HStack {
+                            NavigationLink(destination: TodayView(),
+                                           label: {
+                                Image(systemName: "calendar.badge.exclamationmark")
+                                Text("Today")
+                            })
+                        }
+                        
+                        HStack {
+                            NavigationLink(destination: SettingsView(), label: {
+                                Image(systemName: "gearshape")
+                                Text("Settings")
+                            })
+                        }
                     }
                     
-                    HStack {
-                        NavigationLink(destination: TodayView(),
-                                       label: {
-                            Image(systemName: "calendar.badge.exclamationmark")
-                            Text("Today")
-                        })
-                    }
-                    
-                    HStack {
-                        NavigationLink(destination: SettingsView(), label: {
-                            Image(systemName: "gearshape")
-                            Text("Settings")
-                        })
-                    }
+                    Section {
+                        if viewModel.projects.isEmpty {
+                            addButton
+                        } else {
+                            
+                            ForEach($viewModel.projects, id: \.0) { $item in
+                                // navigate to Project to do list
+                                NavigationLink(destination: ProjectListView(projectId: item.0)) {
+                                    ProjectListRow(project: item.1!)
+                                }
+                            }
+                            .onDelete { indexSet in
+                                let index = indexSet.first!
+                                self.viewModel.deleteProject(at: index)
+                            }
+                            .headerProminence(.standard)
+                            
+                        } }header: {
+                            Text("Projects").font(.headline).foregroundColor(.accentColor)
+                        }
+                } else {
+                    SearchView(searchText: $searchText)
                 }
                 
-                Section {
-                    if viewModel.projects.isEmpty {
-                        addButton
-                    } else {
-                        
-                        ForEach($viewModel.projects, id: \.0) { $item in
-                            // navigate to Project to do list
-                            NavigationLink(destination: ProjectListView(projectId: item.0)) {
-                                ProjectListRow(project: item.1!)
-                            }
-                        }
-                        .onDelete { indexSet in
-                            let index = indexSet.first!
-                            self.viewModel.deleteProject(at: index)
-                        }
-                        .headerProminence(.standard)
-                        
-                    } }header: {
-                        Text("Projects").font(.headline).foregroundColor(.accentColor)
-                    }
             }
             .listStyle(.insetGrouped)
             .padding(.zero)
@@ -98,11 +129,12 @@ struct HomeView: View {
                 EnableRemindersModalView().tint(tintColor)
             }
             .padding(.zero)
-        }
-        .searchable(text: $searchText) {
-            SearchView(searchText: $searchText)
-        }
-        .onSubmit(of: .search, performSearch)
+            
+            //NavigationLink(destination: TodoDetail(entityId: searchTodoId), isActive: $isPresentingSearchedTodo) { EmptyView()}
+            //NavigationLink(destination: TodoDetail(entityId: item.0))
+            
+        
+    
     }
     
     private func performSearch() {

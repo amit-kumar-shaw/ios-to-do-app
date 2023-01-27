@@ -11,39 +11,58 @@ import FirebaseFirestoreSwift
 
 struct SearchView: View {
     
-//    let searchText = "index"
     @Binding var searchText: String
     @ObservedObject var projectViewModel = ProjectViewModel()
-    @ObservedObject var todoViewModel = ProjectViewModel()
+    @ObservedObject var todoViewModel = TodoListViewModel()
+    
     
     var body: some View {
-//        Text("Search for todos and projects!").onAppear{
-//            Firestore.firestore().collection("projects").whereField("projectName", arrayContains: searchText).getDocuments { qs, err in
-//                    if err == nil {
-//                        let docs = qs?.documents.map({ docSnap in
-//                            return docSnap.data()
-//                        })
-//
-//                        print("\(searchText) results: \(docs)")
-//                    }
-//                }
-//        }
-        
-        VStack(alignment: .leading) {
+
             
-                Section(header: Text("Projects")) {
-                    ForEach($projectViewModel.projects, id: \.0) { $item in
-                        if let _ = item.1!.projectName!.range(of: searchText, options: .caseInsensitive) {
-//                            NavigationLink(destination: ProjectListView(projectId: item.0)) {
-                                ProjectListRow(project: item.1!)
-                                .onTapGesture {
-                                    ProjectListView(projectId: item.0)
+            
+            Section(header: Text("Projects").font(.headline).foregroundColor(.accentColor)) {
+                ForEach($projectViewModel.projects, id: \.0) { $item in
+                    
+                    if let _ = item.1!.projectName!.range(of: searchText, options: .caseInsensitive) {
+                        NavigationLink(destination: ProjectListView(projectId: item.0)) {
+                            ProjectListRow(project: item.1!)
+                        }
+                    }
+                }.headerProminence(.standard)
+            }.padding(.bottom)
+        
+            
+            
+            Section(header: Text("Todos").font(.headline).foregroundColor(.accentColor)) {
+                
+                
+                ForEach($todoViewModel.todoList, id: \.0, editActions: .all){
+                    $item in
+                    if item.1.task.range(of: searchText, options: .caseInsensitive) != nil {
+                        
+                        //self.onNavigateToTodo(item.0)
+                        
+                        NavigationLink(destination: TodoDetail(entityId: item.0)){
+                 
+                            HStack {
+                                    Text(item.1.task)
+                                    Spacer()
+                                    Button(action: {}) {
+                                        Checkbox(isChecked: ($item.1.isCompleted), onToggle: {
+                                            todoViewModel.saveTodo(entityId: item.0, todo: item.1)
+                                        })
+                                    }
+                                    
                                 }
-//                            }
-                            
+                        
+                        
                         }
                     }
                 }
+            }
+        
+            
+          
             
 //            Section(header: Text("Todos")) {
 //                ForEach($todoViewModel.todoList, id: \.0) { $item in
@@ -57,7 +76,7 @@ struct SearchView: View {
 //            }
                 
             
-        }.padding()
+  
         
     }
 }
