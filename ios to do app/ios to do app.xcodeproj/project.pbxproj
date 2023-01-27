@@ -15,6 +15,7 @@
 		404EC67A296ECFF6006E6D59 /* SlideOverCard in Frameworks */ = {isa = PBXBuildFile; productRef = 404EC679296ECFF6006E6D59 /* SlideOverCard */; };
 		501E1C89297DB9ED00DC2D4E /* UpcomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C88297DB9ED00DC2D4E /* UpcomingView.swift */; };
 		501E1C8D297DBA4000DC2D4E /* FlashcardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C8C297DBA4000DC2D4E /* FlashcardsView.swift */; };
+		501E1C8F2984740500DC2D4E /* GenericTodoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C8E2984740500DC2D4E /* GenericTodoViewModel.swift */; };
 		50CCAFCC297ADF7900D5F2AA /* NotificationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CCAFCB297ADF7900D5F2AA /* NotificationUtility.swift */; };
 		50CCAFCE297C58A300D5F2AA /* EnableRemindersModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */; };
 		7C3B578229802B5E000815CD /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3B578129802B5E000815CD /* ColorScheme.swift */; };
@@ -99,6 +100,7 @@
 		407EB1D8296ED142005F79D8 /* swiftUI-slide-over-card */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "swiftUI-slide-over-card"; path = "../../../swiftUI-slide-over-card"; sourceTree = "<group>"; };
 		501E1C88297DB9ED00DC2D4E /* UpcomingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingView.swift; sourceTree = "<group>"; };
 		501E1C8C297DBA4000DC2D4E /* FlashcardsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashcardsView.swift; sourceTree = "<group>"; };
+		501E1C8E2984740500DC2D4E /* GenericTodoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTodoViewModel.swift; sourceTree = "<group>"; };
 		50CCAFCB297ADF7900D5F2AA /* NotificationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationUtility.swift; sourceTree = "<group>"; };
 		50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableRemindersModalView.swift; sourceTree = "<group>"; };
 		7C3B578129802B5E000815CD /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				7C3B578F29815014000815CD /* TodayViewModel.swift */,
 				7C3B579529817E56000815CD /* UpcomingViewModel.swift */,
 				28B9F45529819D14008C9150 /* TagViewModel.swift */,
+				501E1C8E2984740500DC2D4E /* GenericTodoViewModel.swift */,
 			);
 			path = viewModels;
 			sourceTree = "<group>";
@@ -559,6 +562,7 @@
 				7CE7D03329749641008F0702 /* Language.swift in Sources */,
 				7C6826582975CC3A002DF5C6 /* LoginScreen.swift in Sources */,
 				7C68265F2975EACB002DF5C6 /* SettingsViewModel.swift in Sources */,
+				501E1C8F2984740500DC2D4E /* GenericTodoViewModel.swift in Sources */,
 				50CCAFCE297C58A300D5F2AA /* EnableRemindersModalView.swift in Sources */,
 				7C6826632976A1CA002DF5C6 /* TodoEditorViewModel.swift in Sources */,
 				7C6826612975EEE5002DF5C6 /* SettingsView.swift in Sources */,

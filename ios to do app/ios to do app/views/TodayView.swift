@@ -32,6 +32,7 @@ struct TodayView: View {
                             HStack{
                                 Checkbox(isChecked: $item.1.isCompleted) {
                                     viewModel.saveTodo(entityId: item.0, todo: item.1)
+                                
                                 }
                                 NavigationLink(destination: TodoDetail(entityId: item.0)){
                                     HStack {

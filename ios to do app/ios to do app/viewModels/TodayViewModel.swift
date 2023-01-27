@@ -12,20 +12,18 @@ import FirebaseFirestoreSwift
 import Combine
 
 
-class TodayViewModel: ObservableObject {
+class TodayViewModel: GenericTodoViewModel {
     
     private var cancelables: [AnyCancellable] = []
     private var querySubscription: ListenerRegistration?
     
     
     @Published var filter: FilterType = .all
-    @Published var error: Error?
-    @Published var showAlert = false
     @Published var progress: Double = 0.0
     @Published var todoList: [(String, Todo)] = []
     
-    init(){
-        
+    override init(){
+        super.init()
         setupBindings()
         loadList(filter: filter)
     }
@@ -42,16 +40,7 @@ class TodayViewModel: ObservableObject {
             self.progress = Double(completedTodos) / Double(totalTodos)
         }.store(in: &cancelables)
     }
-    
-    func saveTodo(entityId : String, todo : Todo) {
-        do {
-            try Firestore.firestore().collection("todos").document(entityId).setData(from: todo)
-        } catch {
-            self.error = error
-            self.showAlert = true
-        }
-        
-    }
+
     
     
     func loadList(filter: FilterType){
