@@ -19,15 +19,18 @@ class Todo: ObservableObject, Codable{
     @Published var reminders: [Reminder] = []
     @Published var priority: Priority = .medium
     @Published var recurring: Recurring = .none
+    @Published var flashcards : Flashcards = Flashcards(cards: [Flashcard()])
     @Published var isCompleted = false
     @Published var task = ""
     @Published var userId: String?
     @Published var completed = false
     @Published var projectId: String?
+    @Published var createdByRecurringTodoId : String = ""
     
     enum CodingKeys: CodingKey {
         case selectedLanguage
         case description
+        case flashcards
         case startDate
         case dueDate
         case reminderBeforeDueDate
@@ -39,6 +42,7 @@ class Todo: ObservableObject, Codable{
         case userId
         case completed
         case projectId
+        case createdByRecurringTodoId
     }
     
     init(){
@@ -66,6 +70,7 @@ class Todo: ObservableObject, Codable{
         self.dueDate = dueDate
         
         reminderBeforeDueDate = try values.decode(Int.self, forKey: .reminderBeforeDueDate)
+        flashcards = try values.decode(Flashcards.self, forKey: .flashcards)
         reminders = try values.decode([Reminder].self, forKey: .reminders)
         priority = try values.decode(Priority.self, forKey: .priority)
         recurring = try values.decode(Recurring.self, forKey: .recurring)
@@ -74,6 +79,7 @@ class Todo: ObservableObject, Codable{
         userId = try values.decode(String.self, forKey: .userId)
         completed = try values.decode(Bool.self, forKey: .completed)
         projectId = try values.decode(String.self, forKey: .projectId)
+        createdByRecurringTodoId = try values.decode(String.self, forKey: .createdByRecurringTodoId)
     }
     
     convenience init(selectedLanguage: Language){
@@ -84,6 +90,7 @@ class Todo: ObservableObject, Codable{
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(selectedLanguage, forKey: .selectedLanguage)
+        try container.encode(flashcards, forKey: .flashcards)
         try container.encode(description, forKey: .description)
         try container.encode(startDate.ISO8601Format(), forKey: .startDate)
         try container.encode(dueDate.ISO8601Format(), forKey: .dueDate)
@@ -96,6 +103,7 @@ class Todo: ObservableObject, Codable{
         try container.encode(userId, forKey: .userId)
         try container.encode(completed, forKey: .completed)
         try container.encode(projectId, forKey: .projectId)
+        try container.encode(createdByRecurringTodoId, forKey: .createdByRecurringTodoId)
         
     }   
 }

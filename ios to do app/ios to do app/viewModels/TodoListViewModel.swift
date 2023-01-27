@@ -11,10 +11,8 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
-class TodoListViewModel: ObservableObject {
+class TodoListViewModel: GenericTodoViewModel {
     @Published var todoList: [(String, Todo)] = []
-    @Published var showAlert = false
-    @Published var error: Error?
     @Published var filter: FilterType = .all
     @Published var dateFilter: Date?
     
@@ -36,7 +34,8 @@ class TodoListViewModel: ObservableObject {
 //        return Double(completedTodos) / Double(totalTodos)
 //    }
     
-    init() {
+    override init() {
+        super.init()
         setupBindings()
         loadList()
     }
@@ -69,20 +68,7 @@ class TodoListViewModel: ObservableObject {
             let completedTodos = self.todoList.filter { $0.1.isCompleted }.count
             self.progress = Double(completedTodos) / Double(totalTodos)
         }.store(in: &cancelables)
-    }
-    
-    
-    func saveTodo(entityId : String, todo : Todo) {
-       
-           do {
-               try db.collection("todos").document(entityId).setData(from: todo)
-           } catch {
-               self.error = error
-               self.showAlert = true
-           }
-           
-    }
-    
+    }    
     
     
     

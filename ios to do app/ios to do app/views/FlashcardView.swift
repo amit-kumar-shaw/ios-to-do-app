@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FlashcardView: View {
-    @StateObject var flashcards = Flashcards(cards: [Flashcard(front: "", back: "")])
+    @StateObject var flashcards = Flashcards(cards: [Flashcard()])
     @State private var currentCard: Int = 0
     @State private var isFlipped: Bool = false
     @State private var showFlashcardEditor: Bool = false

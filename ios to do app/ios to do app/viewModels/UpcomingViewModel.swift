@@ -21,21 +21,19 @@ import FirebaseFirestoreSwift
 import Combine
 
 
-class UpcomingViewModel: ObservableObject {
+class UpcomingViewModel: GenericTodoViewModel {
     
     private var cancelables: [AnyCancellable] = []
     private var querySubscription: ListenerRegistration?
     
     
     @Published var filter: FilterType = .all
-    @Published var error: Error?
-    @Published var showAlert = false
     @Published var progress: Double = 0.0
     @Published var todoList: [(String, Todo)] = []
     @Published var selectedWeekday: Int = 0
     
-    init(){
-        
+    override init(){
+        super.init()
         setupBindings()
         selectedWeekday = Calendar.current.component(.weekdayOrdinal, from: Date()) - 1
         do{
@@ -94,16 +92,7 @@ class UpcomingViewModel: ObservableObject {
             }
         }.store(in: &cancelables)
     }
-    
-    func saveTodo(entityId : String, todo : Todo) {
-        do {
-            try Firestore.firestore().collection("todos").document(entityId).setData(from: todo)
-        } catch {
-            self.error = error
-            self.showAlert = true
-        }
-        
-    }
+
     
     
     func loadList(filter: FilterType, startDate: Date, endDate: Date){

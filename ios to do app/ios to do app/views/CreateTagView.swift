@@ -8,47 +8,57 @@
 import SwiftUI
 
 struct CreateTagView: View {
-    @Environment(\.presentationMode) var presentation
-    
+    @Environment(\.tintColor) var tintColor
+
+    @Binding private var showModal: Bool
     @State private var tag = ""
     private var todo: String?
     @ObservedObject private var viewModel: TagViewModel
     
-    init() {
+    init(show: Binding<Bool>) {
         viewModel = TagViewModel()
+        self._showModal = show
     }
     
-    init(todoId: String) {
+    init(todoId: String, show: Binding<Bool>) {
         viewModel = TagViewModel()
         self.todo = todoId
+        self._showModal = show
     }
     
     var body: some View {
         VStack{
-            List {
-                Section{
-                    TextField("Tag", text: self.$tag)
-                }
-            }
-            Button(action:  {
+            HStack {
+                TextField("Tag", text: self.$tag)
                 
-                self.viewModel.addTag(tag: self.tag, todo: self.todo)
-                self.presentation.wrappedValue.dismiss()
+                Spacer()
                 
-            }  )
-            {
-                Text("Add")
+                Text("Cancel")
+                    .onTapGesture {
+                        showModal = false
+                        self.tag = ""
+                    }
+                    .foregroundColor(tintColor)
             }
-            .disabled(self.tag.isEmpty)
-            .alert("Error add tag", isPresented: $viewModel.showAlert, actions: {
-                    Button("Ok", action: { self.viewModel.showAlert = false })
-                }, message: { Text(self.viewModel.error?.localizedDescription ?? "Unknown error") })
+            HStack {
+                Text("Create Tag")
+                    .onTapGesture {
+                        self.viewModel.addTag(tag: self.tag, todo: self.todo)
+                        showModal = false
+                        self.tag = ""
+                    }.foregroundColor(self.tag.isEmpty ? .gray : tintColor)
+                    .disabled(self.tag.isEmpty)
+                    .alert("Error add tag", isPresented: $viewModel.showAlert, actions: {
+                        Button("Ok", action: { self.viewModel.showAlert = false })
+                    }, message: { Text(self.viewModel.error?.localizedDescription ?? "Unknown error") })
+                
+            }
         }
     }
 }
 
 struct CreateTagView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateTagView()
+        CreateTagView(show: .constant(false))
     }
 }

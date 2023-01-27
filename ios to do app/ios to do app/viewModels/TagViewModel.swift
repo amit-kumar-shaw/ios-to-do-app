@@ -10,6 +10,7 @@ import Combine
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import SwiftUI
 
 class TagViewModel : ObservableObject {
 
@@ -124,9 +125,9 @@ class TagViewModel : ObservableObject {
         
     }
     
-    func deleteTag(at index: Int) {
+    func deleteTag(id: String) {
         
-        let tagId = tags[index].0
+        let tagId = id
         
         // Delete the tag
         db.collection("tags").document(tagId).delete() { err in
@@ -134,7 +135,7 @@ class TagViewModel : ObservableObject {
                 self.showAlert = true
         }
             
-        tags.remove(at: index)
+        self.loadList()
     }
     
     func addTodo(id: String, todo: String) {
@@ -181,6 +182,18 @@ class TagViewModel : ObservableObject {
                     print("Error getting tag \(error)")
             }
         }
+    }
+    
+    func tagCount(todo: String) -> Int {
+        var count = 0
+      
+        tags.forEach { item in
+            if item.1!.todos.contains(todo) {
+                count += 1
+            }
+        }
+        
+        return count
     }
     
     private let itemFormatter: DateFormatter = {

@@ -10,9 +10,11 @@ import SwiftUI
 
 struct TodoDetail: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
     private var entityId: String
     @ObservedObject var viewModel: TodoEditorViewModel
+    @ObservedObject var tagViewModel = TagViewModel()
     @State private var showBeforeDueDatePicker = false
     
     init(entityId: String) {
@@ -33,13 +35,36 @@ struct TodoDetail: View {
                         }
                         TextField("Description", text: $viewModel.todo.description)
                     }
+                    
+                    FlashcardsView(flashcards: viewModel.todo.flashcards, showFlashcardEditor: false)
                                 
                     Section {
-                        DatePicker(selection: $viewModel.todo.startDate, displayedComponents: [.date, .hourAndMinute]) {
-                            Text("Start Date")
-                        }
-                        DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
-                            Text("Due Date")
+                        if dynamicTypeSize > DynamicTypeSize.medium {
+                            VStack(alignment: .leading){
+                                Text("Start Date")
+                                DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
+                                    
+                                }
+                            }
+                            VStack(alignment: .leading){
+                                Text("Due Date")
+                                DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
+                                    
+                                }
+                            }
+                        } else {
+                            HStack{
+                                Text("Start Date")
+                                DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
+
+                                }
+                            }
+                            HStack{
+                                Text("Due Date")
+                                DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
+
+                                }
+                            }
                         }
                         Picker(selection: $viewModel.todo.recurring, label: Text("Recurring")) {
                             ForEach(Recurring.allCases, id: \.self) { v in
@@ -56,12 +81,11 @@ struct TodoDetail: View {
                         }
                         .pickerStyle(SegmentedPickerStyle())
                                         
-                        // TODO: Add tags picker
                         NavigationLink(destination: TagsInTodoView(todoId: entityId)){
                             HStack {
                                 Text("Tags")
                                 Spacer()
-                                Text("5 Tags")
+                                Text("\(tagViewModel.tagCount(todo: entityId)) Tags")
                             }
                         }
                         
@@ -102,7 +126,7 @@ struct TodoDetail: View {
             }
         }
         .navigationTitle("Details")
-        .navigationBarBackButtonHidden(true)
+        .navigationBarBackButtonHidden(false)
         .navigationBarItems(
             trailing:
             Button(action: {

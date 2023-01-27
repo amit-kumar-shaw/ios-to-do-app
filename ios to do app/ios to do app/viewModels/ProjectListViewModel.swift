@@ -92,7 +92,7 @@ class ProjectListViewModel: ObservableObject {
     
 
     func loadList(filter: FilterType){
-        print("Loading list with filter \(filter) ...");
+       // print("Loading list with filter \(filter) ...");
         querySubscription?.remove()
         
         let collectionRef = db.collection("todos").whereField("projectId", isEqualTo: projectId)

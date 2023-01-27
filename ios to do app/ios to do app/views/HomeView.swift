@@ -10,18 +10,37 @@ import FirebaseAuth
 import SwiftUI
 
 struct HomeView: View {
+    @State private var searchText = ""
+    var body: some View {
+        NavigationView {
+            SearchableView(searchText:$searchText)
+        }
+        .searchable(text: $searchText)
+        .disableAutocorrection(true)
+        .onSubmit(of: .search, performSearch)
+        
+    }
+      
+    private func performSearch() {
+        // TODO: implement global search functionality
+    }
+}
+
+struct SearchableView: View {
     @Environment(\.tintColor) var tintColor
     @State private var offset: CGFloat = 0
     @State private var searchTerm = ""
     @State private var projectName = ""
     @State private var projectColor = Color.white
     @State private var showModal = false
-    @State private var searchText = ""
+    @Binding public var searchText : String
     
     @ObservedObject var viewModel = ProjectViewModel()
     @ObservedObject var todoViewModel = TodoListViewModel()
     
-    @State private var showEnableRemindersModal : Bool = false
+//    @State private var showEnableRemindersModal : Bool = false
+    @Environment(\.isSearching) private var isSearching
+    @Environment(\.dismissSearch) private var dismissSearch
 
     
 
@@ -71,7 +90,8 @@ struct HomeView: View {
     }
     
     var body: some View {
-        NavigationView {
+
+            
             List {
                 
                 //Home View Lists
@@ -108,22 +128,27 @@ struct HomeView: View {
                 }
             }
             .navigationTitle("Welcome")
-            .searchable(text: $searchText) {
-                Text("Search for todos and projects!")
-            }
-            .onSubmit(of: .search, performSearch)
-            .onAppear {
-                NotificationUtility.hasPermissions(completion: { hasPermissions in
-                    if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
-                        self.showEnableRemindersModal = true
-                    }
-                })
-            }
-            .fullScreenCover(isPresented: $showEnableRemindersModal) {
-                EnableRemindersModalView().tint(tintColor)
-            }
+//            .searchable(text: $searchText) {
+//                SearchView(searchText: $searchText)
+//            }
+//            .onSubmit(of: .search, performSearch)
+//            .onAppear {
+//                NotificationUtility.hasPermissions(completion: { hasPermissions in
+//                    if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
+//                        self.showEnableRemindersModal = true
+//                    }
+//                })
+//            }
+//            .fullScreenCover(isPresented: $showEnableRemindersModal) {
+//                EnableRemindersModalView().tint(tintColor)
+//            }
             .padding(.zero)
-        }
+            
+            //NavigationLink(destination: TodoDetail(entityId: searchTodoId), isActive: $isPresentingSearchedTodo) { EmptyView()}
+            //NavigationLink(destination: TodoDetail(entityId: item.0))
+            
+        
+    
     }
     
     private func performSearch() {

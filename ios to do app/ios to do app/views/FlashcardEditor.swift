@@ -13,9 +13,8 @@ struct FlashcardEditor: View {
     
     init(flashcards: Flashcards, flashcard: Flashcard?, isPresented: Binding<Bool>) {
         self.flashcards = flashcards
-        self._flashcard = State(initialValue: flashcard ?? Flashcard(front: "", back: ""))
+        self._flashcard = State(initialValue: flashcard ?? Flashcard())
         self._isPresented = isPresented
-        self.isPresented = true
     }
     
     var body: some View {
@@ -46,7 +45,7 @@ struct FlashcardEditor: View {
 
 
 struct FlashcardEditor_Previews: PreviewProvider {
-    static var flashcards = Flashcards(cards:  [Flashcard(front: "", back: "")])
+    static var flashcards = Flashcards(cards:  [Flashcard()])
     static var previews: some View {
         FlashcardEditor(flashcards: flashcards, flashcard: nil, isPresented: .constant(true))
     }
