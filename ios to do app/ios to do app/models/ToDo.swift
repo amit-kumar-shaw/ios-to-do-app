@@ -25,6 +25,7 @@ class Todo: ObservableObject, Codable{
     @Published var userId: String?
     @Published var completed = false
     @Published var projectId: String?
+    @Published var createdByRecurringTodoId : String?
     
     enum CodingKeys: CodingKey {
         case selectedLanguage
@@ -41,6 +42,7 @@ class Todo: ObservableObject, Codable{
         case userId
         case completed
         case projectId
+        case createdByRecurringTodoId
     }
     
     init(){
@@ -77,6 +79,7 @@ class Todo: ObservableObject, Codable{
         userId = try values.decode(String.self, forKey: .userId)
         completed = try values.decode(Bool.self, forKey: .completed)
         projectId = try values.decode(String.self, forKey: .projectId)
+        createdByRecurringTodoId = try values.decode(String.self, forKey: .createdByRecurringTodoId)
     }
     
     convenience init(selectedLanguage: Language){
@@ -100,6 +103,7 @@ class Todo: ObservableObject, Codable{
         try container.encode(userId, forKey: .userId)
         try container.encode(completed, forKey: .completed)
         try container.encode(projectId, forKey: .projectId)
+        try container.encode(createdByRecurringTodoId, forKey: .createdByRecurringTodoId)
         
     }   
 }
