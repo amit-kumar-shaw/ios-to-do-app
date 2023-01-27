@@ -24,8 +24,7 @@ struct HomeView: View {
     @State private var showEnableRemindersModal : Bool = false
 
     
-  
-    
+
     fileprivate func upcomingList() -> some View {
         return HStack {
             NavigationLink(destination: UpcomingView(), label: {
@@ -101,7 +100,8 @@ struct HomeView: View {
             
             .toolbar {
                 ToolbarItem(placement: .automatic) {
-                    EditButton()
+                   // EditButton()
+                    sortByLanguageButton
                 }
                 ToolbarItem(placement: .automatic) {
                     addButton
@@ -143,17 +143,32 @@ struct HomeView: View {
         )
     }
     
+    private var sortByLanguageButton : some View {
+        
+        return AnyView(
+            Button(action: { sortByLanguage() }) {
+                Label("SortByLanguage", systemImage: "tray.fill")
+                
+            }
+        )
+        
+    }
+    
+    private func sortByLanguage() {
+        
+    }
+    
 }
 
 struct ProjectListRow: View {
     
     
     @Binding var project : Project?
-    @State var projectId :String // 왜 옵셔널?
+    @State var projectId :String
     @State var showModal = false
     
     
-    init(project: (String, Binding<Project?>)){ //여기 프로젝트도 바인딩 되야함.
+    init(project: (String, Binding<Project?>)){
         
         self._project = project.1
         self.projectId = project.0
