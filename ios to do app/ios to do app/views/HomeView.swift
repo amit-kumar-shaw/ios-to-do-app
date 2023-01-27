@@ -23,9 +23,69 @@ struct HomeView: View {
     
     @State private var showEnableRemindersModal : Bool = false
     
+    fileprivate func projectsView() -> Section<Text, _ConditionalContent<some View, some View>, EmptyView> {
+        return Section {
+            
+            
+            if viewModel.projects.isEmpty {
+                addButton
+            } else {
+                
+                ForEach($viewModel.projects, id: \.0) { $item in
+                    // navigate to Project to do list
+                    NavigationLink(destination: ProjectListView(projectId: item.0)) {
+                        //show a project list
+                        
+                        ProjectListRow(project: (item.0, $item.1))
+                        
+                        
+                    }
+                }
+                .onDelete { indexSet in
+                    let index = indexSet.first!
+                    self.viewModel.deleteProject(at: index)
+                }
+                .headerProminence(.standard)
+                
+            } }header: {
+                Text("Projects").font(.headline).foregroundColor(.accentColor)
+            }
+    }
+    
+    fileprivate func homeListView() -> Section<EmptyView, TupleView<(HStack<NavigationLink<TupleView<(Image, Text)>, UpcomingView>>, HStack<NavigationLink<TupleView<(Image, Text)>, TodayView>>, HStack<NavigationLink<TupleView<(Image, Text)>, SettingsView>>)>, EmptyView> {
+        
+        return Section {
+            HStack {
+                NavigationLink(destination: UpcomingView(), label: {
+                    Image(systemName: "hourglass.circle.fill")
+                    Text("Upcoming")
+                })
+            }
+            
+            HStack {
+                NavigationLink(destination: TodayView(),
+                               label: {
+                    Image(systemName: "calendar.badge.exclamationmark")
+                    Text("Today")
+                })
+            }
+            
+            HStack {
+                NavigationLink(destination: SettingsView(), label: {
+                    Image(systemName: "gearshape")
+                    Text("Setting")
+                })
+            }
+        }
+    }
+    
     var body: some View {
         NavigationView {
             List {
+               // homeListView()
+                
+               // projectsView()
+                
                 Section {
                     HStack {
                         NavigationLink(destination: UpcomingView(), label: {
@@ -51,6 +111,8 @@ struct HomeView: View {
                 }
                 
                 Section {
+                    
+                    
                     if viewModel.projects.isEmpty {
                         addButton
                     } else {
@@ -58,7 +120,11 @@ struct HomeView: View {
                         ForEach($viewModel.projects, id: \.0) { $item in
                             // navigate to Project to do list
                             NavigationLink(destination: ProjectListView(projectId: item.0)) {
-                                ProjectListRow(project: item.1!)
+                                //show a project list
+                                
+                                ProjectListRow(project: (item.0, $item.1))
+                                
+                                
                             }
                         }
                         .onDelete { indexSet in
@@ -106,57 +172,66 @@ struct HomeView: View {
     }
     
     private var addButton: some View {
+        
+        @State var projectForBinding :Project? = Project()
+        
         return AnyView(
             Button(action: { self.showModal = true }) {
                 Label("Add Item", systemImage: "plus")
             }.sheet(isPresented: $showModal) {
-                CreateProjectView(showModal: $showModal)
+                CreateProjectView(project: $projectForBinding, showModal: $showModal)
             }
         )
     }
-    
-    private func nameText(item: Project?) -> String {
-        guard let item = item, let name = item.projectName else {
-            return "Untitled"
-        }
-        
-        return name
-    }
-    
-    
-    //
-    //        private let itemFormatter: DateFormatter = {
-    //            let formatter = DateFormatter()
-    //            formatter.dateStyle = .short
-    //            formatter.timeStyle = .medium
-    //            return formatter
-    //        }()
-    //
     
 }
 
 struct ProjectListRow: View {
     
     
-    var project: Project
+    @Binding var project : Project?
+    @State var projectId :String // 왜 옵셔널?
+    @State var showModal = false
+
+    
+    init(project: (String, Binding<Project?>)){ //여기 프로젝트도 바인딩 되야함.
+        
+        self._project = project.1
+        self.projectId = project.0
+       
+    }
     
     
     var body: some View {
         HStack {
+
             Circle().frame(width: 12, height: 12)
                 .overlay(
-                    Circle().foregroundColor(Color(hex: project.colorHexString ?? "#FFFFFF"))
+                    Circle().foregroundColor(Color(hex: project!.colorHexString ?? "#FFFFFF"))
                         .frame(width: 10, height: 10)
                 )
             
-            Text(project.projectName ?? "Untitled")
-            Text(project.selectedLanguage.name)
+            Text(project!.projectName ?? "Untitled")
+            Text(project!.selectedLanguage.name)
                 .foregroundColor(.gray)
         }
+        .swipeActions(){
+            
+            //Edit Mode Button
+            Button (action: {
+                showModal = true }){
+                Label("info", systemImage: "info.circle")
+            }
+            
+        }.sheet(isPresented: $showModal) {
+            //EditMode
+            CreateProjectView(project: (self.projectId, self.$project), showModal: $showModal)
+        
+    }.tint(.indigo)
+        
     }
     
 }
-
 
 
 struct HomeView_Previews: PreviewProvider {

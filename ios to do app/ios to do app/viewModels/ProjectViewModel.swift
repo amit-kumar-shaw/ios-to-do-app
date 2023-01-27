@@ -95,13 +95,13 @@ class ProjectViewModel : ObservableObject {
     }
     
     
-    func addProject(name: String, color : String, language: Language) {
+    func addProject(projectInfo : ProjectInfo) {
             
       
         newProject.userId = auth.currentUser?.uid;
-        newProject.projectName = name
-        newProject.colorHexString = color
-        newProject.selectedLanguage = language
+        newProject.projectName = projectInfo.projectName
+        newProject.colorHexString = projectInfo.projectColor.toHex()
+        newProject.selectedLanguage = projectInfo.selectedLanguage
         newProject.timestamp = Date()
         
             guard let documentId = id else {
@@ -131,6 +131,25 @@ class ProjectViewModel : ObservableObject {
             }
         
     }
+    
+    func editProject(projectId: String, projectInfo : ProjectInfo) {
+//
+        let _project = Project(projectName: projectInfo.projectName, projectColor: projectInfo.projectColor, language: projectInfo.selectedLanguage)
+        
+        _project.userId = auth.currentUser?.uid;
+        _project.timestamp = Date()
+        
+            do {
+                
+                try db.collection("projects").document(projectId).setData(from: _project)
+                self.loadList() //-> 데베에 저장되나실제 새로 로드 하고 있지 않음. 뷰가.
+            } catch {
+                self.error = error
+                self.showAlert = true
+            }
+        
+    }
+    
     
     func deleteProject(at index: Int) {
         

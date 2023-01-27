@@ -43,6 +43,17 @@ class Project: ObservableObject, Codable {
         }
     }
     
+    convenience init(projectName: String?, projectColor: Color?,language : Language ) {
+        
+           self.init()
+        
+        if let projectColor = projectColor, let projectName = projectName {
+            self.projectName = projectName
+            self.colorHexString = projectColor.toHex()
+            self.selectedLanguage = language
+        }
+    }
+    
     required init(from decoder: Decoder) throws{
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
