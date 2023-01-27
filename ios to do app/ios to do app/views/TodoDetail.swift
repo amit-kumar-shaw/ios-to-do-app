@@ -11,6 +11,7 @@ import SwiftUI
 struct TodoDetail: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.tintColor) var tintColor
     
     private var entityId: String
     @ObservedObject var viewModel: TodoEditorViewModel
@@ -137,6 +138,10 @@ struct TodoDetail: View {
                 Text("Done")
             }
         )
+        .onAppear {
+            UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(tintColor)
+            UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        }
     }
 }
 

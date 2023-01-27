@@ -12,6 +12,7 @@ import SwiftUI
 struct CreateTodoView: View {
     @Environment(\.presentationMode) var presentation
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.tintColor) var tintColor
     
     @ObservedObject private var viewModel: TodoEditorViewModel
     @State private var showBeforeDueDatePicker = false
@@ -160,6 +161,10 @@ struct CreateTodoView: View {
                     }, message: { Text(self.viewModel.error?.localizedDescription ?? "Unknown error") })
             }
         })
+        .onAppear {
+            UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(tintColor)
+            UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        }
     }
 }
 
