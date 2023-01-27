@@ -25,7 +25,7 @@ class Todo: ObservableObject, Codable{
     @Published var userId: String?
     @Published var completed = false
     @Published var projectId: String?
-    @Published var createdByRecurringTodoId : String?
+    @Published var createdByRecurringTodoId : String = ""
     
     enum CodingKeys: CodingKey {
         case selectedLanguage
