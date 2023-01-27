@@ -38,7 +38,7 @@ struct SearchableView: View {
     @ObservedObject var viewModel = ProjectViewModel()
     @ObservedObject var todoViewModel = TodoListViewModel()
     
-    @State private var showEnableRemindersModal : Bool = false
+//    @State private var showEnableRemindersModal : Bool = false
     
     
     @Environment(\.isSearching) private var isSearching
@@ -118,16 +118,16 @@ struct SearchableView: View {
 //                SearchView(searchText: $searchText)
 //            }
 //            .onSubmit(of: .search, performSearch)
-            .onAppear {
-                NotificationUtility.hasPermissions(completion: { hasPermissions in
-                    if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
-                        self.showEnableRemindersModal = true
-                    }
-                })
-            }
-            .fullScreenCover(isPresented: $showEnableRemindersModal) {
-                EnableRemindersModalView().tint(tintColor)
-            }
+//            .onAppear {
+//                NotificationUtility.hasPermissions(completion: { hasPermissions in
+//                    if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
+//                        self.showEnableRemindersModal = true
+//                    }
+//                })
+//            }
+//            .fullScreenCover(isPresented: $showEnableRemindersModal) {
+//                EnableRemindersModalView().tint(tintColor)
+//            }
             .padding(.zero)
             
             //NavigationLink(destination: TodoDetail(entityId: searchTodoId), isActive: $isPresentingSearchedTodo) { EmptyView()}

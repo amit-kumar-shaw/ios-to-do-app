@@ -17,6 +17,7 @@ struct ios_to_do_appApp: App {
 
     @AppStorage("tintColorHex") var tintColorHex = TINT_COLORS[0]
     
+    @State private var showEnableRemindersModal : Bool = false
     
     var body: some Scene {
         WindowGroup {
@@ -25,6 +26,16 @@ struct ios_to_do_appApp: App {
                 .environment(\.tintColor, Color(hex: tintColorHex))
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
                     NotificationUtility.schedule()
+                }
+                .onAppear {
+                    NotificationUtility.hasPermissions(completion: { hasPermissions in
+                        if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
+                            self.showEnableRemindersModal = true
+                        }
+                    })
+                }
+                .fullScreenCover(isPresented: $showEnableRemindersModal) {
+                    EnableRemindersModalView().tint(Color(hex: tintColorHex)).environment(\.tintColor, Color(hex: tintColorHex))
                 }
         }
     }
