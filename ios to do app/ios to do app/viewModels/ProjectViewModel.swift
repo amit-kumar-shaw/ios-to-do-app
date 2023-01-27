@@ -95,13 +95,13 @@ class ProjectViewModel : ObservableObject {
     }
     
     
-    func addProject(name: String, color : String, language: Language) {
+    func addProject(projectInfo : ProjectInfo) {
             
       
         newProject.userId = auth.currentUser?.uid;
-        newProject.projectName = name
-        newProject.colorHexString = color
-        newProject.selectedLanguage = language
+        newProject.projectName = projectInfo.projectName
+        newProject.colorHexString = projectInfo.projectColor.toHex()
+        newProject.selectedLanguage = projectInfo.selectedLanguage
         newProject.timestamp = Date()
         
             guard let documentId = id else {
@@ -132,6 +132,25 @@ class ProjectViewModel : ObservableObject {
         
     }
     
+    func editProject(projectId: String, projectInfo : ProjectInfo) {
+
+        let _project = Project(projectName: projectInfo.projectName, projectColor: projectInfo.projectColor, language: projectInfo.selectedLanguage)
+        
+        _project.userId = auth.currentUser?.uid;
+        _project.timestamp = Date()
+        
+            do {
+                
+                try db.collection("projects").document(projectId).setData(from: _project)
+            
+            } catch {
+                self.error = error
+                self.showAlert = true
+            }
+        
+    }
+    
+    
     func deleteProject(at index: Int) {
         
         let projectId = projects[index].0
@@ -146,12 +165,12 @@ class ProjectViewModel : ObservableObject {
     }
 
     
-    private let itemFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .medium
-        return formatter
-    }()
+//    private let itemFormatter: DateFormatter = {
+//        let formatter = DateFormatter()
+//        formatter.dateStyle = .short
+//        formatter.timeStyle = .medium
+//        return formatter
+//    }()
     
 }
 
