@@ -38,12 +38,11 @@ struct CreateProjectView: View {
     
     
     
-    fileprivate func projectNameView() -> some View {
+    fileprivate func getProjectNameView() -> some View {
         return VStack{
             Text("Project Name")
                 .bold()
                 .font(.title)
-            
             
             
             TextField("Project Name", text: self.$projectInfo.projectName)
@@ -124,7 +123,7 @@ struct CreateProjectView: View {
             
             Form{
                 Section{
-                    projectNameView()
+                    getProjectNameView()
                 }
                
                 Section{

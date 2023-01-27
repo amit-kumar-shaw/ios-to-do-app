@@ -133,7 +133,7 @@ class ProjectViewModel : ObservableObject {
     }
     
     func editProject(projectId: String, projectInfo : ProjectInfo) {
-//
+
         let _project = Project(projectName: projectInfo.projectName, projectColor: projectInfo.projectColor, language: projectInfo.selectedLanguage)
         
         _project.userId = auth.currentUser?.uid;
@@ -142,7 +142,7 @@ class ProjectViewModel : ObservableObject {
             do {
                 
                 try db.collection("projects").document(projectId).setData(from: _project)
-                self.loadList() //-> 데베에 저장되나실제 새로 로드 하고 있지 않음. 뷰가.
+            
             } catch {
                 self.error = error
                 self.showAlert = true
@@ -165,12 +165,12 @@ class ProjectViewModel : ObservableObject {
     }
 
     
-    private let itemFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .medium
-        return formatter
-    }()
+//    private let itemFormatter: DateFormatter = {
+//        let formatter = DateFormatter()
+//        formatter.dateStyle = .short
+//        formatter.timeStyle = .medium
+//        return formatter
+//    }()
     
 }
 
