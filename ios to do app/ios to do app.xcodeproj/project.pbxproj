@@ -81,7 +81,6 @@
 		CE0775962985757E005AA926 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0775952985757E005AA926 /* Flashcard.swift */; };
 		CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9529758FC400233D7A /* FlashcardEditor.swift */; };
 		CE890B982975900300233D7A /* FlashcardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B972975900300233D7A /* FlashcardView.swift */; };
-		CE9542472985B00A0091EB22 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9542462985B00A0091EB22 /* ConfettiView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -195,7 +194,6 @@
 		CE0775952985757E005AA926 /* Flashcard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
 		CE890B9529758FC400233D7A /* FlashcardEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardEditor.swift; sourceTree = "<group>"; };
 		CE890B972975900300233D7A /* FlashcardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardView.swift; sourceTree = "<group>"; };
-		CE9542462985B00A0091EB22 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -399,7 +397,6 @@
 				28B9F4592981A6D1008C9150 /* CreateTagView.swift */,
 				7C3B57992981B657000815CD /* SearchView.swift */,
 				286C014529848856004D2033 /* TagView.swift */,
-				CE9542462985B00A0091EB22 /* ConfettiView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -667,7 +664,6 @@
 				7C68266D29770523002DF5C6 /* Errors.swift in Sources */,
 				7C3B579A2981B657000815CD /* SearchView.swift in Sources */,
 				7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */,
-				CE9542472985B00A0091EB22 /* ConfettiView.swift in Sources */,
 				CD54992629783E53007F0F3B /* Project.swift in Sources */,
 				7C3B578829804778000815CD /* FirebaseAppDelegate.swift in Sources */,
 				7CE7D03329749641008F0702 /* Language.swift in Sources */,
