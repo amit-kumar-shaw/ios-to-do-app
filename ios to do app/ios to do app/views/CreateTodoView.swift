@@ -230,6 +230,7 @@ struct CreateQuickTodoView: View {
     
     
     private func saveTodo() {
+        viewModel.todo.dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
         viewModel.save()
     }
     
