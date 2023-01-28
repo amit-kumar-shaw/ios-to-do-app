@@ -25,7 +25,7 @@ struct SearchView: View {
                     
                     if let _ = item.1!.projectName!.range(of: searchText, options: .caseInsensitive) {
                         NavigationLink(destination: ProjectListView(projectId: item.0)) {
-                            ProjectListRow(project:  (item.0, $item.1))
+                            ProjectListRow(project: (item.0, $item.1))
                         }
                     }
                 }.headerProminence(.standard)

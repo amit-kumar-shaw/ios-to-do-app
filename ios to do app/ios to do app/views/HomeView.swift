@@ -145,14 +145,12 @@ struct SearchableView: View {
         
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                // EditButton()
+                
                 sortByLanguageButton
             }
             ToolbarItem(placement: .automatic) {
                 addButton
             }
-            //            }
-            
             
         }
         .navigationTitle("Welcome")
@@ -190,17 +188,13 @@ struct SearchableView: View {
                 
             }
         }
-        .onDelete { indexSet in
-            let index = indexSet.first!
-            self.viewModel.deleteProject(at: index)
-        }
         .headerProminence(.standard)
     }
     
-    private func performSearch() {
-        // TODO: implement global search functionality
-    }
-    
+//    private func performSearch() {
+//        // TODO: implement global search functionality
+//    }
+//
     private var addButton: some View {
         
         @State var projectForBinding :Project? = Project()
@@ -269,6 +263,7 @@ struct ProjectListRow: View {
     @State var projectId :String
     @State var showModal = false
     
+    @ObservedObject var viewModel = ProjectViewModel()
     
     init(project: (String, Binding<Project?>)){
         
@@ -293,17 +288,24 @@ struct ProjectListRow: View {
         }
         .swipeActions(){
             
-            //Edit Mode Button
+            //Delete Projet Button
             Button (action: {
                 showModal = true }){
                     Label("info", systemImage: "info.circle")
-                }
+                }.tint(.indigo)
+            
+            //Edit Mode Button
+            Button (action: {
+                viewModel.deleteProject(projectId : projectId)
+            }){
+                    Label("delete", systemImage: "minus.circle")
+                }.tint(.red)
             
         }.sheet(isPresented: $showModal) {
-            //EditMode
+        
             CreateProjectView(project: (self.projectId, self.$project), showModal: $showModal)
             
-        }.tint(.indigo)
+        }
         
     }
     
