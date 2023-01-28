@@ -8,14 +8,10 @@
 import Foundation
 import SwiftUI
 
-import SlideOverCard
 
 struct TodoView: View {
     @ObservedObject var todoListViewModel = TodoListViewModel()
     @State var project : (String, Project)
-    
-    
-    @StateObject var flashcards: [Flashcard] = []
     @State private var showFlashcardEditor: Bool = false
            
     
@@ -44,9 +40,7 @@ struct TodoView: View {
 //        todoList.append(newTodo)
 //        // self.newTodo = Todo()
 //    }
-    private func addFlashcard(flashcard: Flashcard) {
-        self.flashcards.cards.append(flashcard)
-    }
+    
     
     var body: some View {
             VStack {

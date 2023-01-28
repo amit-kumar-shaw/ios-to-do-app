@@ -25,11 +25,9 @@ struct FlashcardEditor: View {
                 TextField("Front", text: $flashcard.front)
                 TextField("Back", text: $flashcard.back)
             }
+            Button("Save", action: saveFlashcard)
         }
-        .navigationBarTitle("New Flashcard")
-        .navigationBarItems(trailing:
-                                Button("Save", action:  saveFlashcard).buttonStyle(.automatic).padding()
-                            )
+        
     }
 }
 

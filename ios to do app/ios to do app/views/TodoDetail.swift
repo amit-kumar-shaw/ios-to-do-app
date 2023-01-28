@@ -36,17 +36,20 @@ struct TodoDetail: View {
                         }
                         TextField("Description", text: $viewModel.todo.description)
                     }
-                   
-                    if !$viewModel.todo.flashcards.isEmpty {
-                        ForEach(viewModel.flashcards, id: \.id) {
-                            flashcard in
-                            Text(flashcard.front)
-                        }.onDelete(perform: { viewModel.deleteFlashcard(offsets: $0) })
-                    }
-                    Button(action: viewModel.toggleReminderEditor) {
-                        Label("Add Flashcard", systemImage: "plus")
-                    }.sheet(isPresented: $viewModel.showFlashcardEditor) {
-                        FlashcardEditor(flashcard: nil, onComplete: viewModel.addFlashcard)
+                    Section{
+                        if !$viewModel.todo.flashcards.isEmpty {
+                            ForEach(viewModel.flashcards, id: \.id) {
+                                flashcard in
+                                NavigationLink(destination: FlashcardView()){
+                                    Text(flashcard.front)
+                                }
+                            }.onDelete(perform: { viewModel.deleteFlashcard(offsets: $0) })
+                        }
+                        Button(action: viewModel.toggleFlashcardEditor) {
+                            Label("Add Flashcard", systemImage: "plus")
+                        }.sheet(isPresented: $viewModel.showFlashcardEditor) {
+                            FlashcardEditor(flashcard: nil, onComplete: viewModel.addFlashcard)
+                        }
                     }
                                 
                     Section {
