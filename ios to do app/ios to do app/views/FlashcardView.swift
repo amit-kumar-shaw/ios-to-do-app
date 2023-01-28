@@ -1,52 +1,72 @@
-//
-//  FlashcardsView.swift
-//  ios to do app
-//
-//  Created by User on 16.01.23.
-//
-
 import SwiftUI
 
 struct FlashcardView: View {
-    @State var flashcards: [Flashcard] = []
+    @Environment(\.tintColor) var tintColor
+    
+    @ObservedObject var viewModel: TodoEditorViewModel
+    @State var flashcards: [Flashcard]
     @State private var currentCard: Int = 0
     @State private var isFlipped: Bool = false
     @State private var showFlashcardEditor: Bool = false
     
+    init (viewModel: TodoEditorViewModel) {
+        self.viewModel = viewModel
+        self.flashcards = viewModel.flashcards
+    }
+    
     var body: some View {
-        VStack {
-            if flashcards.isEmpty {
-                Text("No flashcards yet")
-            } else {
-                Text(isFlipped ? flashcards[currentCard].back : flashcards[currentCard].front)
-                            }
-        }.frame(height: 300)
-            .background(RoundedRectangle(cornerRadius: 15).shadow(radius: 5))
-            .padding()
-        
-        .navigationBarTitle("Flashcards")
-        .toolbar {
-            Button("New Flashcard") {
-                self.showFlashcardEditor = true
-            }
-        }
-        HStack {
-            Button("Previous") {
-                if self.currentCard > 0 {
-                    self.currentCard -= 1
+        VStack{
+            VStack {
+                if flashcards.isEmpty {
+                    Text("No flashcards yet")
+                } else {
+                    Text(isFlipped ? flashcards[currentCard].back : flashcards[currentCard].front)
                 }
             }
-            Spacer()
-            Button("Flip") {
+            .frame(width: 200, height: 300)
+            .padding()
+            .background(isFlipped ? tintColor : .white)
+            .foregroundColor(isFlipped ? .white : tintColor)
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(tintColor).shadow(radius: 5)
+            )
+            .onTapGesture {
                 self.isFlipped.toggle()
             }
+            
             Spacer()
-            Button("Next") {
-                if self.currentCard < self.flashcards.count - 1 {
-                    self.currentCard += 1
+    
+//                .navigationBarTitle("Flashcards")
+//                .toolbar {
+//                    Button("New Flashcard") {
+//                        self.showFlashcardEditor = true
+//                    }
+//                }
+            HStack {
+                Button("Previous") {
+                    if self.currentCard > 0 {
+                        self.currentCard -= 1
+                    }
                 }
-            }
-        }.padding()
+                Spacer()
+                Button("Flip") {
+                    self.isFlipped.toggle()
+                }
+                Spacer()
+                Button("Next") {
+                    if self.currentCard < self.flashcards.count - 1 {
+                        self.currentCard += 1
+                    }
+                }
+            }.padding()
+        }.navigationBarTitle("Flashcards")
+                        .toolbar {
+                            Button("New Flashcard") {
+                                self.showFlashcardEditor = true
+                            }
+                        }
 
     }
 }
@@ -54,7 +74,7 @@ struct FlashcardView: View {
 
 struct FlashcardView_Previews: PreviewProvider {
     static var previews: some View {
-        FlashcardView()
+        FlashcardView(viewModel: TodoEditorViewModel())
     }
 }
 

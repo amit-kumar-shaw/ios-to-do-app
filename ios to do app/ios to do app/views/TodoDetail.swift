@@ -38,12 +38,19 @@ struct TodoDetail: View {
                     }
                     Section{
                         if !$viewModel.todo.flashcards.isEmpty {
-                            ForEach(viewModel.flashcards, id: \.id) {
-                                flashcard in
-                                NavigationLink(destination: FlashcardView()){
-                                    Text(flashcard.front)
+                            NavigationLink(destination: FlashcardView(viewModel: viewModel)){
+                                HStack {
+                                    Text("All Flashcards")
+                                    Spacer()
+                                    Text("\(viewModel.flashcards.count) Cards")
                                 }
-                            }.onDelete(perform: { viewModel.deleteFlashcard(offsets: $0) })
+                            }
+//                            ForEach(viewModel.flashcards, id: \.id) {
+//                                flashcard in
+//                                NavigationLink(destination: FlashcardView(viewModel: viewModel)){
+//                                    Text(flashcard.front)
+//                                }
+//                            }.onDelete(perform: { viewModel.deleteFlashcard(offsets: $0) })
                         }
                         Button(action: viewModel.toggleFlashcardEditor) {
                             Label("Add Flashcard", systemImage: "plus")
