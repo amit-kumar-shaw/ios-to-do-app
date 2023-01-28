@@ -43,17 +43,18 @@ struct TagView: View {
         }
         List (selectedTags, id: \.self) { item in
             ForEach($todoViewModel.todoList, id: \.0, editActions: .all){ $todo in
-
-                HStack{
-                    Checkbox(isChecked: $todo.1.isCompleted) {
-                        todoViewModel.saveTodo(entityId: todo.0, todo: todo.1)
-                        todoViewModel.cloneRecurringTodoIfNecessary(entityId: todo.0, todo: todo.1)
-                    }
-                    NavigationLink(destination: TodoDetail(entityId: todo.0)){
-                        HStack {
-                            Text(todo.1.task)
-                            Spacer()
-                            
+                if todo.0 == item {
+                    HStack{
+                        Checkbox(isChecked: $todo.1.isCompleted) {
+                            todoViewModel.saveTodo(entityId: todo.0, todo: todo.1)
+                            todoViewModel.cloneRecurringTodoIfNecessary(entityId: todo.0, todo: todo.1)
+                        }
+                        NavigationLink(destination: TodoDetail(entityId: todo.0)){
+                            HStack {
+                                Text(todo.1.task)
+                                Spacer()
+                                
+                            }
                         }
                     }
                 }
