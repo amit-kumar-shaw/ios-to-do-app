@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct FlashcardView: View {
-    @StateObject var flashcards = Flashcards(cards: [Flashcard()])
+    @State var flashcards: [Flashcard] = []
     @State private var currentCard: Int = 0
     @State private var isFlipped: Bool = false
     @State private var showFlashcardEditor: Bool = false
     
     var body: some View {
         VStack {
-            if flashcards.cards.isEmpty {
+            if flashcards.isEmpty {
                 Text("No flashcards yet")
             } else {
-                Text(isFlipped ? flashcards.cards[currentCard].back : flashcards.cards[currentCard].front)
+                Text(isFlipped ? flashcards[currentCard].back : flashcards[currentCard].front)
                             }
         }.frame(height: 300)
             .background(RoundedRectangle(cornerRadius: 15).shadow(radius: 5))
@@ -42,7 +42,7 @@ struct FlashcardView: View {
             }
             Spacer()
             Button("Next") {
-                if self.currentCard < self.flashcards.cards.count - 1 {
+                if self.currentCard < self.flashcards.count - 1 {
                     self.currentCard += 1
                 }
             }

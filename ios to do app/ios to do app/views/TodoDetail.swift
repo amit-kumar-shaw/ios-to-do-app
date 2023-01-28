@@ -36,8 +36,18 @@ struct TodoDetail: View {
                         }
                         TextField("Description", text: $viewModel.todo.description)
                     }
-                    
-                    FlashcardsView(flashcards: viewModel.todo.flashcards, showFlashcardEditor: false)
+                   
+                    if !$viewModel.todo.flashcards.isEmpty {
+                        ForEach(viewModel.flashcards, id: \.id) {
+                            flashcard in
+                            Text(flashcard.front)
+                        }.onDelete(perform: { viewModel.deleteFlashcard(offsets: $0) })
+                    }
+                    Button(action: viewModel.toggleReminderEditor) {
+                        Label("Add Flashcard", systemImage: "plus")
+                    }.sheet(isPresented: $viewModel.showFlashcardEditor) {
+                        FlashcardEditor(flashcard: nil, onComplete: viewModel.addFlashcard)
+                    }
                                 
                     Section {
                         if dynamicTypeSize > DynamicTypeSize.medium {
