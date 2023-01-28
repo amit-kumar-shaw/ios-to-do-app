@@ -15,7 +15,6 @@
 		400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400A2631296D5C6B00FA45E7 /* TodoView.swift */; };
 		404EC67A296ECFF6006E6D59 /* SlideOverCard in Frameworks */ = {isa = PBXBuildFile; productRef = 404EC679296ECFF6006E6D59 /* SlideOverCard */; };
 		501E1C89297DB9ED00DC2D4E /* UpcomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C88297DB9ED00DC2D4E /* UpcomingView.swift */; };
-		501E1C8D297DBA4000DC2D4E /* FlashcardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C8C297DBA4000DC2D4E /* FlashcardsView.swift */; };
 		501E1C8F2984740500DC2D4E /* GenericTodoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C8E2984740500DC2D4E /* GenericTodoViewModel.swift */; };
 		501E1C96298530F600DC2D4E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501E1C95298530F500DC2D4E /* WidgetKit.framework */; };
 		501E1C98298530F600DC2D4E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501E1C97298530F600DC2D4E /* SwiftUI.framework */; };
@@ -79,9 +78,10 @@
 		CD646DB3298134C20061A380 /* CreateProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD646DB1298134C20061A380 /* CreateProjectView.swift */; };
 		CD646DB4298134C20061A380 /* ProjectListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD646DB2298134C20061A380 /* ProjectListView.swift */; };
 		CD646DB6298134E40061A380 /* ProjectListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD646DB5298134E40061A380 /* ProjectListViewModel.swift */; };
-		CE890B9229758E6500233D7A /* Flashcards.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9129758E6500233D7A /* Flashcards.swift */; };
+		CE0775962985757E005AA926 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0775952985757E005AA926 /* Flashcard.swift */; };
 		CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B9529758FC400233D7A /* FlashcardEditor.swift */; };
 		CE890B982975900300233D7A /* FlashcardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE890B972975900300233D7A /* FlashcardView.swift */; };
+		CE9542472985B00A0091EB22 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9542462985B00A0091EB22 /* ConfettiView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,7 +131,6 @@
 		400A2631296D5C6B00FA45E7 /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
 		407EB1D8296ED142005F79D8 /* swiftUI-slide-over-card */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "swiftUI-slide-over-card"; path = "../../../swiftUI-slide-over-card"; sourceTree = "<group>"; };
 		501E1C88297DB9ED00DC2D4E /* UpcomingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingView.swift; sourceTree = "<group>"; };
-		501E1C8C297DBA4000DC2D4E /* FlashcardsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashcardsView.swift; sourceTree = "<group>"; };
 		501E1C8E2984740500DC2D4E /* GenericTodoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTodoViewModel.swift; sourceTree = "<group>"; };
 		501E1C94298530F500DC2D4E /* Todo WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Todo WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		501E1C95298530F500DC2D4E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -193,9 +192,10 @@
 		CD646DB1298134C20061A380 /* CreateProjectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateProjectView.swift; sourceTree = "<group>"; };
 		CD646DB2298134C20061A380 /* ProjectListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectListView.swift; sourceTree = "<group>"; };
 		CD646DB5298134E40061A380 /* ProjectListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectListViewModel.swift; sourceTree = "<group>"; };
-		CE890B9129758E6500233D7A /* Flashcards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcards.swift; sourceTree = "<group>"; };
+		CE0775952985757E005AA926 /* Flashcard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
 		CE890B9529758FC400233D7A /* FlashcardEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardEditor.swift; sourceTree = "<group>"; };
 		CE890B972975900300233D7A /* FlashcardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardView.swift; sourceTree = "<group>"; };
+		CE9542462985B00A0091EB22 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -384,7 +384,6 @@
 				7CE7D02A2972C70F008F0702 /* CreateTodoView.swift */,
 				50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */,
 				CE890B9529758FC400233D7A /* FlashcardEditor.swift */,
-				501E1C8C297DBA4000DC2D4E /* FlashcardsView.swift */,
 				CE890B972975900300233D7A /* FlashcardView.swift */,
 				7CE7CFEA2964DD58008F0702 /* HomeView.swift */,
 				7CE7D02E29749549008F0702 /* LanguageList.swift */,
@@ -400,6 +399,7 @@
 				28B9F4592981A6D1008C9150 /* CreateTagView.swift */,
 				7C3B57992981B657000815CD /* SearchView.swift */,
 				286C014529848856004D2033 /* TagView.swift */,
+				CE9542462985B00A0091EB22 /* ConfettiView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -407,7 +407,7 @@
 		7CE7D0222972B6D4008F0702 /* models */ = {
 			isa = PBXGroup;
 			children = (
-				CE890B9129758E6500233D7A /* Flashcards.swift */,
+				CE0775952985757E005AA926 /* Flashcard.swift */,
 				7CE7D03229749641008F0702 /* Language.swift */,
 				CD54992529783E53007F0F3B /* Project.swift */,
 				7CE7D0372974B0CB008F0702 /* Reminder.swift */,
@@ -631,6 +631,7 @@
 				7CE7D03629749725008F0702 /* JSONUtils.swift in Sources */,
 				7CE7D0272972BA82008F0702 /* ToDo.swift in Sources */,
 				CD54992A297843B2007F0F3B /* ProjectViewModel.swift in Sources */,
+				CE0775962985757E005AA926 /* Flashcard.swift in Sources */,
 				28B9F45629819D14008C9150 /* TagViewModel.swift in Sources */,
 				7C3B578229802B5E000815CD /* ColorScheme.swift in Sources */,
 				7CE7CFF52964DD5A008F0702 /* ios_to_do_app.xcdatamodeld in Sources */,
@@ -639,7 +640,6 @@
 				400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */,
 				7C3B578429802BC7000815CD /* EnvironmentValues.swift in Sources */,
 				7C3B579829817EF8000815CD /* Weekday.swift in Sources */,
-				501E1C8D297DBA4000DC2D4E /* FlashcardsView.swift in Sources */,
 				7CE7D0252972B9E7008F0702 /* BindingExtension.swift in Sources */,
 				7CE7D02D297305F0008F0702 /* ReminderEditor.swift in Sources */,
 				7C68265A2975E2B2002DF5C6 /* ContentView.swift in Sources */,
@@ -656,7 +656,6 @@
 				7C6826652976F1FB002DF5C6 /* TodoDetail.swift in Sources */,
 				7C3B579629817E56000815CD /* UpcomingViewModel.swift in Sources */,
 				7C68266B2977036F002DF5C6 /* TodoListViewModel.swift in Sources */,
-				CE890B9229758E6500233D7A /* Flashcards.swift in Sources */,
 				7C3B579029815014000815CD /* TodayViewModel.swift in Sources */,
 				CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */,
 				7C6826692976F850002DF5C6 /* TodoList.swift in Sources */,
@@ -668,6 +667,7 @@
 				7C68266D29770523002DF5C6 /* Errors.swift in Sources */,
 				7C3B579A2981B657000815CD /* SearchView.swift in Sources */,
 				7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */,
+				CE9542472985B00A0091EB22 /* ConfettiView.swift in Sources */,
 				CD54992629783E53007F0F3B /* Project.swift in Sources */,
 				7C3B578829804778000815CD /* FirebaseAppDelegate.swift in Sources */,
 				7CE7D03329749641008F0702 /* Language.swift in Sources */,
