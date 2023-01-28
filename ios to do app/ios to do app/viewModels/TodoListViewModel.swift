@@ -12,7 +12,6 @@ import FirebaseFirestoreSwift
 import Foundation
 
 class TodoListViewModel: GenericTodoViewModel {
-    @Published var todoList: [(String, Todo)] = []
     @Published var filter: FilterType = .all
     @Published var dateFilter: Date?
     
@@ -38,6 +37,11 @@ class TodoListViewModel: GenericTodoViewModel {
         super.init()
         setupBindings()
         loadList()
+    }
+    
+    override func refresh() {
+        loadList()
+        super.refresh()
     }
     
     init(projectId: String){
