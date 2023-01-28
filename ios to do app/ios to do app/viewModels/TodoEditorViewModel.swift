@@ -24,10 +24,11 @@ class TodoEditorViewModel: ObservableObject {
     
     @Published var todo: Todo = .init()
     @Published var reminderList: [Reminder] = []
-    @Published var flashcards: Flashcards = Flashcards(cards: [])
+    @Published var flashcards: [Flashcard] = []
     @Published var error: Error?
     @Published var showAlert = false
     @Published var showReminderEditor = false
+    @Published var showFlashcardEditor = false
     
     
     init(id: String?) {
@@ -61,6 +62,7 @@ class TodoEditorViewModel: ObservableObject {
                 case .success(let todo):
                     self.todo = todo
                     self.reminderList = todo.reminders
+                    self.flashcards = todo.flashcards
                 case .failure(let error):
                     print("Error getting todo \(error)")
             }
@@ -75,9 +77,18 @@ class TodoEditorViewModel: ObservableObject {
     func toggleReminderEditor(){
         showReminderEditor.toggle()
     }
+    func toggleFlashcardEditor(){
+        showFlashcardEditor.toggle()
+    }
     
     func addReminder(reminder: Reminder) {
         reminderList.append(reminder)
+    }
+    func addFlashcard(flashcard: Flashcard) {
+        flashcards.append(flashcard)
+    }
+    func deleteFlashcard(offsets: IndexSet) {
+        flashcards.remove(atOffsets: offsets)
     }
     
     func deleteReminders(offsets: IndexSet) {

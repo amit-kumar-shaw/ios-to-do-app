@@ -19,7 +19,7 @@ class Todo: ObservableObject, Codable{
     @Published var reminders: [Reminder] = []
     @Published var priority: Priority = .medium
     @Published var recurring: Recurring = .none
-    @Published var flashcards : Flashcards = Flashcards(cards: [Flashcard()])
+    @Published var flashcards : [Flashcard] = []
     @Published var isCompleted = false
     @Published var task = ""
     @Published var userId: String?
@@ -70,7 +70,7 @@ class Todo: ObservableObject, Codable{
         self.dueDate = dueDate
         
         reminderBeforeDueDate = try values.decode(Int.self, forKey: .reminderBeforeDueDate)
-        flashcards = try values.decode(Flashcards.self, forKey: .flashcards)
+        flashcards = try values.decode([Flashcard].self, forKey: .flashcards)
         reminders = try values.decode([Reminder].self, forKey: .reminders)
         priority = try values.decode(Priority.self, forKey: .priority)
         recurring = try values.decode(Recurring.self, forKey: .recurring)

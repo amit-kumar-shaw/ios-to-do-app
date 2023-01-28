@@ -21,6 +21,7 @@ class TagViewModel : ObservableObject {
     @Published var filter: FilterType = .all
 
     @Published var tags: [(String, Tag?)] = []
+    @Published var selectableTags: [(String, Tag, Bool)] = []
     @Published var newTag: Tag = .init()
     
     @Published var error: Error?
@@ -62,6 +63,10 @@ class TagViewModel : ObservableObject {
                         return (docSnapshot.documentID, tag)
                 });
                 self.tags = docs!
+                self.selectableTags = []
+                self.tags.forEach { item in
+                    self.selectableTags.append((item.0, item.1!, false))
+                }
             }catch {
                 self.error = error
                 self.showAlert = true

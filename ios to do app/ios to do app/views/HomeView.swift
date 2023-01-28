@@ -50,7 +50,7 @@ struct SearchableView: View {
         
     }
     
-    func viewWillAppear(){
+    func saveLanguageDict(){
         
         
         for item in $viewModel.projects {
@@ -79,6 +79,16 @@ struct SearchableView: View {
         }
     }
     
+    fileprivate func tagList() -> some View{
+        return HStack {
+            NavigationLink(destination: TagView(),
+                           label: {
+                Image(systemName: "number.square.fill")
+                Text("Tags")
+            })
+        }
+    }
+    
     fileprivate func settingList() -> some View {
         return HStack {
             NavigationLink(destination: SettingsView(), label: {
@@ -87,51 +97,52 @@ struct SearchableView: View {
             })
         }
     }
-   
+    
     
     @ViewBuilder var body: some View {
         
         
+        
         List {
-            
-            //Home View Lists
-            upcomingList()
-            
-            todayList()
-            
-            settingList()
-            
-            
-            
-            if self.isSortByLanguage {
+            if (!isSearching) {
+                //Home View Lists
+                upcomingList()
                 
-                sortByLanguage()
-                  
+                todayList()
                 
-            } else {
+                tagList()
                 
-                // Projects Section
-                Section {
+                settingList()
+                
+                if self.isSortByLanguage {
                     
-                    if viewModel.projects.isEmpty {
-                        addButton
-                    } else {
+                    sortByLanguage()
+                    
+                    
+                } else {
+                    // Projects Section
+                    Section {
                         
-                        projectList()
-                        
-                    } }header: {
-                        Text("Projects").font(.headline).foregroundColor(.accentColor)
-                    }
-                
-                
-                
+                        if viewModel.projects.isEmpty {
+                            addButton
+                        } else {
+                            
+                            projectList()
+                            
+                        } }header: {
+                            Text("Projects").font(.headline).foregroundColor(.accentColor)
+                        }
+                    
+                }
+            }
+            else {
+                SearchView(searchText: $searchText)
             }
             
             
+            
         }
-        .listStyle(.insetGrouped)
-        .padding(.zero)
-        .onAppear(perform: viewWillAppear)
+        
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 // EditButton()
@@ -140,6 +151,9 @@ struct SearchableView: View {
             ToolbarItem(placement: .automatic) {
                 addButton
             }
+            //            }
+            
+            
         }
         .navigationTitle("Welcome")
         //            .searchable(text: $searchText) {
@@ -203,11 +217,11 @@ struct SearchableView: View {
     private var sortByLanguageButton : some View {
         
         return AnyView(
-            Button(action: {viewWillAppear()
+            Button(action: {saveLanguageDict()
                 isSortByLanguage = !isSortByLanguage }) {
-                Label("SortByLanguage", systemImage: "tray.fill")
-                
-            }
+                    Label("SortByLanguage", systemImage: "tray.fill")
+                    
+                }
         )
         
     }
@@ -218,15 +232,15 @@ struct SearchableView: View {
         
         languageProjectDict.forEach{ language, value in
             
-            var section = Section(header: Text(language)){
+            let section = Section(header: Text(language)){
+                
+                NavigationLink(destination: ProjectListView(projectId: value.0) ){
                     
-                    NavigationLink(destination: ProjectListView(projectId: value.0) ){
-                        
-                        //show a project list
-                        ProjectListRow(project: (value.0, value.1))
-                        
-                    }
+                    //show a project list
+                    ProjectListRow(project: (value.0, value.1))
+                    
                 }
+            }
             
             
             languageListsViews.append(section)
@@ -235,7 +249,7 @@ struct SearchableView: View {
         }
         
         return Group {
-           
+            
             ForEach(0...languageListsViews.count-1,id: \.self) { index in
                 languageListsViews[index]
             }
@@ -244,13 +258,7 @@ struct SearchableView: View {
     }
     
     
-//    private mutating func saveLanguageDict(){
-//        for item in $viewModel.projects{
-//
-//            self.languageProjectDict[item.1.wrappedValue?.projectName ?? "None"] = (item.0.wrappedValue,item.1)
-//        }
-//
-//    }
+    
     
 }
 

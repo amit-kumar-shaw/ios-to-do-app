@@ -11,6 +11,7 @@ import SwiftUI
 struct TodoDetail: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.tintColor) var tintColor
     
     private var entityId: String
     @ObservedObject var viewModel: TodoEditorViewModel
@@ -35,8 +36,21 @@ struct TodoDetail: View {
                         }
                         TextField("Description", text: $viewModel.todo.description)
                     }
-                    
-                    FlashcardsView(flashcards: viewModel.todo.flashcards, showFlashcardEditor: false)
+                    Section{
+                        if !$viewModel.todo.flashcards.isEmpty {
+                            ForEach(viewModel.flashcards, id: \.id) {
+                                flashcard in
+                                NavigationLink(destination: FlashcardView()){
+                                    Text(flashcard.front)
+                                }
+                            }.onDelete(perform: { viewModel.deleteFlashcard(offsets: $0) })
+                        }
+                        Button(action: viewModel.toggleFlashcardEditor) {
+                            Label("Add Flashcard", systemImage: "plus")
+                        }.sheet(isPresented: $viewModel.showFlashcardEditor) {
+                            FlashcardEditor(flashcard: nil, onComplete: viewModel.addFlashcard)
+                        }
+                    }
                                 
                     Section {
                         if dynamicTypeSize > DynamicTypeSize.medium {
@@ -137,6 +151,10 @@ struct TodoDetail: View {
                 Text("Done")
             }
         )
+        .onAppear {
+            UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(tintColor)
+            UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        }
     }
 }
 

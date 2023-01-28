@@ -28,8 +28,13 @@ class UpcomingViewModel: GenericTodoViewModel {
     
     
     @Published var filter: FilterType = .all
+    
+    var lastActiveFilter: FilterType = .all
+    var lastStartDate: Date?
+    var lastEndDate: Date?
+    
+    
     @Published var progress: Double = 0.0
-    @Published var todoList: [(String, Todo)] = []
     @Published var selectedWeekday: Int = 0
     
     override init(){
@@ -43,6 +48,14 @@ class UpcomingViewModel: GenericTodoViewModel {
             self.error = error
             self.showAlert = true
         }
+    }
+    
+    override func refresh() {
+        if let lsd = lastStartDate, let led = lastEndDate {
+            loadList(filter: lastActiveFilter, startDate: lsd, endDate: led)
+        }
+        
+        super.refresh()
     }
     
     private func determineDateRange(weekday: Int) throws ->  (Date, Date){

@@ -45,6 +45,7 @@ struct TodoList: View {
                         Button(action: {}) {
                             Checkbox(isChecked: ($item.1.isCompleted), onToggle: {
                                 viewModel.saveTodo(entityId: item.0, todo: item.1)
+                                viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
                             })
                         }
                         

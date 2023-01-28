@@ -19,13 +19,18 @@ class TodayViewModel: GenericTodoViewModel {
     
     
     @Published var filter: FilterType = .all
+    @Published var lastActiveFilter: FilterType = .all
     @Published var progress: Double = 0.0
-    @Published var todoList: [(String, Todo)] = []
     
     override init(){
         super.init()
         setupBindings()
         loadList(filter: filter)
+    }
+    
+    override func refresh() {
+        loadList(filter: lastActiveFilter)
+        super.refresh()
     }
     
     func setupBindings(){
@@ -44,6 +49,7 @@ class TodayViewModel: GenericTodoViewModel {
     
     
     func loadList(filter: FilterType){
+        lastActiveFilter = filter
         querySubscription?.remove()
         
         guard let currentUserId = Auth.auth().currentUser?.uid else{
