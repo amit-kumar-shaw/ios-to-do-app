@@ -48,7 +48,8 @@ struct TodoDetail: View {
                         Button(action: viewModel.toggleFlashcardEditor) {
                             Label("Add Flashcard", systemImage: "plus")
                         }.sheet(isPresented: $viewModel.showFlashcardEditor) {
-                            FlashcardEditor(flashcard: nil, onComplete: viewModel.addFlashcard)
+//                            FlashcardEditor(flashcard: nil, onComplete: viewModel.addFlashcard)
+                            FlashcardEditor(viewModel: viewModel)
                         }
                     }
                                 
