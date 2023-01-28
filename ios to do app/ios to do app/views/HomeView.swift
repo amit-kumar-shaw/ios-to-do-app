@@ -68,7 +68,7 @@ struct SearchableView: View {
             NavigationLink(destination: TagView(),
                            label: {
                 Image(systemName: "number.square.fill")
-                Text("Tag")
+                Text("Tags")
             })
         }
     }
