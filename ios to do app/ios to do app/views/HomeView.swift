@@ -20,7 +20,7 @@ struct HomeView: View {
         .onSubmit(of: .search, performSearch)
         
     }
-      
+    
     private func performSearch() {
         // TODO: implement global search functionality
     }
@@ -30,20 +30,36 @@ struct SearchableView: View {
     @Environment(\.tintColor) var tintColor
     @State private var offset: CGFloat = 0
     @State private var searchTerm = ""
-    @State private var projectName = ""
-    @State private var projectColor = Color.white
+    // @State private var projectName = ""
+    // @State private var projectColor = Color.white
     @State private var showModal = false
+    @State private var isSortByLanguage = false
+    @State private var languageProjectDict = [String:(String,Binding<Project?>)]()
     @Binding public var searchText : String
     
     @ObservedObject var viewModel = ProjectViewModel()
     @ObservedObject var todoViewModel = TodoListViewModel()
     
-//    @State private var showEnableRemindersModal : Bool = false
+    //    @State private var showEnableRemindersModal : Bool = false
     @Environment(\.isSearching) private var isSearching
     @Environment(\.dismissSearch) private var dismissSearch
-
     
-
+    init(searchText : Binding<String>){
+        
+        self._searchText = searchText
+        
+    }
+    
+    func viewWillAppear(){
+        
+        
+        for item in $viewModel.projects {
+            
+            languageProjectDict[item.1.wrappedValue?.selectedLanguage.name ?? "None"] = (item.0.wrappedValue,item.1)
+        }
+        
+    }
+    
     fileprivate func upcomingList() -> some View {
         return HStack {
             NavigationLink(destination: UpcomingView(), label: {
@@ -71,36 +87,28 @@ struct SearchableView: View {
             })
         }
     }
+   
     
-    fileprivate func projectList() -> some View {
-        return ForEach($viewModel.projects, id: \.0) { $item in
-            // navigate to Project to do list
-            NavigationLink(destination: ProjectListView(projectId: item.0)) {
-               
-                //show a project list
-                ProjectListRow(project: (item.0, $item.1))
-                
-            }
-        }
-        .onDelete { indexSet in
-            let index = indexSet.first!
-            self.viewModel.deleteProject(at: index)
-        }
-        .headerProminence(.standard)
-    }
-    
-    var body: some View {
-
+    @ViewBuilder var body: some View {
+        
+        
+        List {
             
-            List {
+            //Home View Lists
+            upcomingList()
+            
+            todayList()
+            
+            settingList()
+            
+            
+            
+            if self.isSortByLanguage {
                 
-                //Home View Lists
-                upcomingList()
+                sortByLanguage()
+                  
                 
-                todayList()
-                
-                settingList()
-                
+            } else {
                 
                 // Projects Section
                 Section {
@@ -114,41 +122,65 @@ struct SearchableView: View {
                     } }header: {
                         Text("Projects").font(.headline).foregroundColor(.accentColor)
                     }
+                
+                
+                
             }
-            .listStyle(.insetGrouped)
-            .padding(.zero)
             
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                   // EditButton()
-                    sortByLanguageButton
-                }
-                ToolbarItem(placement: .automatic) {
-                    addButton
-                }
+            
+        }
+        .listStyle(.insetGrouped)
+        .padding(.zero)
+        .onAppear(perform: viewWillAppear)
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                // EditButton()
+                sortByLanguageButton
             }
-            .navigationTitle("Welcome")
-//            .searchable(text: $searchText) {
-//                SearchView(searchText: $searchText)
-//            }
-//            .onSubmit(of: .search, performSearch)
-//            .onAppear {
-//                NotificationUtility.hasPermissions(completion: { hasPermissions in
-//                    if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
-//                        self.showEnableRemindersModal = true
-//                    }
-//                })
-//            }
-//            .fullScreenCover(isPresented: $showEnableRemindersModal) {
-//                EnableRemindersModalView().tint(tintColor)
-//            }
-            .padding(.zero)
-            
-            //NavigationLink(destination: TodoDetail(entityId: searchTodoId), isActive: $isPresentingSearchedTodo) { EmptyView()}
-            //NavigationLink(destination: TodoDetail(entityId: item.0))
-            
+            ToolbarItem(placement: .automatic) {
+                addButton
+            }
+        }
+        .navigationTitle("Welcome")
+        //            .searchable(text: $searchText) {
+        //                SearchView(searchText: $searchText)
+        //            }
+        //            .onSubmit(of: .search, performSearch)
+        //            .onAppear {
+        //                NotificationUtility.hasPermissions(completion: { hasPermissions in
+        //                    if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
+        //                        self.showEnableRemindersModal = true
+        //                    }
+        //                })
+        //            }
+        //            .fullScreenCover(isPresented: $showEnableRemindersModal) {
+        //                EnableRemindersModalView().tint(tintColor)
+        //            }
+        .padding(.zero)
         
+        //NavigationLink(destination: TodoDetail(entityId: searchTodoId), isActive: $isPresentingSearchedTodo) { EmptyView()}
+        //NavigationLink(destination: TodoDetail(entityId: item.0))
+        
+        
+        
+    }
     
+    
+    fileprivate func projectList() -> some View {
+        return ForEach($viewModel.projects, id: \.0) { $item in
+            // navigate to Project to do list
+            NavigationLink(destination: ProjectListView(projectId: item.0)) {
+                
+                //show a project list
+                ProjectListRow(project: (item.0, $item.1))
+                
+            }
+        }
+        .onDelete { indexSet in
+            let index = indexSet.first!
+            self.viewModel.deleteProject(at: index)
+        }
+        .headerProminence(.standard)
     }
     
     private func performSearch() {
@@ -171,7 +203,8 @@ struct SearchableView: View {
     private var sortByLanguageButton : some View {
         
         return AnyView(
-            Button(action: { sortByLanguage() }) {
+            Button(action: {viewWillAppear()
+                isSortByLanguage = !isSortByLanguage }) {
                 Label("SortByLanguage", systemImage: "tray.fill")
                 
             }
@@ -179,9 +212,45 @@ struct SearchableView: View {
         
     }
     
-    private func sortByLanguage() {
+    private func sortByLanguage() -> some View {
         
+        var languageListsViews =  [Section<Text, NavigationLink<ProjectListRow, ProjectListView>, EmptyView>]()
+        
+        languageProjectDict.forEach{ language, value in
+            
+            var section = Section(header: Text(language)){
+                    
+                    NavigationLink(destination: ProjectListView(projectId: value.0) ){
+                        
+                        //show a project list
+                        ProjectListRow(project: (value.0, value.1))
+                        
+                    }
+                }
+            
+            
+            languageListsViews.append(section)
+            
+            
+        }
+        
+        return Group {
+           
+            ForEach(0...languageListsViews.count-1,id: \.self) { index in
+                languageListsViews[index]
+            }
+            
+        }
     }
+    
+    
+//    private mutating func saveLanguageDict(){
+//        for item in $viewModel.projects{
+//
+//            self.languageProjectDict[item.1.wrappedValue?.projectName ?? "None"] = (item.0.wrappedValue,item.1)
+//        }
+//
+//    }
     
 }
 
