@@ -7,6 +7,8 @@ struct FlashcardView: View {
     @State var flashcards: [Flashcard]
     @State private var currentCard: Int = 0
     @State private var isFlipped: Bool = false
+    @State var flashcardRotation = 0.0
+    @State var contentRotation = 0.0
     @State private var showFlashcardEditor: Bool = false
     
     init (viewModel: TodoEditorViewModel) {
@@ -23,6 +25,7 @@ struct FlashcardView: View {
                     Text(isFlipped ? flashcards[currentCard].back : flashcards[currentCard].front)
                 }
             }
+            .rotation3DEffect(.degrees(contentRotation), axis: (x: 0, y: 1, z: 0))
             .frame(width: 200, height: 300)
             .padding()
             .background(isFlipped ? tintColor : .white)
@@ -33,30 +36,27 @@ struct FlashcardView: View {
                     .stroke(tintColor).shadow(radius: 5)
             )
             .onTapGesture {
-                self.isFlipped.toggle()
+                flipFlashcard()
             }
+            .rotation3DEffect(.degrees(flashcardRotation), axis: (x: 0, y: 1, z: 0))
             
             Spacer()
-    
-//                .navigationBarTitle("Flashcards")
-//                .toolbar {
-//                    Button("New Flashcard") {
-//                        self.showFlashcardEditor = true
-//                    }
-//                }
+            
             HStack {
                 Button("Previous") {
                     if self.currentCard > 0 {
+                        isFlipped = false
                         self.currentCard -= 1
                     }
                 }
                 Spacer()
                 Button("Flip") {
-                    self.isFlipped.toggle()
+                    flipFlashcard()
                 }
                 Spacer()
                 Button("Next") {
                     if self.currentCard < self.flashcards.count - 1 {
+                        isFlipped = false
                         self.currentCard += 1
                     }
                 }
@@ -69,6 +69,18 @@ struct FlashcardView: View {
                         }
 
     }
+    
+    func flipFlashcard() {
+            let animationTime = 0.5
+            withAnimation(Animation.linear(duration: animationTime)) {
+                flashcardRotation += 180
+            }
+            
+            withAnimation(Animation.linear(duration: 0.001).delay(animationTime / 2)) {
+                contentRotation += 180
+                isFlipped.toggle()
+            }
+        }
 }
 
 
