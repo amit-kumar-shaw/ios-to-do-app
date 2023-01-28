@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		286C014629848856004D2033 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 286C014529848856004D2033 /* TagView.swift */; };
 		28B9F45429819A46008C9150 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F45329819A46008C9150 /* Tag.swift */; };
 		28B9F45629819D14008C9150 /* TagViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F45529819D14008C9150 /* TagViewModel.swift */; };
 		28B9F4582981A122008C9150 /* TagsInTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F4572981A122008C9150 /* TagsInTodoView.swift */; };
@@ -92,6 +93,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		286C014529848856004D2033 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		28B9F45329819A46008C9150 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		28B9F45529819D14008C9150 /* TagViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewModel.swift; sourceTree = "<group>"; };
 		28B9F4572981A122008C9150 /* TagsInTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsInTodoView.swift; sourceTree = "<group>"; };
@@ -332,6 +334,7 @@
 				28B9F4572981A122008C9150 /* TagsInTodoView.swift */,
 				28B9F4592981A6D1008C9150 /* CreateTagView.swift */,
 				7C3B57992981B657000815CD /* SearchView.swift */,
+				286C014529848856004D2033 /* TagView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD646DB4298134C20061A380 /* ProjectListView.swift in Sources */,
+				286C014629848856004D2033 /* TagView.swift in Sources */,
 				7CE7CFF22964DD5A008F0702 /* Persistence.swift in Sources */,
 				7CE7D03629749725008F0702 /* JSONUtils.swift in Sources */,
 				7CE7D0272972BA82008F0702 /* ToDo.swift in Sources */,

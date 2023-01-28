@@ -63,6 +63,16 @@ struct SearchableView: View {
         }
     }
     
+    fileprivate func tagList() -> some View{
+        return HStack {
+            NavigationLink(destination: TagView(),
+                           label: {
+                Image(systemName: "number.square.fill")
+                Text("Tag")
+            })
+        }
+    }
+    
     fileprivate func settingList() -> some View {
         return HStack {
             NavigationLink(destination: SettingsView(), label: {
@@ -93,26 +103,32 @@ struct SearchableView: View {
 
             
             List {
-                
-                //Home View Lists
-                upcomingList()
-                
-                todayList()
-                
-                settingList()
-                
-                
-                // Projects Section
-                Section {
+                if (!isSearching) {
+                    //Home View Lists
+                    upcomingList()
                     
-                    if viewModel.projects.isEmpty {
-                        addButton
-                    } else {
+                    todayList()
+                    
+                    tagList()
+                    
+                    settingList()
+                    
+                    
+                    // Projects Section
+                    Section {
                         
-                        projectList()
-                        
-                    } }header: {
-                        Text("Projects").font(.headline).foregroundColor(.accentColor)
+                        if viewModel.projects.isEmpty {
+                            addButton
+                        } else {
+                            
+                            projectList()
+                            
+                        } }header: {
+                            Text("Projects").font(.headline).foregroundColor(.accentColor)
+                        }
+                }
+                    else {
+                        SearchView(searchText: $searchText)
                     }
             }
             .listStyle(.insetGrouped)
@@ -120,12 +136,14 @@ struct SearchableView: View {
             
             .toolbar {
                 ToolbarItem(placement: .automatic) {
-                   // EditButton()
+                    // EditButton()
                     sortByLanguageButton
                 }
                 ToolbarItem(placement: .automatic) {
                     addButton
                 }
+//            }
+               
             }
             .navigationTitle("Welcome")
 //            .searchable(text: $searchText) {
