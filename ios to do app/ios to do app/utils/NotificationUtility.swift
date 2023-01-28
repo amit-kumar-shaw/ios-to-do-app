@@ -104,9 +104,15 @@ struct NotificationUtility{
             if let error = error {
                 print("Error scheduling notification: \(error)")
             } else {
-                print("scheuduled: ")
+                print("scheduled: ")
                 print(title)
-                print(date.timeIntervalSinceNow)
+                let formatter = DateComponentsFormatter()
+                formatter.allowedUnits = [.day, .hour, .minute, .second]
+                formatter.unitsStyle = .abbreviated
+
+                let formattedInterval = formatter.string(from: date.timeIntervalSinceNow)
+                print(formattedInterval ?? "")
+              
             }
         }
     }
@@ -115,31 +121,41 @@ struct NotificationUtility{
         // Remove all scheduled notifications
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
-        for (_, todo) in todoList {
+        for (entityId, todo) in todoList {
+            
+            if todo.isCompleted {
+                continue
+            }
+            
             if todo.reminderBeforeDueDate >= 0, let timeInterval = TimeInterval(exactly: -todo.reminderBeforeDueDate * 60) {
          
                 self.scheduleSingleNotification(date: todo.dueDate.addingTimeInterval(timeInterval), title: todo.task, body: todo.description)
                 
-                if (todo.recurring != .none) {
-                    if (todo.recurring != .monthly) {
-                        // calculate 7 days/weeks in the future
-                        for i in 1...7 {
-                          
-                            if let recurringInterval = TimeInterval(exactly: 60 * 60 * 24 * (todo.recurring == .daily ? 1 : 7) * i) {
-                                self.scheduleSingleNotification(date: todo.dueDate.addingTimeInterval(recurringInterval), title: todo.task, body: todo.description)
+                // only schedule future recurring reminders if no cloned recurring todo already exists:
+                if !todoList.contains(where: {(_, todo) in
+                    todo.createdByRecurringTodoId == entityId
+                }) {
+                    if (todo.recurring != .none) {
+                        if (todo.recurring != .monthly) {
+                            // calculate 7 days/weeks in the future
+                            for i in 1...7 {
+                                
+                                if let recurringInterval = TimeInterval(exactly: 60 * 60 * 24 * (todo.recurring == .daily ? 1 : 7) * i) {
+                                    self.scheduleSingleNotification(date: todo.dueDate.addingTimeInterval(recurringInterval), title: todo.task, body: todo.description)
+                                }
+                            }
+                        } else {
+                            let calendar = Calendar.current
+                            // calculate 6 months
+                            for i in 1...6 {
+                                
+                                if let iMonthsLater = calendar.date(byAdding: .month, value: i, to: todo.dueDate) {
+                                    self.scheduleSingleNotification(date: iMonthsLater, title: todo.task, body: todo.description)
+                                }
                             }
                         }
-                    } else {
-                        let calendar = Calendar.current
-                        // calculate 6 months
-                        for i in 1...6 {
                         
-                            if let iMonthsLater = calendar.date(byAdding: .month, value: i, to: todo.dueDate) {
-                                self.scheduleSingleNotification(date: iMonthsLater, title: todo.task, body: todo.description)
-                            }
-                        }
                     }
-                    
                 }
                 
             }
