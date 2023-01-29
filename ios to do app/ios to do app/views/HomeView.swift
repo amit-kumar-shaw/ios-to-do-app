@@ -30,10 +30,9 @@ struct SearchableView: View {
     @Environment(\.tintColor) var tintColor
     @State private var offset: CGFloat = 0
     @State private var searchTerm = ""
-    // @State private var projectName = ""
-    // @State private var projectColor = Color.white
+   
     @State private var showModal = false
-    @State private var isSortByLanguage = false
+    @State var isSortedByLanguage = false
     @State private var languageProjectDict = [String:[(String,Binding<Project?>)]]()
     @Binding public var searchText : String
     
@@ -105,24 +104,17 @@ struct SearchableView: View {
                 
                 settingList()
                 
-                if self.isSortByLanguage {
-                    
-                    sortByLanguage()
-                   
-                    
-                    
-                } else {
+                if self.isSortedByLanguage {
+                    // Projects Section sorted by language
+                    sortByLanguage() } else {
                     // Projects Section
                     Section {
                         
-                        if viewModel.projects.isEmpty {
-                            addButton
+                        if viewModel.projects.isEmpty { addButton
                         } else {
-                            
                             projectList()
-                            
                         } }header: {
-                            Text("Projects").font(.headline).foregroundColor(.accentColor)
+                            Text("Projects").foregroundColor(.accentColor).font(.headline)
                         }
                     
                 }
@@ -130,9 +122,7 @@ struct SearchableView: View {
             else {
                 SearchView(searchText: $searchText)
             }
-            
-            
-            
+        
         }
         
         .toolbar {
@@ -169,24 +159,8 @@ struct SearchableView: View {
         
     }
     
+   
     
-    fileprivate func projectList() -> some View {
-        return ForEach($viewModel.projects, id: \.0) { $item in
-            // navigate to Project to do list
-            NavigationLink(destination: ProjectListView(projectId: item.0)) {
-                
-                //show a project list
-                ProjectListRow(project: (item.0, $item.1))
-                
-            }
-        }
-        .headerProminence(.standard)
-    }
-    
-    //    private func performSearch() {
-    //        // TODO: implement global search functionality
-    //    }
-    //
     private var addButton: some View {
         
         @State var projectForBinding :Project? = Project()
@@ -202,12 +176,12 @@ struct SearchableView: View {
     
     func saveLanguageDict(){
         
-        //  var projectArray = [(String : Binding<Project?>)]
+        languageProjectDict = [:]
         
         for item in $viewModel.projects {
             
             let key = item.1.wrappedValue?.selectedLanguage.name ?? "None"
-            let value = (item.0.wrappedValue,item.1)
+            let value = (item.0.wrappedValue,item.1.self)
             
             
             if var projects = languageProjectDict[key] {
@@ -227,11 +201,10 @@ struct SearchableView: View {
         return AnyView(
             Button(action: {
                 
-                if languageProjectDict.isEmpty
-                {   saveLanguageDict()
+                saveLanguageDict()
                     
-                }
-                isSortByLanguage = !isSortByLanguage }) {
+                
+                isSortedByLanguage = !isSortedByLanguage }) {
                     Label("SortByLanguage", systemImage: "tray.fill")
                     
                 }
@@ -241,7 +214,7 @@ struct SearchableView: View {
     
     private func sortByLanguage() -> some View {
 
-        var languageListsViews = [AnyView]() // [Section<Any, Any, Any>]
+        var languageListsViews = [AnyView]()
 
         languageProjectDict.forEach{ language, values in
 
@@ -252,19 +225,16 @@ struct SearchableView: View {
                     NavigationLink(destination: ProjectListView(projectId: value.0) ){
 
                         //show a project list
-                        ProjectListRow(project: (value.0, value.1))
+                        ProjectListRow(project: (value.0, value.1), isSortedByLanguage : $isSortedByLanguage)
 
                     }
                 }
             }
-
-            
             languageListsViews.append(AnyView(section))
 
         }
         
-       
-
+        
         return Group {
 
             ForEach(0...languageListsViews.count-1,id: \.self) { index in
@@ -272,6 +242,20 @@ struct SearchableView: View {
             }
 
         }
+    }
+    
+    
+    fileprivate func projectList() -> some View {
+        return ForEach($viewModel.projects, id: \.0) { $item in
+            // navigate to Project to do list
+            NavigationLink(destination: ProjectListView(projectId: item.0)) {
+                
+                //show a project list
+                ProjectListRow(project: (item.0, $item.1),isSortedByLanguage : $isSortedByLanguage)
+                
+            }
+        }
+        .headerProminence(.standard)
     }
 }
 

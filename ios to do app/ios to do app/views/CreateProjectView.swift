@@ -33,7 +33,7 @@ struct CreateProjectView: View {
     }
     
     
-    private let colorPalette : [String] = ["#FFCA3A","#109648","#264653","#B8B8FF","#F4A261","#FF595E","#8338EC","#3A86FF","#00AFB9"]
+    private let colorPalette : [String] = ["#FFCA3A","#109648","#AB4E68","#B8B8FF","#F4A261","#FF595E","#8338EC","#3A86FF","#00AFB9"]
     private let columns = [GridItem(.adaptive(minimum: 80))]
     
     
