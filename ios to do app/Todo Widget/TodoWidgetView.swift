@@ -8,6 +8,7 @@ struct TodoWidgetView: View {
         self.upcomingTodos = upcomingTodos
     }
     
+    private static let deeplinkURL = URL(string: "widget-deeplink://")!
     
   var body: some View {
       VStack(alignment: .leading) {
@@ -66,7 +67,7 @@ struct TodoWidgetView: View {
               }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading).padding([.leading, .trailing, .bottom] ,4)
           }
           
-      }
+      }.widgetURL(Self.deeplinkURL)
   }
 }
 

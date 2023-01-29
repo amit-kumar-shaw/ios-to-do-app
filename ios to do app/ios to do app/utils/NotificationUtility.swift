@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 import FirebaseAuth
 import NotificationCenter
 import Foundation
+import WidgetKit
 
 struct NotificationUtility{
     
@@ -165,14 +166,12 @@ struct NotificationUtility{
         }
     }
     
-    static func provideWidgetTimeline(todoList: [(String, Todo)]) {
+    static func provideWidgetTimeline(tintColor: String, todoList: [(String, Todo)]) {
         
       var dailyTodosTuple : [(Date, [SimpleTodo])] = []
         
       let calendar = Calendar.current
       let now = calendar.startOfDay(for:  Date())
-           
-        
         
       dailyTodosTuple.append((now, []))
     
@@ -185,18 +184,14 @@ struct NotificationUtility{
         
         for (_, todo) in todoList {
             
-            if todo.isCompleted {
-                continue
-            }
-            
             for i in 0 ..< dailyTodosTuple.count {
                 
                 var (dailyTodoDate, dailyTodoTodos) : (Date, [SimpleTodo]) = dailyTodosTuple[i]
                 
                 if todo.dueDate >= dailyTodoDate && todo.dueDate <= calendar.date(byAdding: .day, value: 1, to: dailyTodoDate)! {
-                    
-                    dailyTodoTodos.append(SimpleTodo(task: todo.task, isCompleted: todo.isCompleted, color: "#ff0000"))
-                    
+                    dailyTodoTodos.append(SimpleTodo(task: todo.task, isCompleted: todo.isCompleted, color: "\(tintColor)"))
+                    dailyTodosTuple[i] = (dailyTodoDate, dailyTodoTodos)
+                    break
                 }
             }
             
@@ -205,7 +200,13 @@ struct NotificationUtility{
         var dailyTodos : [DailyTodo] = []
         
         for (dayDate, dayTodos) in dailyTodosTuple {
-            dailyTodos.append(DailyTodo(date: dayDate, dailyTodoList: dayTodos))
+            
+            let sortedTodos = dayTodos.sorted(by: {(lhs, rhs) in
+                !lhs.isCompleted
+            })
+            
+           
+            dailyTodos.append(DailyTodo(date: dayDate, dailyTodoList: sortedTodos))
         }
         
         let upComingDays = UpcomingDays(dailyTodos: dailyTodos)
@@ -213,7 +214,7 @@ struct NotificationUtility{
         do {
             let jsonData = try JSONEncoder().encode(upComingDays)
             let jsonString = String(data: jsonData, encoding: .utf8)!
-            print(jsonString)
+            
             if let defaults = UserDefaults(suiteName: "group.com.iostodoapp") {
                 defaults.setValue(jsonString, forKey: "widget_upcoming_days")
 
@@ -222,12 +223,12 @@ struct NotificationUtility{
             print(error)
         }
         
+        WidgetCenter.shared.reloadAllTimelines()
 
     }
     
     
-    static func schedule() {
-        
+    static func schedule(tintColor : String) async {
         
         let db = Firestore.firestore()
         let auth = Auth.auth()
@@ -265,7 +266,7 @@ struct NotificationUtility{
                 }
                 
                 // provide timeline for today-widget
-                provideWidgetTimeline(todoList: todoList)
+                provideWidgetTimeline(tintColor: tintColor, todoList: todoList)
                 
             } catch {
                 

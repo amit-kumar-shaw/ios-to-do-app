@@ -12,38 +12,37 @@ import Intents
 
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), upcomingTodos: [], configuration: ConfigurationIntent())
+        SimpleEntry(date: Date(), upcomingTodos: [SimpleTodo(task: "Example task 1", isCompleted: true, color: "#025ee8"), SimpleTodo(task: "Example task 2", isCompleted: true, color: "#18eb09"), SimpleTodo(task: "Example task 3", isCompleted: true, color: "#e802e0"),], configuration: ConfigurationIntent())
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), upcomingTodos: [], configuration: configuration)
-        completion(entry)
+     
+        
+
+        completion(SimpleEntry(date: Date(), upcomingTodos: [SimpleTodo(task: "Example task 1", isCompleted: true, color: "#025ee8"), SimpleTodo(task: "Example task 2", isCompleted: true, color: "#18eb09"), SimpleTodo(task: "Example task 3", isCompleted: true, color: "#e802e0")], configuration: ConfigurationIntent()))
+
     }
 
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         
-        var todoList : [SimpleTodo] = []
-        todoList.append(SimpleTodo(task: "Answer me 2", isCompleted: true, color: "#ff0000"))
-        todoList.append(SimpleTodo(task: "Code app", isCompleted: false, color: "#ff0000"))
-        todoList.append(SimpleTodo(task: "Practice piano", isCompleted: false, color: "#ff0000"))
-        
-        var t : String = "----"
-        if let bla : String = UserDefaults(suiteName: "group.com.iostodoapp")?.string(forKey: "LOL")
+        var jsonString = ""
+        if let jS : String = UserDefaults(suiteName: "group.com.iostodoapp")?.string(forKey: "widget_upcoming_days")
         {
-            t = bla
+            jsonString = jS
         }
-            
-        var entries: [SimpleEntry] = []
 
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
+        let jsonData = jsonString.data(using: .utf8)!
+        
+        var decodedUpComingDays = UpcomingDays(dailyTodos: [])
+        
+        do { decodedUpComingDays = try JSONDecoder().decode(UpcomingDays.self, from: jsonData) }
+        catch _ {}
+        
+        var entries: [SimpleEntry] = []
+        
+        for day in decodedUpComingDays.dailyTodos {
             
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let dailyTodo = DailyTodo(date: entryDate, dailyTodoList: todoList)
-            
-            
-            let entry = SimpleEntry(date:entryDate, upcomingTodos: dailyTodo.dailyTodoList, configuration: configuration)
+            let entry = SimpleEntry(date:day.date, upcomingTodos: day.dailyTodoList, configuration: configuration)
             entries.append(entry)
         }
 
@@ -98,8 +97,8 @@ struct Todo_Widget: Widget {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             Todo_WidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Todo Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Today's Tasks")
+        .description("This widget displays all the tasks due for the current day, making it easy to stay on top of your to-do list and get things done.")
     }
 }
 

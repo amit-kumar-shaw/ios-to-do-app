@@ -19,13 +19,19 @@ struct ios_to_do_appApp: App {
     
     @State private var showEnableRemindersModal : Bool = false
     
+    func schedule(tintColor: String) {
+        Task {
+            await NotificationUtility.schedule(tintColor: tintColor)
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView(tintColor: Color(hex: tintColorHex))
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environment(\.tintColor, Color(hex: tintColorHex))
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                    NotificationUtility.schedule()
+                    schedule(tintColor: tintColorHex)
                 }
                 .onAppear {
                     NotificationUtility.hasPermissions(completion: { hasPermissions in
