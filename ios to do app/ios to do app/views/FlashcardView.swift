@@ -63,8 +63,10 @@ struct FlashcardView: View {
             }.padding()
         }.navigationBarTitle("Flashcards")
                         .toolbar {
-                            Button("New Flashcard") {
-                                self.showFlashcardEditor = true
+                            Button(action: viewModel.toggleFlashcardEditor) {
+                                Text("New Flashcard")
+                            }.sheet(isPresented: $viewModel.showFlashcardEditor) {
+                                FlashcardEditor(viewModel: viewModel)
                             }
                         }
 
