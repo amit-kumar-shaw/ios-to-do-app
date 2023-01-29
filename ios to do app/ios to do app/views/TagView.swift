@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// View to display all tags and filter the todos on tag selection
 struct TagView: View {
     @Environment(\.tintColor) var tintColor
     
@@ -19,6 +20,8 @@ struct TagView: View {
     }
     
     var body: some View {
+        
+        /// list all the tags
         ScrollView(.horizontal) {
             LazyHGrid(rows: [GridItem(.flexible())], alignment: .top) {
                 ForEach($viewModel.selectableTags, id: \.0) { $item in
@@ -37,11 +40,13 @@ struct TagView: View {
                         }
                 }
             }
-            .frame(height: 50)
+            .frame(height: 30)
             .padding()
             
         }
-        List (selectedTags, id: \.self) { item in
+        
+        /// list todos of selected tags
+        List (todosOsSelectedTags, id: \.self) { item in
             ForEach($todoViewModel.todoList, id: \.0, editActions: .all){ $todo in
                 if todo.0 == item {
                     HStack{
@@ -59,10 +64,12 @@ struct TagView: View {
                     }
                 }
             }
-        }
+        }.animation(.default)
     }
     
-    var selectedTags: [String]{
+    /// Find all todos of selected tags and filter unique todos.
+    /// - Returns: List of unique todo ids of selected tags.
+    var todosOsSelectedTags: [String]{
         var list: [String] = []
         viewModel.selectableTags.forEach { item in
             if item.2 {
@@ -84,6 +91,7 @@ struct TagView_Previews: PreviewProvider {
     }
 }
 
+/// Remove duplicate elements in an array
 extension Array where Element: Hashable {
     func removingDuplicates() -> [Element] {
         var addedDict = [Element: Bool]()
