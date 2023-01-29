@@ -26,7 +26,7 @@
 		501E1CA3298530F700DC2D4E /* Todo_Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C9E298530F600DC2D4E /* Todo_Widget.intentdefinition */; };
 		501E1CA6298530F800DC2D4E /* Todo WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 501E1C94298530F500DC2D4E /* Todo WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		501E1CAD298531CA00DC2D4E /* TodoWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1CAB2985318000DC2D4E /* TodoWidgetView.swift */; };
-		50CCAFCC297ADF7900D5F2AA /* NotificationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CCAFCB297ADF7900D5F2AA /* NotificationUtility.swift */; };
+		50CCAFCC297ADF7900D5F2AA /* RemindersWidgetUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CCAFCB297ADF7900D5F2AA /* RemindersWidgetUtility.swift */; };
 		50CCAFCE297C58A300D5F2AA /* EnableRemindersModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */; };
 		7C3B578229802B5E000815CD /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3B578129802B5E000815CD /* ColorScheme.swift */; };
 		7C3B578429802BC7000815CD /* EnvironmentValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3B578329802BC7000815CD /* EnvironmentValues.swift */; };
@@ -145,7 +145,7 @@
 		501E1CAB2985318000DC2D4E /* TodoWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoWidgetView.swift; sourceTree = "<group>"; };
 		501E1CAE2985778300DC2D4E /* ios to do app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ios to do app.entitlements"; sourceTree = "<group>"; };
 		501E1CAF298577C400DC2D4E /* Todo WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Todo WidgetExtension.entitlements"; sourceTree = "<group>"; };
-		50CCAFCB297ADF7900D5F2AA /* NotificationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationUtility.swift; sourceTree = "<group>"; };
+		50CCAFCB297ADF7900D5F2AA /* RemindersWidgetUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersWidgetUtility.swift; sourceTree = "<group>"; };
 		50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableRemindersModalView.swift; sourceTree = "<group>"; };
 		7C3B578129802B5E000815CD /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		7C3B578329802BC7000815CD /* EnvironmentValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentValues.swift; sourceTree = "<group>"; };
@@ -440,7 +440,7 @@
 			isa = PBXGroup;
 			children = (
 				7CE7D03529749725008F0702 /* JSONUtils.swift */,
-				50CCAFCB297ADF7900D5F2AA /* NotificationUtility.swift */,
+				50CCAFCB297ADF7900D5F2AA /* RemindersWidgetUtility.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -671,7 +671,7 @@
 				CE890B982975900300233D7A /* FlashcardView.swift in Sources */,
 				286C014829871671004D2033 /* FlashcardListView.swift in Sources */,
 				7CE7CFEB2964DD58008F0702 /* HomeView.swift in Sources */,
-				50CCAFCC297ADF7900D5F2AA /* NotificationUtility.swift in Sources */,
+				50CCAFCC297ADF7900D5F2AA /* RemindersWidgetUtility.swift in Sources */,
 				7C68265D2975E43F002DF5C6 /* AuthenticationViewModel.swift in Sources */,
 				7C68266D29770523002DF5C6 /* Errors.swift in Sources */,
 				7C3B579A2981B657000815CD /* SearchView.swift in Sources */,

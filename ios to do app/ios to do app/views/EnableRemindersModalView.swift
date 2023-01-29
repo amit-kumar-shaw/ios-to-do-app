@@ -47,9 +47,9 @@ struct EnableRemindersModalView: View {
                 
                 Button( action: {
                     if (didAskForNotifications) {
-                        NotificationUtility.openSettings()
+                        RemindersWidgetUtility.openSettings()
                     } else {
-                        NotificationUtility.askForNotificationPermissions()
+                        RemindersWidgetUtility.askForNotificationPermissions()
                     }
                     dismiss()
                 }) {
@@ -63,7 +63,7 @@ struct EnableRemindersModalView: View {
                 
                 Button(action: {
                     if (appearanceCount > 2) {
-                        NotificationUtility.setDontShowRemindersModal()
+                        RemindersWidgetUtility.setDontShowRemindersModal()
                     }
                     dismiss()
                     
@@ -77,9 +77,9 @@ struct EnableRemindersModalView: View {
             
 
         }.onAppear {
-            appearanceCount = NotificationUtility.getReminderModalAppearanceCount()
-            didAskForNotifications = NotificationUtility.didAskForNotificationPermissions()
-            NotificationUtility.incrementReminderModalAppearanceCount()
+            appearanceCount = RemindersWidgetUtility.getReminderModalAppearanceCount()
+            didAskForNotifications = RemindersWidgetUtility.didAskForNotificationPermissions()
+            RemindersWidgetUtility.incrementReminderModalAppearanceCount()
         }
     }
 }
