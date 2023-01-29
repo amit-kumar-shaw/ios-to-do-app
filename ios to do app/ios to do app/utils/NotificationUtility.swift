@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 import FirebaseAuth
 import NotificationCenter
 import Foundation
+import WidgetKit
 
 struct NotificationUtility{
     
@@ -74,7 +75,7 @@ struct NotificationUtility{
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             
-            if let error = error {
+            if let _ = error {
                 // Handle the error here.
                 return
             }
@@ -165,8 +166,70 @@ struct NotificationUtility{
         }
     }
     
+    static func provideWidgetTimeline(tintColor: String, todoList: [(String, Todo)]) {
+        
+      var dailyTodosTuple : [(Date, [SimpleTodo])] = []
+        
+      let calendar = Calendar.current
+      let now = calendar.startOfDay(for:  Date())
+        
+      dailyTodosTuple.append((now, []))
     
-    static func schedule() {
+       for i in 1...7 {
+           let date = calendar.date(byAdding: .day, value: i, to: now)!
+           let startOfDay = calendar.startOfDay(for: date)
+           dailyTodosTuple.append((startOfDay, []))
+       }
+        
+        
+        for (_, todo) in todoList {
+            
+            for i in 0 ..< dailyTodosTuple.count {
+                
+                var (dailyTodoDate, dailyTodoTodos) : (Date, [SimpleTodo]) = dailyTodosTuple[i]
+                
+                if todo.dueDate >= dailyTodoDate && todo.dueDate <= calendar.date(byAdding: .day, value: 1, to: dailyTodoDate)! {
+                    dailyTodoTodos.append(SimpleTodo(task: todo.task, isCompleted: todo.isCompleted, color: "\(tintColor)"))
+                    dailyTodosTuple[i] = (dailyTodoDate, dailyTodoTodos)
+                    break
+                }
+            }
+            
+        }
+        
+        var dailyTodos : [DailyTodo] = []
+        
+        for (dayDate, dayTodos) in dailyTodosTuple {
+            
+            let sortedTodos = dayTodos.sorted(by: {(lhs, rhs) in
+                !lhs.isCompleted
+            })
+            
+           
+            dailyTodos.append(DailyTodo(date: dayDate, dailyTodoList: sortedTodos))
+        }
+        
+        let upComingDays = UpcomingDays(dailyTodos: dailyTodos)
+        
+        do {
+            let jsonData = try JSONEncoder().encode(upComingDays)
+            let jsonString = String(data: jsonData, encoding: .utf8)!
+            
+            if let defaults = UserDefaults(suiteName: "group.com.iostodoapp") {
+                defaults.setValue(jsonString, forKey: "widget_upcoming_days")
+
+            }
+        } catch {
+            print(error)
+        }
+        
+        WidgetCenter.shared.reloadAllTimelines()
+
+    }
+    
+    
+    static func schedule(tintColor : String) async {
+        
         let db = Firestore.firestore()
         let auth = Auth.auth()
         
@@ -174,42 +237,47 @@ struct NotificationUtility{
             return
         }
         
-        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-            if settings.authorizationStatus == .authorized {
-                // The user has granted permission to send notifications
-                print("Permission granted to send notifications")
+        
+        
+        let userTodosQuery = db.collection("todos").whereField("userId", in: [currentUserId])
+        
+        userTodosQuery.addSnapshotListener { querySnapshot, error in
+            if error != nil {
+                return
+            }
+            
+            do{
+                let docs = try querySnapshot?.documents.map({ docSnapshot in
+                    return (docSnapshot.documentID, try docSnapshot.data(as: Todo.self))
+                })
+                let todoList: [(String, Todo)] = docs!
                 
-                let userTodosQuery = db.collection("todos").whereField("userId", in: [currentUserId])
-                
-                userTodosQuery.addSnapshotListener { querySnapshot, error in
-                    if error != nil {
-                        return
+                // schedule notifications if possible
+                UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+                    if settings.authorizationStatus == .authorized {
+                        // The user has granted permission to send notifications
+                        print("Has permissions to send notifications")
+                        self.scheduleNotifications(todoList: todoList)
                     }
                     
-                    do{
-                        let docs = try querySnapshot?.documents.map({ docSnapshot in
-                            return (docSnapshot.documentID, try docSnapshot.data(as: Todo.self))
-                        })
-                        let todoList: [(String, Todo)] = docs!
-                      
-                        // check rights
-                        self.scheduleNotifications(todoList: todoList)
-                        
-                    } catch {
-                        
+                    else {
+                        print("No permissions to send notifications")
                     }
                 }
                 
-            } else {
-                // The user has not granted permission to send notifications
-                print("Permission denied to send notifications")
+                // provide timeline for today-widget
+                provideWidgetTimeline(tintColor: tintColor, todoList: todoList)
+                
+            } catch {
+                
             }
+            
         }
         
         
         // recurring
         // dueDate
-        // 
+        //
         
     }
     
@@ -227,4 +295,21 @@ struct NotificationUtility{
         
     }
     
+}
+
+
+
+struct UpcomingDays: Decodable, Encodable {
+    let dailyTodos: [DailyTodo]
+}
+
+struct DailyTodo: Decodable, Encodable {
+    let date: Date
+    var dailyTodoList: [SimpleTodo]
+}
+
+struct SimpleTodo: Decodable, Encodable {
+    let task : String
+    let isCompleted : Bool
+    let color : String
 }

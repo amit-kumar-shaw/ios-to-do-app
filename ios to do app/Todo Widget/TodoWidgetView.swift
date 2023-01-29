@@ -1,22 +1,109 @@
 import SwiftUI
 
-struct EmojiWidgetView: View {
-
-
-
-  var body: some View {
-    ZStack {
-      Color(UIColor.systemIndigo)
-      VStack {
-        Text("Test1")
-          .font(.system(size: 56))
-        Text("TEST")
-          .font(.headline)
-          .multilineTextAlignment(.center)
-          .padding(.top, 5)
-          .padding([.leading, .trailing])
-          .foregroundColor(.white)
-      }
+struct TodoWidgetView: View {
+    
+    var upcomingTodos : [SimpleTodo] = []
+    
+    init(upcomingTodos: [SimpleTodo]) {
+        self.upcomingTodos = upcomingTodos
     }
+    
+    private static let deeplinkURL = URL(string: "widget-deeplink://")!
+    
+  var body: some View {
+      VStack(alignment: .leading) {
+          Text("Today").font(.system(size: 12, weight: .bold)).frame(maxWidth: .infinity, alignment: .center).padding(.top, 5)
+          
+          if upcomingTodos.count < 1 {
+              VStack {
+                  Image(systemName:"checkmark.circle.fill")
+                      .resizable()
+                      .frame(width: 32, height: 32)
+                      .foregroundColor(Color(UIColor.gray))
+                  Text("No upcoming\ntodos.").frame(maxWidth: .infinity, alignment: .center).padding([.leading, .trailing, .bottom],10).font(.system(size: 12, weight: .bold)).multilineTextAlignment(.center)
+              }.frame(maxHeight: .infinity)
+              
+             
+              
+          }
+          else {
+              LazyVGrid(
+                
+                columns: [GridItem(.adaptive(minimum: 170))],
+                alignment: .leading,
+                spacing: 5)
+              {
+                  
+                  ForEach((0 ..< upcomingTodos.count), id: \.self) {i in
+                      
+                      VStack {
+                          VStack {
+                              HStack {
+                                  Image(systemName: upcomingTodos[i].isCompleted ? "checkmark.circle.fill" : "circle")
+                                      .resizable()
+                                      .frame(width: 18, height: 18)
+                                      .foregroundColor(Color(hexStringToUIColor(hex: upcomingTodos[i].color)))
+                                  
+                                  
+                                  
+                                  
+                                  HStack {
+                                      Text(upcomingTodos[i].task).font(.system(size: 12, weight: .bold)).lineLimit(1).truncationMode(.tail)
+                                  }
+                                 
+                              }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading).padding(5)
+                          }
+                          .frame(minWidth: 130)
+                          .background(Color(UIColor.secondarySystemBackground))
+                          .cornerRadius(100)
+                          .padding(.horizontal, 10)
+                          
+                          
+                          
+                      }
+                      
+                      
+                  }
+              }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading).padding([.leading, .trailing, .bottom] ,4)
+          }
+          
+      }.widgetURL(Self.deeplinkURL)
   }
+}
+
+
+
+
+func hexStringToUIColor (hex:String) -> UIColor {
+    var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+
+    if (cString.hasPrefix("#")) {
+        cString.remove(at: cString.startIndex)
+    }
+
+    if ((cString.count) != 6) {
+        return UIColor.gray
+    }
+
+    var rgbValue:UInt64 = 0
+    Scanner(string: cString).scanHexInt64(&rgbValue)
+
+    return UIColor(
+        red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+        green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+        blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+        alpha: CGFloat(1.0)
+    )
+}
+
+extension Color {
+    init(hex: UInt, alpha: Double = 1) {
+        self.init(
+            .sRGB,
+            red: Double((hex >> 16) & 0xff) / 255,
+            green: Double((hex >> 08) & 0xff) / 255,
+            blue: Double((hex >> 00) & 0xff) / 255,
+            opacity: alpha
+        )
+    }
 }

@@ -141,6 +141,8 @@
 		501E1C9F298530F700DC2D4E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		501E1CA1298530F700DC2D4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		501E1CAB2985318000DC2D4E /* TodoWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoWidgetView.swift; sourceTree = "<group>"; };
+		501E1CAE2985778300DC2D4E /* ios to do app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ios to do app.entitlements"; sourceTree = "<group>"; };
+		501E1CAF298577C400DC2D4E /* Todo WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Todo WidgetExtension.entitlements"; sourceTree = "<group>"; };
 		50CCAFCB297ADF7900D5F2AA /* NotificationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationUtility.swift; sourceTree = "<group>"; };
 		50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableRemindersModalView.swift; sourceTree = "<group>"; };
 		7C3B578129802B5E000815CD /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 		7CE7CFDC2964DD58008F0702 = {
 			isa = PBXGroup;
 			children = (
+				501E1CAF298577C400DC2D4E /* Todo WidgetExtension.entitlements */,
 				407EB1D7296ED142005F79D8 /* Packages */,
 				7CE7CFE72964DD58008F0702 /* ios to do app */,
 				7CE7CFFE2964DD5A008F0702 /* ios to do appTests */,
@@ -331,6 +334,7 @@
 		7CE7CFE72964DD58008F0702 /* ios to do app */ = {
 			isa = PBXGroup;
 			children = (
+				501E1CAE2985778300DC2D4E /* ios to do app.entitlements */,
 				7C68265B2975E424002DF5C6 /* viewModels */,
 				7C6826542975CA9A002DF5C6 /* firebase */,
 				7CE7D03429749710008F0702 /* utils */,
@@ -725,9 +729,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Todo WidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2NWV32G3N7;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Todo Widget/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Todo Widget";
@@ -753,9 +758,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Todo WidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2NWV32G3N7;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Todo Widget/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Todo Widget";
@@ -896,10 +902,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "ios to do app/ios to do app.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ios to do app/Preview Content\"";
-				DEVELOPMENT_TEAM = 2NWV32G3N7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -927,10 +934,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "ios to do app/ios to do app.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ios to do app/Preview Content\"";
-				DEVELOPMENT_TEAM = 2NWV32G3N7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

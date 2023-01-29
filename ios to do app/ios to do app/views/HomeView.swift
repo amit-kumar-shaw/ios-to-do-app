@@ -39,6 +39,8 @@ struct SearchableView: View {
     @ObservedObject var viewModel = ProjectViewModel()
     @ObservedObject var todoViewModel = TodoListViewModel()
     
+    @State var showTodayView : Bool = false
+    
     //    @State private var showEnableRemindersModal : Bool = false
     @Environment(\.isSearching) private var isSearching
     @Environment(\.dismissSearch) private var dismissSearch
@@ -61,11 +63,16 @@ struct SearchableView: View {
     
     fileprivate func todayList() -> some View{
         return HStack {
+            
             NavigationLink(destination: TodayView(),
+                           isActive: $showTodayView,
                            label: {
                 Image(systemName: "calendar.badge.exclamationmark")
                 Text("Today")
             })
+        }.onOpenURL{ url in
+            guard url.scheme == "widget-deeplink" else { return }
+            showTodayView = true
         }
     }
     
