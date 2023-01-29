@@ -21,7 +21,7 @@ struct ios_to_do_appApp: App {
     
     func schedule(tintColor: String) {
         Task {
-            await NotificationUtility.schedule(tintColor: tintColor)
+            await RemindersWidgetUtility.scheduleRemindersAndWidgetTimeline(tintColor: tintColor)
         }
     }
     
@@ -34,8 +34,8 @@ struct ios_to_do_appApp: App {
                     schedule(tintColor: tintColorHex)
                 }
                 .onAppear {
-                    NotificationUtility.hasPermissions(completion: { hasPermissions in
-                        if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
+                    RemindersWidgetUtility.hasPermissions(completion: { hasPermissions in
+                        if !hasPermissions, !RemindersWidgetUtility.getDontShowRemindersModal() {
                             self.showEnableRemindersModal = true
                         }
                     })

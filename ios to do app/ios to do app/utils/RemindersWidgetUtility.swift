@@ -1,5 +1,5 @@
 //
-//  NotificationScheduler.swift
+//  RemindersWidgetUtility.swift
 //  ios to do app
 //
 //  Created by Max on 20.01.23.
@@ -13,23 +13,28 @@ import NotificationCenter
 import Foundation
 import WidgetKit
 
-struct NotificationUtility{
+struct RemindersWidgetUtility{
     
+    /// Opens the app settings page of the app.
     public static func openSettings() {
         if let appSettings = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(appSettings) {
             UIApplication.shared.open(appSettings)
         }
     }
     
+    
+    /// Increments the count of times the reminder modal has appeared.
     public static func incrementReminderModalAppearanceCount() {
         let defaults = UserDefaults.standard
-        var count = NotificationUtility.getReminderModalAppearanceCount()
+        var count = RemindersWidgetUtility.getReminderModalAppearanceCount()
         count += 1
 
         defaults.set(count, forKey: "reminderModalAppearanceCount")
 
     }
-
+    
+    /// Retrieves the count of times the reminder modal has appeared.
+    /// - Returns: The count of times the reminder modal has appeared.
     public static func getReminderModalAppearanceCount() -> Int {
         let defaults = UserDefaults.standard
         if let count = defaults.value(forKey: "reminderModalAppearanceCount") as? Int {
@@ -41,6 +46,8 @@ struct NotificationUtility{
         }
     }
     
+    /// Retrieves the user's preference for not showing the reminders modal.
+    /// - Returns: false if the user shouldn't see the reminders modal in general again; true otherwise
     public static func getDontShowRemindersModal() -> Bool {
         if UserDefaults.standard.value(forKey: "dontShowRemindersModal") == nil {
             UserDefaults.standard.set(false, forKey: "dontShowRemindersModal")
@@ -48,12 +55,15 @@ struct NotificationUtility{
         return UserDefaults.standard.bool(forKey: "dontShowRemindersModal")
     }
     
+    /// Sets the user's preference for not showing the reminders modal.
     public static func setDontShowRemindersModal() {
         UserDefaults.standard.set(true, forKey: "dontShowRemindersModal")
     }
     
 
     
+    /// Determines if the user has granted notifications permissions.
+    /// - Parameter completion: A closure that is called with the result of the check. The closure is passed a `Bool` indicating whether the user has granted notifications permissions (`true`) or not (`false`).
     public static func hasPermissions(completion: @escaping (Bool) -> Void) {
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
             if settings.authorizationStatus == .authorized {
@@ -63,7 +73,9 @@ struct NotificationUtility{
             }
         }
     }
-
+    
+    /// Indicates whether the app has previously asked the user for notifications permissions.
+    /// - Returns: `true` if the app has previously asked the user for notifications permissions; `false` otherwise.
     public static func didAskForNotificationPermissions() -> Bool {
         if UserDefaults.standard.value(forKey: "didAskForNotificationPermissions") == nil { // 1
             UserDefaults.standard.set(false, forKey: "didAskForNotificationPermissions") // 2
@@ -71,6 +83,7 @@ struct NotificationUtility{
         return UserDefaults.standard.bool(forKey: "didAskForNotificationPermissions")
     }
     
+    /// Requests the user for notification permissions.
     public static func askForNotificationPermissions() {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
@@ -85,11 +98,32 @@ struct NotificationUtility{
         }
     }
     
-    private static func scheduleSingleNotification(date : Date, title: String, body: String) {
+    /// Returns the reminder description in minutes, hours or days.
+    /// - Parameter minutes: The number of minutes before due date to remind the user.
+    /// - Returns: The reminder description string in minutes, hours or days.
+    public static func getRemindMeBeforeDueDateDescription(minutes : Int) -> String {
+        let _minutes = minutes > 0 ? minutes : -minutes
+        
+        if (_minutes < 60) {
+            return "\(_minutes) \(_minutes > 1 ? "minutes" : "minute")"
+        }
+        if (minutes < 1440) {
+            return "\(_minutes / 60) \((_minutes / 60) > 1 ? "hours" : "hour")"
+        }
+
+        return "\(_minutes / 1440) \((_minutes / 1440) > 1 ? "days" : "day")"
+        
+    }
+    
+    //// Schedules a single reminder with a given date, title, and body
+    /// - Parameters:
+    ///     - date: The date when the reminder should trigger
+    ///     - title: The title of the reminder
+    ///     - body: The body or message of the reminder
+    private static func scheduleSingleReminder(date : Date, title: String, body: String) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
-        //let trigger = UNTimeIntervalNotificationTrigger(timeInterval: date.timeIntervalSinceNow, repeats: false)
     
         
         if (date.timeIntervalSinceNow.isLessThanOrEqualTo(0)) {
@@ -118,7 +152,9 @@ struct NotificationUtility{
         }
     }
     
-    private static func scheduleNotifications(todoList: [(String, Todo)]) {
+    /// Schedules reminders for a given list of todos
+    /// - Parameter todoList: An array of tuples consisting of entity id and todo object
+    private static func scheduleReminders(todoList: [(String, Todo)]) {
         // Remove all scheduled notifications
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
@@ -130,7 +166,7 @@ struct NotificationUtility{
             
             if todo.reminderBeforeDueDate >= 0, let timeInterval = TimeInterval(exactly: -todo.reminderBeforeDueDate * 60) {
          
-                self.scheduleSingleNotification(date: todo.dueDate.addingTimeInterval(timeInterval), title: todo.task, body: todo.description)
+                self.scheduleSingleReminder(date: todo.dueDate.addingTimeInterval(timeInterval), title: todo.task, body: todo.description)
                 
                 // only schedule future recurring reminders if no cloned recurring todo already exists:
                 if !todoList.contains(where: {(_, todo) in
@@ -142,7 +178,7 @@ struct NotificationUtility{
                             for i in 1...7 {
                                 
                                 if let recurringInterval = TimeInterval(exactly: 60 * 60 * 24 * (todo.recurring == .daily ? 1 : 7) * i) {
-                                    self.scheduleSingleNotification(date: todo.dueDate.addingTimeInterval(recurringInterval), title: todo.task, body: todo.description)
+                                    self.scheduleSingleReminder(date: todo.dueDate.addingTimeInterval(recurringInterval), title: todo.task, body: todo.description)
                                 }
                             }
                         } else {
@@ -151,7 +187,7 @@ struct NotificationUtility{
                             for i in 1...6 {
                                 
                                 if let iMonthsLater = calendar.date(byAdding: .month, value: i, to: todo.dueDate) {
-                                    self.scheduleSingleNotification(date: iMonthsLater, title: todo.task, body: todo.description)
+                                    self.scheduleSingleReminder(date: iMonthsLater, title: todo.task, body: todo.description)
                                 }
                             }
                         }
@@ -161,11 +197,15 @@ struct NotificationUtility{
                 
             }
             for reminder in todo.reminders {
-                self.scheduleSingleNotification(date: reminder.date, title: todo.task, body: todo.description)
+                self.scheduleSingleReminder(date: reminder.date, title: todo.task, body: todo.description)
             }
         }
     }
     
+    ///  Takes a list of todos and calculates the timeline for the widget for today and the next 7 days. It encodes the timeline as JSON and saves it using UserDefaults and AppGroups so that the WidgetTimeLineProvider can decode it again.
+    /// - Parameters:
+    ///   - tintColor: the accent color that got selected by the user
+    ///   - todoList: list of all todos which should be displayed in the widget
     static func provideWidgetTimeline(tintColor: String, todoList: [(String, Todo)]) {
         
       var dailyTodosTuple : [(Date, [SimpleTodo])] = []
@@ -228,7 +268,9 @@ struct NotificationUtility{
     }
     
     
-    static func schedule(tintColor : String) async {
+    /// Schedules reminders and updates the timeline of the widget. Uses directly the Firestore to retrieve all relevant todos.
+    /// - Parameter tintColor: the accent color that got selected by the user
+    static func scheduleRemindersAndWidgetTimeline(tintColor : String) async {
         
         let db = Firestore.firestore()
         let auth = Auth.auth()
@@ -257,7 +299,7 @@ struct NotificationUtility{
                     if settings.authorizationStatus == .authorized {
                         // The user has granted permission to send notifications
                         print("Has permissions to send notifications")
-                        self.scheduleNotifications(todoList: todoList)
+                        self.scheduleReminders(todoList: todoList)
                     }
                     
                     else {
@@ -275,25 +317,9 @@ struct NotificationUtility{
         }
         
         
-        // recurring
-        // dueDate
-        //
-        
     }
     
-    public static func getRemindMeBeforeDueDateDescription(minutes : Int) -> String {
-        let _minutes = minutes > 0 ? minutes : -minutes
-        
-        if (_minutes < 60) {
-            return "\(_minutes) \(_minutes > 1 ? "minutes" : "minute")"
-        }
-        if (minutes < 1440) {
-            return "\(_minutes / 60) \((_minutes / 60) > 1 ? "hours" : "hour")"
-        }
-
-        return "\(_minutes / 1440) \((_minutes / 1440) > 1 ? "days" : "day")"
-        
-    }
+   
     
 }
 
