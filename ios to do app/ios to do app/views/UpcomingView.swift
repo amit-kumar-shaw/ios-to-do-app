@@ -15,30 +15,52 @@ struct UpcomingView: View {
     @Environment(\.tintColor) var tintColor
 
     var body: some View {
-        List {
+        VStack {
+           List {
             Section{
                 header
             }
             
-            Section{
-                ForEach($viewModel.todoList, id: \.0) { $item in
-                    HStack {
-                        Checkbox(isChecked: $item.1.isCompleted) {
-                            viewModel.saveTodo(entityId: item.0, todo: item.1)
-                            viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
-                        }
-                        NavigationLink(destination: TodoDetail(entityId: item.0)) {
-                            HStack {
-                                Text(item.1.task)
-                                Spacer()
-                            }
-                        }
+               Section{
+                   ForEach($viewModel.todoList, id: \.0) { $item in
+                       HStack {
+                           Checkbox(isChecked: $item.1.isCompleted) {
+                               viewModel.saveTodo(entityId: item.0, todo: item.1)
+                           }
+                           NavigationLink(destination: TodoDetail(entityId: item.0)) {
+                               HStack {
+                                   Text(item.1.task)
+                                   Spacer()
+                               }
+                           }
+                       }
+                   }
+                   .onDelete { indexSet in
+                       viewModel.todoList.remove(atOffsets: indexSet)
+                   }
+               }
+            }.listStyle(.insetGrouped)
+            
+            HStack {
+                Picker(selection: $viewModel.filter, label: Text("Filter"), content: {
+                    ForEach(FilterType.allCases, id: \.self) { v in
+                        Text(v.localizedName).tag(v)
                     }
-                }
-                .onDelete { indexSet in
-                    viewModel.todoList.remove(atOffsets: indexSet)
+                })
+                NavigationLink {
+                    CreateTodoView()
+                } label: {
+                    Text("Add").padding()
                 }
             }
+            .padding()
+        }.alert("Error: \(self.viewModel.error?.localizedDescription ?? "")", isPresented: $viewModel.showAlert) {
+            Button("Ok", role: .cancel){
+                self.viewModel.showAlert = false;
+                self.viewModel.error = nil
+            }
+        }.toolbar {
+            EditButton()
         }.navigationTitle("Upcoming").onAppear {
             UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(tintColor)
             UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
@@ -68,3 +90,4 @@ struct UpcomingView_Previews: PreviewProvider {
         UpcomingView()
     }
 }
+
