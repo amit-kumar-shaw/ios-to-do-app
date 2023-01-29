@@ -34,7 +34,7 @@ struct SearchableView: View {
     // @State private var projectColor = Color.white
     @State private var showModal = false
     @State private var isSortByLanguage = false
-    @State private var languageProjectDict = [String:(String,Binding<Project?>)]()
+    @State private var languageProjectDict = [String:[(String,Binding<Project?>)]]()
     @Binding public var searchText : String
     
     @ObservedObject var viewModel = ProjectViewModel()
@@ -50,15 +50,6 @@ struct SearchableView: View {
         
     }
     
-    func saveLanguageDict(){
-        
-        
-        for item in $viewModel.projects {
-            
-            languageProjectDict[item.1.wrappedValue?.selectedLanguage.name ?? "None"] = (item.0.wrappedValue,item.1)
-        }
-        
-    }
     
     fileprivate func upcomingList() -> some View {
         return HStack {
@@ -102,10 +93,10 @@ struct SearchableView: View {
     @ViewBuilder var body: some View {
         
         
-        
         List {
             if (!isSearching) {
-                //Home View Lists
+                
+                
                 upcomingList()
                 
                 todayList()
@@ -117,6 +108,7 @@ struct SearchableView: View {
                 if self.isSortByLanguage {
                     
                     sortByLanguage()
+                   
                     
                     
                 } else {
@@ -191,10 +183,10 @@ struct SearchableView: View {
         .headerProminence(.standard)
     }
     
-//    private func performSearch() {
-//        // TODO: implement global search functionality
-//    }
-//
+    //    private func performSearch() {
+    //        // TODO: implement global search functionality
+    //    }
+    //
     private var addButton: some View {
         
         @State var projectForBinding :Project? = Project()
@@ -208,10 +200,37 @@ struct SearchableView: View {
         )
     }
     
+    func saveLanguageDict(){
+        
+        //  var projectArray = [(String : Binding<Project?>)]
+        
+        for item in $viewModel.projects {
+            
+            let key = item.1.wrappedValue?.selectedLanguage.name ?? "None"
+            let value = (item.0.wrappedValue,item.1)
+            
+            
+            if var projects = languageProjectDict[key] {
+                projects.append(value)
+                languageProjectDict[key] = projects
+            } else {
+                languageProjectDict[key] = [value]
+            }
+            
+        }
+        
+    }
+    
     private var sortByLanguageButton : some View {
         
+       // var isEmpty =  saveLanguageDict.count == 0
         return AnyView(
-            Button(action: {saveLanguageDict()
+            Button(action: {
+                
+                if languageProjectDict.isEmpty
+                {   saveLanguageDict()
+                    
+                }
                 isSortByLanguage = !isSortByLanguage }) {
                     Label("SortByLanguage", systemImage: "tray.fill")
                     
@@ -221,95 +240,41 @@ struct SearchableView: View {
     }
     
     private func sortByLanguage() -> some View {
-        
-        var languageListsViews =  [Section<Text, NavigationLink<ProjectListRow, ProjectListView>, EmptyView>]()
-        
-        languageProjectDict.forEach{ language, value in
-            
+
+        var languageListsViews = [AnyView]() // [Section<Any, Any, Any>]
+
+        languageProjectDict.forEach{ language, values in
+
             let section = Section(header: Text(language)){
-                
-                NavigationLink(destination: ProjectListView(projectId: value.0) ){
-                    
-                    //show a project list
-                    ProjectListRow(project: (value.0, value.1))
-                    
+
+                ForEach(values, id:\.0){ value in
+
+                    NavigationLink(destination: ProjectListView(projectId: value.0) ){
+
+                        //show a project list
+                        ProjectListRow(project: (value.0, value.1))
+
+                    }
                 }
             }
+
             
-            
-            languageListsViews.append(section)
-            
-            
+            languageListsViews.append(AnyView(section))
+
         }
         
+       
+
         return Group {
-            
+
             ForEach(0...languageListsViews.count-1,id: \.self) { index in
                 languageListsViews[index]
             }
-            
+
         }
     }
-    
-    
-    
-    
 }
 
-struct ProjectListRow: View {
-    
-    
-    @Binding var project : Project?
-    @State var projectId :String
-    @State var showModal = false
-    
-    @ObservedObject var viewModel = ProjectViewModel()
-    
-    init(project: (String, Binding<Project?>)){
-        
-        self._project = project.1
-        self.projectId = project.0
-        
-    }
-    
-    
-    var body: some View {
-        HStack {
-            
-            Circle().frame(width: 12, height: 12)
-                .overlay(
-                    Circle().foregroundColor(Color(hex: project!.colorHexString ?? "#FFFFFF"))
-                        .frame(width: 10, height: 10)
-                )
-            
-            Text(project!.projectName ?? "Untitled")
-            Text(project!.selectedLanguage.name)
-                .foregroundColor(.gray)
-        }
-        .swipeActions(){
-            
-            //Delete Projet Button
-            Button (action: {
-                showModal = true }){
-                    Label("info", systemImage: "info.circle")
-                }.tint(.indigo)
-            
-            //Edit Mode Button
-            Button (action: {
-                viewModel.deleteProject(projectId : projectId)
-            }){
-                    Label("delete", systemImage: "minus.circle")
-                }.tint(.red)
-            
-        }.sheet(isPresented: $showModal) {
-        
-            CreateProjectView(project: (self.projectId, self.$project), showModal: $showModal)
-            
-        }
-        
-    }
-    
-}
 
 
 struct HomeView_Previews: PreviewProvider {
