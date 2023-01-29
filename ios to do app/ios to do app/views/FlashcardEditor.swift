@@ -9,20 +9,13 @@ import SwiftUI
 struct FlashcardEditor: View {
     @ObservedObject private var flashcard: Flashcard
     @ObservedObject var viewModel: TodoEditorViewModel
-//    var onComplete: (Flashcard) -> Void
-    
-//    init(flashcard: Flashcard?, onComplete: @escaping (Flashcard) -> Void) {
-//        self.flashcard = flashcard ?? Flashcard()
-//        self.onComplete = onComplete
-//    }
+
     init (viewModel: TodoEditorViewModel) {
         self.flashcard = Flashcard()
         self.viewModel = viewModel
     }
     func saveFlashcard() {
-//        onComplete(flashcard)
         viewModel.addFlashcard(flashcard: flashcard)
-        viewModel.save()
         viewModel.toggleFlashcardEditor()
     }
     var body: some View {

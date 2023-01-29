@@ -2,9 +2,9 @@ import SwiftUI
 
 struct FlashcardView: View {
     @Environment(\.tintColor) var tintColor
+    @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var viewModel: TodoEditorViewModel
-    @State var flashcards: [Flashcard]
     @State private var currentCard: Int = 0
     @State private var isFlipped: Bool = false
     @State var flashcardRotation = 0.0
@@ -13,22 +13,22 @@ struct FlashcardView: View {
     
     init (viewModel: TodoEditorViewModel) {
         self.viewModel = viewModel
-        self.flashcards = viewModel.flashcards
     }
     
     var body: some View {
         VStack{
             VStack {
-                if flashcards.isEmpty {
+                if viewModel.flashcards.isEmpty {
                     Text("No flashcards yet")
                 } else {
-                    Text(isFlipped ? flashcards[currentCard].back : flashcards[currentCard].front)
+                    Text(isFlipped ? viewModel.flashcards[currentCard].back : viewModel.flashcards[currentCard].front)
                 }
             }
+            .bold()
             .rotation3DEffect(.degrees(contentRotation), axis: (x: 0, y: 1, z: 0))
             .frame(width: 200, height: 300)
             .padding()
-            .background(isFlipped ? tintColor : .white)
+            .background(colorScheme == .dark ? (isFlipped ? tintColor : .black) : (isFlipped ? tintColor : .white))
             .foregroundColor(isFlipped ? .white : tintColor)
             .cornerRadius(16)
             .overlay(
@@ -48,26 +48,30 @@ struct FlashcardView: View {
                         isFlipped = false
                         self.currentCard -= 1
                     }
-                }
+                }.disabled(self.currentCard == 0)
                 Spacer()
                 Button("Flip") {
                     flipFlashcard()
                 }
                 Spacer()
                 Button("Next") {
-                    if self.currentCard < self.flashcards.count - 1 {
+                    if self.currentCard < self.viewModel.flashcards.count - 1 {
                         isFlipped = false
                         self.currentCard += 1
                     }
-                }
+                }.disabled(self.currentCard == self.viewModel.flashcards.count - 1)
             }.padding()
         }.navigationBarTitle("Flashcards")
                         .toolbar {
+                            NavigationLink(destination: FlashcardListView(viewModel: viewModel)){
+                                Text("Edit")
+                            }
                             Button(action: viewModel.toggleFlashcardEditor) {
-                                Text("New Flashcard")
+                                Text("Add")
                             }.sheet(isPresented: $viewModel.showFlashcardEditor) {
                                 FlashcardEditor(viewModel: viewModel)
                             }
+                            
                         }
 
     }

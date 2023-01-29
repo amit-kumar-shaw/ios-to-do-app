@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		286C014629848856004D2033 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 286C014529848856004D2033 /* TagView.swift */; };
+		286C014829871671004D2033 /* FlashcardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 286C014729871671004D2033 /* FlashcardListView.swift */; };
 		28B9F45429819A46008C9150 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F45329819A46008C9150 /* Tag.swift */; };
 		28B9F45629819D14008C9150 /* TagViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F45529819D14008C9150 /* TagViewModel.swift */; };
 		28B9F4582981A122008C9150 /* TagsInTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F4572981A122008C9150 /* TagsInTodoView.swift */; };
@@ -124,6 +125,7 @@
 
 /* Begin PBXFileReference section */
 		286C014529848856004D2033 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		286C014729871671004D2033 /* FlashcardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardListView.swift; sourceTree = "<group>"; };
 		28B9F45329819A46008C9150 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		28B9F45529819D14008C9150 /* TagViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewModel.swift; sourceTree = "<group>"; };
 		28B9F4572981A122008C9150 /* TagsInTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsInTodoView.swift; sourceTree = "<group>"; };
@@ -404,6 +406,7 @@
 				7C3B57992981B657000815CD /* SearchView.swift */,
 				286C014529848856004D2033 /* TagView.swift */,
 				CD15C6D4298661C70020DF71 /* ProjectList.swift */,
+				286C014729871671004D2033 /* FlashcardListView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -666,6 +669,7 @@
 				7C6826692976F850002DF5C6 /* TodoList.swift in Sources */,
 				7C3B5792298159C0000815CD /* Checkbox.swift in Sources */,
 				CE890B982975900300233D7A /* FlashcardView.swift in Sources */,
+				286C014829871671004D2033 /* FlashcardListView.swift in Sources */,
 				7CE7CFEB2964DD58008F0702 /* HomeView.swift in Sources */,
 				50CCAFCC297ADF7900D5F2AA /* NotificationUtility.swift in Sources */,
 				7C68265D2975E43F002DF5C6 /* AuthenticationViewModel.swift in Sources */,
