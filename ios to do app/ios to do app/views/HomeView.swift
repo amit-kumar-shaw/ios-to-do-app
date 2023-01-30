@@ -63,7 +63,7 @@ struct SearchableView: View {
         return HStack {
             NavigationLink(destination: UpcomingView(), label: {
                 Image(systemName: "hourglass.circle.fill").foregroundColor(tintColor)
-                Text("Upcoming").foregroundColor(tintColor)
+                Text("Upcoming")
             })
         }
     }
@@ -77,7 +77,7 @@ struct SearchableView: View {
                            isActive: $showTodayView,
                            label: {
                 Image(systemName: "calendar.badge.exclamationmark").foregroundColor(tintColor)
-                Text("Today").foregroundColor(tintColor)
+                Text("Today")
             })
         }.onOpenURL{ url in
             guard url.scheme == "widget-deeplink" else { return }
@@ -92,7 +92,7 @@ struct SearchableView: View {
             NavigationLink(destination: TagView(),
                            label: {
                 Image(systemName: "number.square.fill").foregroundColor(tintColor)
-                Text("Tags").foregroundColor(tintColor)
+                Text("Tags")
             })
         }
     }
@@ -174,7 +174,7 @@ struct SearchableView: View {
 
    
     
-    /// Creates a button that opens a modal view to add a new project.
+    ///Creates a button that opens a modal view to add a new project.
     private var addButton: some View {
         return AnyView(
             Button(action: { self.showModal = true }) {
@@ -185,7 +185,16 @@ struct SearchableView: View {
         )
     }
     
-    /// Saves language dictionary for projects
+    ///Displays a button that allows the user to access and change app settings such as color scheme.
+    fileprivate var settingButton : some View {
+        return HStack {
+            NavigationLink(destination: SettingsView(), label: {
+                Image(systemName: "gearshape").foregroundColor(tintColor)
+                
+            })
+        }
+    }
+    
     ///Sorts and saves the projects by their selected language in a dictionary called languageProjectDict.
     ///The dictionary uses the language name as the key and a tuple of project ID and project information as the value.
     func saveLanguageDict(){
