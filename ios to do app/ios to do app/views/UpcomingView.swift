@@ -10,7 +10,7 @@ import SwiftUI
 
 
 
-/// Upcomingview
+/// The UpcomingView displays all upcoming todos for the current week, grouped by day of the week.
 struct UpcomingView: View {
     @ObservedObject var viewModel = UpcomingViewModel()
     /// Color from he color setting
