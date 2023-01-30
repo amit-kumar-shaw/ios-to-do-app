@@ -12,7 +12,7 @@ import SwiftUI
 ///
 ///intended to be showed as a sheet
 struct SelectPriorityView: View {
-    
+    @Environment(\.dismiss) var dismiss
     ///Selected Priority binding
     @State var priority: Priority
     
@@ -30,6 +30,7 @@ struct SelectPriorityView: View {
                 }
             }.pickerStyle(.wheel)
             Button("Save"){
+                dismiss()
                 onSelect(priority)
             }.padding()
         }
