@@ -34,13 +34,11 @@ struct TodayView: View {
                     }else {
                         ForEach($viewModel.todoList, id: \.0, editActions: .delete){
                             $item in
-                            TodoRow(item: $item, onToggleCheckbox: {checked in
+                            TodoRow(item: $item).onChange(of: item.1.isCompleted) { newValue in
                                 viewModel.saveTodo(entityId: item.0, todo: item.1)
                                 viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
-                            }).onChange(of: item.1.isCompleted) { newValue in
-                                
                             }
-                        }.onDelete(perform: viewModel.deleteSelection)
+                        }
                     }
                 }
             }.listStyle(.insetGrouped)

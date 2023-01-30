@@ -46,7 +46,7 @@ struct ProjectListRow: View {
             Circle()
                 .foregroundColor(Color(hex: project!.colorHexString ?? "#FFFFFF"))
                 .frame(width: 12, height: 12)
-            Text(project!.projectName ?? "Untitled")
+            Text(project!.projectName ?? "Untitled").foregroundColor(tintColor)
             Text(project!.selectedLanguage.name)
                 .foregroundColor(.gray)
         }

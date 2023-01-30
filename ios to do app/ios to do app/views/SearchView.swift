@@ -39,12 +39,7 @@ struct SearchView: View {
             ForEach($todoViewModel.todoList, id: \.0, editActions: .all){
                 $item in
                 if item.1.task.range(of: searchText, options: .caseInsensitive) != nil {
-                        TodoRow(item: $item, onToggleCheckbox: {checked in
-                            todoViewModel.saveTodo(entityId: item.0, todo: item.1)
-                            todoViewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
-                        }).onChange(of: item.1.isCompleted) { newValue in
-                           
-                        }
+                        TodoRow(item: $item)
                 }
             }
         }

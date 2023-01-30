@@ -15,7 +15,6 @@ struct TodoRow: View {
     @Environment(\.editMode) var editMode
     
     @Binding var item: (String, Todo)
-    public var onToggleCheckbox: (Bool) -> Void
     
     var body: some View {
         
@@ -28,7 +27,7 @@ struct TodoRow: View {
             
             HStack{
                 Checkbox(isChecked: $item.1.isCompleted){
-                    self.onToggleCheckbox(item.1.isCompleted)
+                    
                 }
                 NavigationLink(destination: TodoDetail(entityId: item.0)){
                     HStack {
@@ -55,9 +54,7 @@ struct TodoRow_Mock: View{
 
     
     var body: some View{
-        TodoRow(item: $item, onToggleCheckbox: {checked in
-            
-        })
+        TodoRow(item: $item)
     }
 }
 

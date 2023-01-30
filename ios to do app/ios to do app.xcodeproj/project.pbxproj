@@ -596,6 +596,7 @@
 			);
 			mainGroup = 7CE7CFDC2964DD58008F0702;
 			packageReferences = (
+				40B1662F296EC4100071EC12 /* XCRemoteSwiftPackageReference "swiftUI-slide-over-card" */,
 				7C6826472975CA58002DF5C6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 7CE7CFE62964DD58008F0702 /* Products */;
@@ -1134,6 +1135,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		40B1662F296EC4100071EC12 /* XCRemoteSwiftPackageReference "swiftUI-slide-over-card" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/moifort/swiftUI-slide-over-card.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		7C6826472975CA58002DF5C6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
