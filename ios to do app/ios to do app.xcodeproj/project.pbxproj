@@ -61,6 +61,7 @@
 		7C9F1BA2298749A400328560 /* SelectPriorityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9F1BA1298749A400328560 /* SelectPriorityView.swift */; };
 		7C9F1BA4298749B800328560 /* SelectDueDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9F1BA3298749B800328560 /* SelectDueDateView.swift */; };
 		7C9F1BA52987733300328560 /* CreateTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D02A2972C70F008F0702 /* CreateTodoView.swift */; };
+		7C9F1BA72988625700328560 /* NotificationNavigationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9F1BA62988625700328560 /* NotificationNavigationManager.swift */; };
 		7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7CFE82964DD58008F0702 /* ios_to_do_appApp.swift */; };
 		7CE7CFEB2964DD58008F0702 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7CFEA2964DD58008F0702 /* HomeView.swift */; };
 		7CE7CFED2964DD5A008F0702 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CE7CFEC2964DD5A008F0702 /* Assets.xcassets */; };
@@ -179,6 +180,7 @@
 		7C9F1B9F2987445100328560 /* VerticalLabelButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalLabelButton.swift; sourceTree = "<group>"; };
 		7C9F1BA1298749A400328560 /* SelectPriorityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPriorityView.swift; sourceTree = "<group>"; };
 		7C9F1BA3298749B800328560 /* SelectDueDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDueDateView.swift; sourceTree = "<group>"; };
+		7C9F1BA62988625700328560 /* NotificationNavigationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNavigationManager.swift; sourceTree = "<group>"; };
 		7CE7CFE52964DD58008F0702 /* ios to do app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios to do app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE7CFE82964DD58008F0702 /* ios_to_do_appApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ios_to_do_appApp.swift; sourceTree = "<group>"; };
 		7CE7CFEA2964DD58008F0702 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				7C3B579529817E56000815CD /* UpcomingViewModel.swift */,
 				28B9F45529819D14008C9150 /* TagViewModel.swift */,
 				501E1C8E2984740500DC2D4E /* GenericTodoViewModel.swift */,
+				7C9F1BA62988625700328560 /* NotificationNavigationManager.swift */,
 			);
 			path = viewModels;
 			sourceTree = "<group>";
@@ -674,6 +677,7 @@
 				7C3B578229802B5E000815CD /* ColorScheme.swift in Sources */,
 				7CE7CFF52964DD5A008F0702 /* ios_to_do_app.xcdatamodeld in Sources */,
 				CD646DB3298134C20061A380 /* CreateProjectView.swift in Sources */,
+				7C9F1BA72988625700328560 /* NotificationNavigationManager.swift in Sources */,
 				28B9F45A2981A6D1008C9150 /* CreateTagView.swift in Sources */,
 				400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */,
 				7C3B578429802BC7000815CD /* EnvironmentValues.swift in Sources */,

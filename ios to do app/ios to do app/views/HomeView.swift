@@ -29,6 +29,8 @@ struct HomeView: View {
 struct SearchableView: View {
     
     @Environment(\.tintColor) var tintColor
+    @EnvironmentObject var notificationsNavManager: NotificationNavigationManager
+    
     
     @State private var offset: CGFloat = 0
     @State private var searchTerm = ""
@@ -60,13 +62,14 @@ struct SearchableView: View {
         return HStack {
             NavigationLink(destination: UpcomingView(), label: {
                 Image(systemName: "hourglass.circle.fill").foregroundColor(tintColor)
-                Text("Upcoming").foregroundColor(tintColor)
+                Text("Upcoming")
             })
         }
     }
     
     fileprivate func todayList() -> some View{
         return HStack {
+
             
             NavigationLink(destination: TodayView(),
                            isActive: $showTodayView,
@@ -77,6 +80,12 @@ struct SearchableView: View {
         }.onOpenURL{ url in
             guard url.scheme == "widget-deeplink" else { return }
             showTodayView = true
+        }.onReceive(notificationsNavManager.$pageToNavigateTo) { v in
+            if(v == "today"){
+                showTodayView = true
+                notificationsNavManager.pageToNavigateTo = nil
+            }
+            
         }
     }
     
