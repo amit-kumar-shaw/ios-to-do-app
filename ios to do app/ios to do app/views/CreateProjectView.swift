@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CreateProjectView: View {
         
+    @Environment(\.tintColor) var tintColor
     
     @State var projectInfo : ProjectInfo = ProjectInfo()
-    
-    ///For editing 
+
     @Binding var selectedProject : Project?
     @Binding var showModal: Bool
     @ObservedObject var viewModel = ProjectViewModel()
@@ -40,11 +40,12 @@ struct CreateProjectView: View {
     
     
     
-    fileprivate func getProjectNameView() -> some View {
+    fileprivate func selectProjectNameView() -> some View {
         return VStack{
             Text("Project Name")
                 .bold()
                 .font(.title)
+                .foregroundColor(tintColor)
             
             
             TextField("Project Name", text: self.$projectInfo.projectName)
@@ -61,7 +62,7 @@ struct CreateProjectView: View {
     }
     
     fileprivate func selectLanguageView() -> some View {
-        return Picker(selection: self.$projectInfo.selectedLanguage, label: Text("Language")) {
+        return Picker(selection: self.$projectInfo.selectedLanguage, label: Text("Language").foregroundColor(tintColor)) {
             LanguageList()
         }.onReceive([self.projectInfo.selectedLanguage].publisher.first()) { (value) in
             self.projectInfo.selectedLanguage = value
@@ -71,7 +72,7 @@ struct CreateProjectView: View {
     
     fileprivate func selectColorView() -> some View {
         return VStack{
-            ColorPicker("Color", selection: self.$projectInfo.projectColor)
+            ColorPicker(selection: self.$projectInfo.projectColor,label:{ Text("Color").foregroundColor(tintColor)})
             
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(colorPalette, id: \.self){ colorHex in
@@ -125,7 +126,7 @@ struct CreateProjectView: View {
             
             Form{
                 Section{
-                    getProjectNameView()
+                    selectProjectNameView()
                 }
                
                 Section{

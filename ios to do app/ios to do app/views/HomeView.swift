@@ -55,8 +55,8 @@ struct SearchableView: View {
     fileprivate func upcomingList() -> some View {
         return HStack {
             NavigationLink(destination: UpcomingView(), label: {
-                Image(systemName: "hourglass.circle.fill")
-                Text("Upcoming")
+                Image(systemName: "hourglass.circle.fill").foregroundColor(tintColor)
+                Text("Upcoming").foregroundColor(tintColor)
             })
         }
     }
@@ -67,8 +67,8 @@ struct SearchableView: View {
             NavigationLink(destination: TodayView(),
                            isActive: $showTodayView,
                            label: {
-                Image(systemName: "calendar.badge.exclamationmark")
-                Text("Today")
+                Image(systemName: "calendar.badge.exclamationmark").foregroundColor(tintColor)
+                Text("Today").foregroundColor(tintColor)
             })
         }.onOpenURL{ url in
             guard url.scheme == "widget-deeplink" else { return }
@@ -82,8 +82,8 @@ struct SearchableView: View {
         return HStack {
             NavigationLink(destination: TagView(),
                            label: {
-                Image(systemName: "number.square.fill")
-                Text("Tags")
+                Image(systemName: "number.square.fill").foregroundColor(tintColor)
+                Text("Tags").foregroundColor(tintColor)
             })
         }
     }
@@ -91,8 +91,8 @@ struct SearchableView: View {
     fileprivate func settingList() -> some View {
         return HStack {
             NavigationLink(destination: SettingsView(), label: {
-                Image(systemName: "gearshape")
-                Text("Settings")
+                Image(systemName: "gearshape").foregroundColor(tintColor)
+                Text("Settings").foregroundColor(tintColor)
             })
         }
     }
@@ -123,7 +123,7 @@ struct SearchableView: View {
                         } else {
                             projectList()
                         } }header: {
-                            Text("Projects").foregroundColor(.accentColor).font(.headline)
+                            Text("Projects").foregroundColor(tintColor).font(.headline)
                         }
                     
                 }
