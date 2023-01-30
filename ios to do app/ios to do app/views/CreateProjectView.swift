@@ -42,7 +42,7 @@ struct CreateProjectView: View {
     
     fileprivate func selectProjectNameView() -> some View {
         return VStack{
-            Text("Project Name")
+            Text("Create Project")
                 .bold()
                 .font(.title)
                 .foregroundColor(tintColor)
