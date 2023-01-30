@@ -54,13 +54,11 @@ struct TodoDetail: View {
                     
                     /// show flashcards and a button to add flashcards
                     Section{
-                        if !$viewModel.todo.flashcards.isEmpty {
-                            NavigationLink(destination: FlashcardView(viewModel: viewModel)){
-                                HStack {
-                                    Text("All Flashcards")
-                                    Spacer()
-                                    Text("\(viewModel.flashcards.count) Cards")
-                                }
+                        NavigationLink(destination: FlashcardView(viewModel: viewModel)){
+                            HStack {
+                                Text("All Flashcards")
+                                Spacer()
+                                Text("\(viewModel.flashcards.count) Cards")
                             }
                         }
                         Button(action: viewModel.toggleFlashcardEditor) {

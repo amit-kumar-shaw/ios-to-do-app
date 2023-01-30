@@ -56,18 +56,19 @@ struct FlashcardView: View {
                         isFlipped = false
                         self.currentCard -= 1
                     }
-                }.disabled(self.currentCard == 0)
+                }.disabled(self.currentCard == 0 || viewModel.flashcards.isEmpty)
                 Spacer()
                 Button("Flip") {
                     flipFlashcard()
                 }
+                .disabled(viewModel.flashcards.isEmpty)
                 Spacer()
                 Button("Next") {
-                    if self.currentCard < self.viewModel.flashcards.count - 1 {
+                    if self.currentCard < viewModel.flashcards.count - 1 {
                         isFlipped = false
                         self.currentCard += 1
                     }
-                }.disabled(self.currentCard == self.viewModel.flashcards.count - 1)
+                }.disabled(self.currentCard == viewModel.flashcards.count - 1 || viewModel.flashcards.isEmpty)
             }.padding()
         }.navigationBarTitle("Flashcards")
                         .toolbar {
