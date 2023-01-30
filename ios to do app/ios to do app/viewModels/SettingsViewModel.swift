@@ -21,7 +21,7 @@ class SettingsViewModel: ObservableObject {
     
 
     init(){
-        RemindersWidgetUtility.hasPermissions { hasPermission in
+        RemindersWidgetAppIconUtil.hasPermissions { hasPermission in
             self.showEnableRemindersButton = !hasPermission
         }
     }
@@ -38,10 +38,10 @@ class SettingsViewModel: ObservableObject {
     
     ///request permision for push notification
     func requestNotificationsPermission(){
-        if (RemindersWidgetUtility.didAskForNotificationPermissions()) {
-            RemindersWidgetUtility.openSettings()
+        if (RemindersWidgetAppIconUtil.didAskForNotificationPermissions()) {
+            RemindersWidgetAppIconUtil.openSettings()
         } else {
-            RemindersWidgetUtility.askForNotificationPermissions()
+            RemindersWidgetAppIconUtil.askForNotificationPermissions()
         }
     }
     

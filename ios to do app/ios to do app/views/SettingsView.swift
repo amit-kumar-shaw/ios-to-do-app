@@ -20,7 +20,7 @@ struct SettingsView: View {
     
     func setAppIcon(tintColor: String, themePrefix: String) {
         Task {
-            await RemindersWidgetUtility.setAppIcon(tintColor: tintColor, themePrefix: themePrefix)
+            await RemindersWidgetAppIconUtil.setAppIcon(tintColor: tintColor, themePrefix: themePrefix)
         }
     }
     
@@ -35,10 +35,7 @@ struct SettingsView: View {
                             Text(tintColor.name).foregroundColor(tintColor.color)
                         }
                     }.onChange(of: $tintColorHex.wrappedValue, perform: { newState in
-                        print(tintColorHex)
                         setAppIcon(tintColor: tintColorHex, themePrefix:  colorScheme == .dark ? "Dark" : "Light")
-                        //RemindersWidgetUtility.setAppIcon(tintColor: tintColorHex, themePrefix: colorScheme == .dark ? "Dark" : "Light")
-       
                     })
                     
                 }

@@ -20,13 +20,13 @@ struct ios_to_do_appApp: App {
     
     func schedule(tintColor: String) {
         Task {
-            await RemindersWidgetUtility.scheduleRemindersAndWidgetTimeline(tintColor: tintColor)
+            await RemindersWidgetAppIconUtil.scheduleRemindersAndWidgetTimeline(tintColor: tintColor)
         }
     }
     
     func setAppIcon(tintColor: String) {
         Task {
-            await RemindersWidgetUtility.setAppIcon(tintColor: tintColor, themePrefix: UITraitCollection.current.userInterfaceStyle.rawValue == UIUserInterfaceStyle(.dark).rawValue ? "Dark" : "Light")
+            await RemindersWidgetAppIconUtil.setAppIcon(tintColor: tintColor, themePrefix: UITraitCollection.current.userInterfaceStyle.rawValue == UIUserInterfaceStyle(.dark).rawValue ? "Dark" : "Light")
         }
     }
     
@@ -42,8 +42,8 @@ struct ios_to_do_appApp: App {
                     schedule(tintColor: tintColorHex)
                 }
                 .onAppear {
-                    RemindersWidgetUtility.hasPermissions(completion: { hasPermissions in
-                        if !hasPermissions, !RemindersWidgetUtility.getDontShowRemindersModal() {
+                    RemindersWidgetAppIconUtil.hasPermissions(completion: { hasPermissions in
+                        if !hasPermissions, !RemindersWidgetAppIconUtil.getDontShowRemindersModal() {
                             self.showEnableRemindersModal = true
                         }
                     })

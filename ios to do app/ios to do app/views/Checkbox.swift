@@ -16,7 +16,7 @@ struct Checkbox: View {
     
     func setAppIcon(tintColor: String, themePrefix: String) {
         Task {
-            await RemindersWidgetUtility.setAppIcon(tintColor: tintColor, themePrefix: themePrefix)
+            await RemindersWidgetAppIconUtil.setAppIcon(tintColor: tintColor, themePrefix: themePrefix)
         }
     }
     

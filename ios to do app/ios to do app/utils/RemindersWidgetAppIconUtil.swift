@@ -1,5 +1,5 @@
 //
-//  RemindersWidgetUtility.swift
+//  RemindersWidgetAppIconUtil.swift
 //  ios to do app
 //
 //  Created by Max on 20.01.23.
@@ -13,7 +13,9 @@ import NotificationCenter
 import Foundation
 import WidgetKit
 
-struct RemindersWidgetUtility{
+
+/// This struct offers a set of functionalities related to scheduling notifications, providing data for the timeline of the widget, and changing the app icon dynamically.
+struct RemindersWidgetAppIconUtil{
     
     /// Opens the app settings page of the app.
     public static func openSettings() {
@@ -26,7 +28,7 @@ struct RemindersWidgetUtility{
     /// Increments the count of times the reminder modal has appeared.
     public static func incrementReminderModalAppearanceCount() {
         let defaults = UserDefaults.standard
-        var count = RemindersWidgetUtility.getReminderModalAppearanceCount()
+        var count = RemindersWidgetAppIconUtil.getReminderModalAppearanceCount()
         count += 1
 
         defaults.set(count, forKey: "reminderModalAppearanceCount")
@@ -113,6 +115,37 @@ struct RemindersWidgetUtility{
 
         return "\(_minutes / 1440) \((_minutes / 1440) > 1 ? "days" : "day")"
         
+    }
+    
+    /// Retrieves the list of to-dos and returns it as an array of tuples containing the to-do-id and the to-do object. The result is passed to the completion closure as an argument.
+    /// - Parameter completion: A closure that takes in an array of tuples, each containing a String as the to-do id and a Todo object
+    static func getTodoList(completion: @escaping ([(String, Todo)]) -> Void) {
+        let db = Firestore.firestore()
+        let auth = Auth.auth()
+
+        guard let currentUserId = auth.currentUser?.uid else {
+            completion([])
+            return
+        }
+
+        let userTodosQuery = db.collection("todos").whereField("userId", in: [currentUserId])
+        userTodosQuery.addSnapshotListener { querySnapshot, error in
+            if error != nil {
+                completion([])
+                return
+            }
+
+            do {
+                let docs = try querySnapshot?.documents.map({ docSnapshot in
+                    return (docSnapshot.documentID, try docSnapshot.data(as: Todo.self))
+                })
+                let todoList: [(String, Todo)] = docs!
+
+                completion(todoList)
+            } catch {
+                completion([])
+            }
+        }
     }
     
     //// Schedules a single reminder with a given date, title, and body
@@ -202,102 +235,11 @@ struct RemindersWidgetUtility{
         }
     }
     
-    static func setAppIcon(tintColor: String, themePrefix: String) async {
-        
-        
-        
-        getTodoList(completion: {todoList in
-            var isDayCompleted = true
-            
-            for (_, todo) in todoList {
-                if todo.dueDate >= Calendar.current.startOfDay(for:  Date()) && todo.dueDate <= Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for:  Date()))! {
-                    if (!todo.isCompleted) {
-                        isDayCompleted = false
-                        break
-                    }
-                }
-            }
-            
-            self._setAppIcon(tintColor: tintColor, isTodayNotCompleted: !isDayCompleted, themePrefix: themePrefix)
-            
-        })
-        
-       
-    }
-    
-    static func _setAppIcon(tintColor: String, isTodayNotCompleted : Bool, themePrefix : String) {
-        
-        var iconSuffix = "BlueUntickedIcon"
-        
-        if tintColor.lowercased() == "#007aff" {
-            // blue
-            if (isTodayNotCompleted) {
-                iconSuffix = "BlueUntickedIcon"
-            } else {
-                iconSuffix = "BlueTickedIcon"
-            }
-           
-        }
-        if tintColor.lowercased() == "#18eb09" {
-            // green
-            if (isTodayNotCompleted) {
-                iconSuffix = "GreenUntickedIcon"
-            } else {
-                iconSuffix = "GreenTickedIcon"
-            }
-        }
-        if tintColor.lowercased() == "#e802e0" {
-            // "pink"
-            if (isTodayNotCompleted) {
-                iconSuffix = "PinkUntickedIcon"
-            } else {
-                iconSuffix = "PinkTickedIcon"
-            }
-        }
-        if tintColor.lowercased() == "#eb7a09" {
-            // orange
-            if (isTodayNotCompleted) {
-                iconSuffix = "OrangeUntickedIcon"
-            } else {
-                iconSuffix = "OrangeTickedIcon"
-            }
-        }
-        
-        let iconName : String = "\(themePrefix)\(iconSuffix)"
-
-        let lastAppIconName = UserDefaults.standard.string(forKey: "lastAppIconName") ?? "DarkBlueTickedIcon"
-
-        if iconName != lastAppIconName {
-            DispatchQueue.main.async {
-                RemindersWidgetUtility.setApplicationIconName(iconName)
-            }
-            UserDefaults.standard.set(iconName, forKey: "lastAppIconName")
-        }
-        
-    }
-    
-    static func setApplicationIconName(_ iconName: String) {
-            if UIApplication.shared.responds(to: #selector(getter: UIApplication.supportsAlternateIcons)) && UIApplication.shared.supportsAlternateIcons {
-                
-                typealias setAlternateIconName = @convention(c) (NSObject, Selector, NSString, @escaping (NSError) -> ()) -> ()
-                
-                let selectorString = "_setAlternateIconName:completionHandler:"
-                
-                let selector = NSSelectorFromString(selectorString)
-                let imp = UIApplication.shared.method(for: selector)
-                let method = unsafeBitCast(imp, to: setAlternateIconName.self)
-                method(UIApplication.shared, selector, iconName as NSString, { _ in })
-            }
-        }
-    
     ///  Takes a list of todos and calculates the timeline for the widget for today and the next 7 days. It encodes the timeline as JSON and saves it using UserDefaults and AppGroups so that the WidgetTimeLineProvider can decode it again.
     /// - Parameters:
     ///   - tintColor: the accent color that got selected by the user
     ///   - todoList: list of all todos which should be displayed in the widget
     static func provideWidgetTimeline(tintColor: String, todoList: [(String, Todo)]) {
-        
-    
-        
         
       var dailyTodosTuple : [(Date, [SimpleTodo])] = []
         
@@ -357,37 +299,7 @@ struct RemindersWidgetUtility{
         WidgetCenter.shared.reloadAllTimelines()
 
     }
-    
-    static func getTodoList(completion: @escaping ([(String, Todo)]) -> Void) {
-        let db = Firestore.firestore()
-        let auth = Auth.auth()
 
-        guard let currentUserId = auth.currentUser?.uid else {
-            completion([])
-            return
-        }
-
-        let userTodosQuery = db.collection("todos").whereField("userId", in: [currentUserId])
-        userTodosQuery.addSnapshotListener { querySnapshot, error in
-            if error != nil {
-                completion([])
-                return
-            }
-
-            do {
-                let docs = try querySnapshot?.documents.map({ docSnapshot in
-                    return (docSnapshot.documentID, try docSnapshot.data(as: Todo.self))
-                })
-                let todoList: [(String, Todo)] = docs!
-
-                completion(todoList)
-            } catch {
-                completion([])
-            }
-        }
-    }
-
-    
     
     /// Schedules reminders and updates the timeline of the widget. Uses directly the Firestore to retrieve all relevant todos.
     /// - Parameter tintColor: the accent color that got selected by the user
@@ -415,21 +327,116 @@ struct RemindersWidgetUtility{
         
     }
     
-   
+    /// Sets the app icon. The new icon reflects the specified tint color, theme and whether all todos are completed for the current day
+    /// - Parameters:
+    ///   - tintColor: A String representing the tint color for the app icon.
+    ///   - themePrefix: A String representing the theme of the device (either 'Dark' or 'Light')
+    static func setAppIcon(tintColor: String, themePrefix: String) async {
+        
+        getTodoList(completion: {todoList in
+            var isDayCompleted = true
+            
+            for (_, todo) in todoList {
+                if todo.dueDate >= Calendar.current.startOfDay(for:  Date()) && todo.dueDate <= Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for:  Date()))! {
+                    if (!todo.isCompleted) {
+                        isDayCompleted = false
+                        break
+                    }
+                }
+            }
+            self.determineFileNameAndSetAppIcon(tintColor: tintColor, isTodayNotCompleted: !isDayCompleted, themePrefix: themePrefix)
+            
+        })
+       
+    }
+    
+    /// Determines the file name of the desired icon based on the given tint color, today's completion status, and theme. The determined file is then set as the app icon using the setApplicationIconName function. Makes also sure that the app icon is only set if it actually changes.
+    /// - Parameters:
+    ///   - tintColor: A String representing the tint color for the app icon.
+    ///   - isTodayNotCompleted: A Bool indicating whether today's to-dos have been completed or not.
+    ///   - themePrefix:  A String representing the prefix for the theme applied to the app icon.
+    private static func determineFileNameAndSetAppIcon(tintColor: String, isTodayNotCompleted : Bool, themePrefix : String) {
+        
+        var iconSuffix = "BlueUntickedIcon"
+        
+        if tintColor.lowercased() == "#007aff" {
+            // blue
+            if (isTodayNotCompleted) {
+                iconSuffix = "BlueUntickedIcon"
+            } else {
+                iconSuffix = "BlueTickedIcon"
+            }
+           
+        }
+        if tintColor.lowercased() == "#18eb09" {
+            // green
+            if (isTodayNotCompleted) {
+                iconSuffix = "GreenUntickedIcon"
+            } else {
+                iconSuffix = "GreenTickedIcon"
+            }
+        }
+        if tintColor.lowercased() == "#e802e0" {
+            // "pink"
+            if (isTodayNotCompleted) {
+                iconSuffix = "PinkUntickedIcon"
+            } else {
+                iconSuffix = "PinkTickedIcon"
+            }
+        }
+        if tintColor.lowercased() == "#eb7a09" {
+            // orange
+            if (isTodayNotCompleted) {
+                iconSuffix = "OrangeUntickedIcon"
+            } else {
+                iconSuffix = "OrangeTickedIcon"
+            }
+        }
+        
+        let iconName : String = "\(themePrefix)\(iconSuffix)"
+
+        let lastAppIconName = UserDefaults.standard.string(forKey: "lastAppIconName") ?? "DarkBlueTickedIcon"
+
+        if iconName != lastAppIconName {
+            DispatchQueue.main.async {
+                self.setApplicationIconName(iconName)
+            }
+            UserDefaults.standard.set(iconName, forKey: "lastAppIconName")
+        }
+        
+    }
+    
+    /// Sets the app icon to the desired file named iconName using a private Apple API. Using the standard way to set the app's icon would trigger an alert each time the icon is set, but this way allows the icon to be set without triggering an alert.
+    /// - Parameter iconName: A String representing the name of the file to be set as the app icon.
+    private static func setApplicationIconName(_ iconName: String) {
+        if UIApplication.shared.responds(to: #selector(getter: UIApplication.supportsAlternateIcons)) && UIApplication.shared.supportsAlternateIcons {
+            
+            typealias setAlternateIconName = @convention(c) (NSObject, Selector, NSString, @escaping (NSError) -> ()) -> ()
+            
+            let selectorString = "_setAlternateIconName:completionHandler:"
+            
+            let selector = NSSelectorFromString(selectorString)
+            let imp = UIApplication.shared.method(for: selector)
+            let method = unsafeBitCast(imp, to: setAlternateIconName.self)
+            method(UIApplication.shared, selector, iconName as NSString, { _ in })
+        }
+    }
     
 }
 
 
-
+/// The parent JSON-object which is used for encoding the timeline
 struct UpcomingDays: Decodable, Encodable {
     let dailyTodos: [DailyTodo]
 }
 
+/// Used to describe the todos for a single day
 struct DailyTodo: Decodable, Encodable {
     let date: Date
     var dailyTodoList: [SimpleTodo]
 }
 
+/// Simplified version of a ToDo that only consists of a task, whether it is completed or not and the user selected accent color of the checkmark
 struct SimpleTodo: Decodable, Encodable {
     let task : String
     let isCompleted : Bool
