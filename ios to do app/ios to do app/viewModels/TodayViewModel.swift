@@ -11,6 +11,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
+/// View model for the TodayView
 class TodayViewModel: GenericTodoViewModel {
     private var cancelables: [AnyCancellable] = []
     private var querySubscription: ListenerRegistration?

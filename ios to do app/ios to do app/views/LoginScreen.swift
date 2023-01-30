@@ -11,7 +11,7 @@ import FirebaseAuth
 
 let lightGreyColor = Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0)
 
-/// Define the `SignUpView` struct
+/// This view describes the login screen of the app
 struct SignUpView: View {
     /// State property `email` to store user's email input
     @State private var email: String = ""
