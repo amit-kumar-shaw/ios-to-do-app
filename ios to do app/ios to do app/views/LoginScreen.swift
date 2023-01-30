@@ -187,14 +187,18 @@ struct LoginScreen: View {
                     Button(action: {self.showSignUpView = true}){
                         Text("Sign Up")
                     }
-                    .padding()
+                    .padding().sheet(isPresented: $showSignUpView) {
+                        SignUpView(showSignUpView: $showSignUpView)
+                    }
                 }
                 //.buttonStyle(.bordered)
                 // Forget password button
                 Button(action: {self.showForgetPasswordView = true}){
                     Text("Forget password")
                 }
-                .padding()
+                .padding().sheet(isPresented: $showForgetPasswordView) {
+                    ForgetPasswordView(showForgetPasswordView: $showForgetPasswordView)
+                }
                 //.buttonStyle(.bordered)
             }
             .padding()
