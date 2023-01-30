@@ -63,7 +63,7 @@ struct CreateProjectView: View {
     }
     
     fileprivate func selectLanguageView() -> some View {
-        return Picker(selection: self.$projectInfo.selectedLanguage, label: Text("Language").foregroundColor(tintColor)) {
+        return Picker(selection: self.$projectInfo.selectedLanguage, label: Text("Language")) {
             LanguageList()
         }.onReceive([self.projectInfo.selectedLanguage].publisher.first()) { (value) in
             self.projectInfo.selectedLanguage = value
@@ -73,7 +73,7 @@ struct CreateProjectView: View {
     
     fileprivate func selectColorView() -> some View {
         return VStack{
-            ColorPicker(selection: self.$projectInfo.projectColor,label:{ Text("Color").foregroundColor(tintColor)})
+            ColorPicker(selection: self.$projectInfo.projectColor,label:{ Text("Color")})
             
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(colorPalette, id: \.self){ colorHex in
