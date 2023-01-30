@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-import SlideOverCard
 
 struct UpcomingView: View {
     @ObservedObject var viewModel = UpcomingViewModel()
