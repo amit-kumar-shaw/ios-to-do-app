@@ -4,7 +4,6 @@ import Foundation
 /// View for each row in the project list.
 struct ProjectListRow: View {
     
-    @Environment(\.tintColor) var tintColor
     
     /// Binding for the project to display in the row.
     @Binding var project : Project?
@@ -46,7 +45,7 @@ struct ProjectListRow: View {
             Circle()
                 .foregroundColor(Color(hex: project!.colorHexString ?? "#FFFFFF"))
                 .frame(width: 12, height: 12)
-            Text(project!.projectName ?? "Untitled").foregroundColor(tintColor)
+            Text(project!.projectName ?? "Untitled")
             Text(project!.selectedLanguage.name)
                 .foregroundColor(.gray)
         }

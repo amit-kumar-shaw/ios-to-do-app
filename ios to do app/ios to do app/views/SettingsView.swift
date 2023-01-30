@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-/// SettingView
+/// The SettingsView allows a user to edit the selected theme, enable reminders when they are disabled, or log out from the currently signed in account.
 struct SettingsView: View {
     @ObservedObject var viewModel: SettingsViewModel
     @State private var showEnableRemindersButton : Bool = false

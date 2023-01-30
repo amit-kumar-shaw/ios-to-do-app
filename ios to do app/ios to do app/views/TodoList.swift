@@ -10,6 +10,8 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseAuth
 
+
+/// View that is actually only used by the TodayView to show the list of todos due for today
 struct TodoList: View {
     
     @ObservedObject var viewModel = TodoListViewModel()

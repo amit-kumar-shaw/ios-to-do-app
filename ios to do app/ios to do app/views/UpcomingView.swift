@@ -10,7 +10,7 @@ import SwiftUI
 
 
 
-/// Upcomingview
+/// The UpcomingView displays all upcoming todos for the current week, grouped by day of the week.
 struct UpcomingView: View {
     @ObservedObject var viewModel = UpcomingViewModel()
     /// Color from he color setting
@@ -28,9 +28,11 @@ struct UpcomingView: View {
             /// Todo List
                Section{
                    ForEach($viewModel.todoList, id: \.0) { $item in
-                       TodoRow(item: $item).onChange(of: item.1.isCompleted) { newValue in
+                       TodoRow(item: $item, onToggleCheckbox: {checked in
                            viewModel.saveTodo(entityId: item.0, todo: item.1)
                            viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
+                       }).onChange(of: item.1.isCompleted) { newValue in
+                           
                        }
                    }
                    .onDelete { indexSet in

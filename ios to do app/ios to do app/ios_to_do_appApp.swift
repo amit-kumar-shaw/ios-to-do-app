@@ -13,10 +13,12 @@ import Combine
 struct ios_to_do_appApp: App {
     
     let persistenceController = PersistenceController.shared
+    let notificationNavigationManager = NotificationNavigationManager()
     @UIApplicationDelegateAdaptor(FirebaseAppDelegate.self) var delegate
     @AppStorage("tintColorHex") var tintColorHex = TINT_COLORS[0]
-    
     @State private var showEnableRemindersModal : Bool = false
+    
+    
     
     func schedule(tintColor: String) {
         Task {
@@ -35,6 +37,7 @@ struct ios_to_do_appApp: App {
             ContentView(tintColor: Color(hex: tintColorHex))
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environment(\.tintColor, Color(hex: tintColorHex))
+                .environmentObject(notificationNavigationManager)
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     setAppIcon(tintColor: tintColorHex)
                 }
@@ -47,6 +50,8 @@ struct ios_to_do_appApp: App {
                             self.showEnableRemindersModal = true
                         }
                     })
+                    
+                    delegate.notificationManager = notificationNavigationManager
                 }
             
                 .fullScreenCover(isPresented: $showEnableRemindersModal) {

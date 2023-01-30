@@ -28,6 +28,8 @@ class GenericTodoViewModel: ObservableObject {
     @Published var showChangeDueDate = false
     @Published var showChangePriority = false
     
+    let semaphore = DispatchSemaphore(value: 1)
+    
     private var querySubscription: ListenerRegistration?
 
     init() {
@@ -39,10 +41,10 @@ class GenericTodoViewModel: ObservableObject {
         self.loadUnfilteredList()
     }
     
+    /// Moves the selected items to a project specified by the projectId parameter.
+    /// - Parameter projectId: An optional String representing the identifier of the project to which the selected items should be moved. If nil, the items are moved to the default project and this means it isn't part of any project.
     func selectionMoveToProject(projectId: String?){
         let db = Firestore.firestore()
-        
-        
         
         guard !selection.isEmpty else {
             return
@@ -70,6 +72,8 @@ class GenericTodoViewModel: ObservableObject {
         
     }
     
+    /// Changes the due date of the selected items to the date specified by the newDueDate parameter.
+    /// - Parameter newDueDate: A Date object representing the new due date for the selected items.
     func selectionChangeDueDate(newDueDate: Date){
         let db = Firestore.firestore()
         
@@ -108,6 +112,8 @@ class GenericTodoViewModel: ObservableObject {
         
     }
     
+    /// Changes the priority of the selected items to the priority specified by the newPriority parameter.
+    /// - Parameter newPriority: A Priority enum representing the new priority for the selected items.
     func selectionChangePriority(newPriority: Priority){
         let db = Firestore.firestore()
         
@@ -134,6 +140,40 @@ class GenericTodoViewModel: ObservableObject {
             
             return nil
         } completion: {_,err in
+            guard err != nil else {
+                print("saved chages!");
+                return
+            }
+            
+            self.error = err;
+            self.showAlert = true
+        }
+
+    }
+    
+    /// Deletes the items specified by the indexSet parameter from the selection.
+    /// - Parameter indexSet: An optional IndexSet representing the indices of the items to be deleted from the selection. If nil, all items are deleted.
+    func deleteSelection(indexSet: IndexSet?){
+        let db = Firestore.firestore()
+        
+        guard let indexes = indexSet else {
+            return
+        }
+    
+            let selectedRefrences = indexes.map { index in
+                let id = todoList[index].0
+                return db.document("/todos/\(id)")
+            }
+       
+        
+        db.runTransaction { transaction, err in
+            
+            for d in selectedRefrences {
+                transaction.deleteDocument(d);
+            }
+            
+            return nil
+        } completion: { _, err in
             guard err != nil else {
                 print("saved chages!");
                 return
@@ -188,7 +228,7 @@ class GenericTodoViewModel: ObservableObject {
     ///   - entityId: id of the todo that might be clonsed
     ///   - todo: the todo object that might be cloned
     func cloneRecurringTodoIfNecessary(entityId : String, todo : Todo) {
-        
+        semaphore.wait()
         // only clone when todo is marked done and is recurring
         if !todo.isCompleted || todo.recurring == .none {
             return
@@ -260,7 +300,7 @@ class GenericTodoViewModel: ObservableObject {
         // done
         self.refresh()
         self.objectWillChange.send()
-        
+        semaphore.signal()
         
     }
     

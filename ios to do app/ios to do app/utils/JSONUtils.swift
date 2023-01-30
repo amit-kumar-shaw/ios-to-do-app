@@ -7,6 +7,9 @@
 
 import Foundation
 
+
+/// JSONUtils is a utility class for reading JSON data from a local file.
+/// This class is used for reading language JSON that allows the user to select a language for a project.
 struct JSONUtils{
     
     static func readLocalJSONFile(forName name: String) -> Data? {
