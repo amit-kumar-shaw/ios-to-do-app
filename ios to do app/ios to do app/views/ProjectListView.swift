@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct ProjectListView: View {
+    @Environment(\.tintColor) var tintColor
     
     @Environment(\.editMode) var editMode
     
     @ObservedObject var viewModel: ProjectListViewModel
     var projectId: String
-    
+    @State private var showModal = false
     @State var selectedFilter: FilterType = .all
     
     init(projectId: String){
@@ -36,6 +37,16 @@ struct ProjectListView: View {
                                 viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
                             }
                         }
+                    }
+                    if showModal {
+                        CreateQuickTodoView(projectId: self.projectId, show: $showModal)
+                        
+                    } else {
+                        Label("Add Quick Todo", systemImage: "plus")
+                            .foregroundColor(tintColor)
+                            .onTapGesture {
+                                showModal = true
+                            }
                     }
                 }
             }

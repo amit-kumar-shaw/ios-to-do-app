@@ -20,7 +20,7 @@ struct HomeView: View {
         .onSubmit(of: .search, performSearch)
         
     }
-      
+    
     private func performSearch() {
         // TODO: implement global search functionality
     }
@@ -30,20 +30,28 @@ struct SearchableView: View {
     @Environment(\.tintColor) var tintColor
     @State private var offset: CGFloat = 0
     @State private var searchTerm = ""
-    @State private var projectName = ""
-    @State private var projectColor = Color.white
+   
     @State private var showModal = false
+    @State var isSortedByLanguage = false
+    @State private var languageProjectDict = [String:[(String,Binding<Project?>)]]()
     @Binding public var searchText : String
     
     @ObservedObject var viewModel = ProjectViewModel()
     @ObservedObject var todoViewModel = TodoListViewModel()
     
-//    @State private var showEnableRemindersModal : Bool = false
+    @State var showTodayView : Bool = false
+    
+    //    @State private var showEnableRemindersModal : Bool = false
     @Environment(\.isSearching) private var isSearching
     @Environment(\.dismissSearch) private var dismissSearch
-
     
-
+    init(searchText : Binding<String>){
+        
+        self._searchText = searchText
+        
+    }
+    
+    
     fileprivate func upcomingList() -> some View {
         return HStack {
             NavigationLink(destination: UpcomingView(), label: {
@@ -55,20 +63,27 @@ struct SearchableView: View {
     
     fileprivate func todayList() -> some View{
         return HStack {
+            
             NavigationLink(destination: TodayView(),
+                           isActive: $showTodayView,
                            label: {
                 Image(systemName: "calendar.badge.exclamationmark")
                 Text("Today")
             })
+        }.onOpenURL{ url in
+            guard url.scheme == "widget-deeplink" else { return }
+            showTodayView = true
         }
     }
     
+    /// Link to Tags filter View
+    /// - Returns: A cell to access Tags filter view
     fileprivate func tagList() -> some View{
         return HStack {
             NavigationLink(destination: TagView(),
                            label: {
                 Image(systemName: "number.square.fill")
-                Text("Tag")
+                Text("Tags")
             })
         }
     }
@@ -82,96 +97,78 @@ struct SearchableView: View {
         }
     }
     
-    fileprivate func projectList() -> some View {
-        return ForEach($viewModel.projects, id: \.0) { $item in
-            // navigate to Project to do list
-            NavigationLink(destination: ProjectListView(projectId: item.0)) {
-               
-                //show a project list
-                ProjectListRow(project: (item.0, $item.1))
-                
-            }
-        }
-        .onDelete { indexSet in
-            let index = indexSet.first!
-            self.viewModel.deleteProject(at: index)
-        }
-        .headerProminence(.standard)
-    }
     
-    var body: some View {
-
-            
-            List {
-                if (!isSearching) {
-                    //Home View Lists
-                    upcomingList()
-                    
-                    todayList()
-                    
-                    tagList()
-                    
-                    settingList()
-                    
-                    
+    @ViewBuilder var body: some View {
+        
+        
+        List {
+            if (!isSearching) {
+                
+                
+                upcomingList()
+                
+                todayList()
+                
+                tagList()
+                
+                settingList()
+                
+                if self.isSortedByLanguage {
+                    // Projects Section sorted by language
+                    sortByLanguage() } else {
                     // Projects Section
                     Section {
                         
-                        if viewModel.projects.isEmpty {
-                            addButton
+                        if viewModel.projects.isEmpty { addButton
                         } else {
-                            
                             projectList()
-                            
                         } }header: {
-                            Text("Projects").font(.headline).foregroundColor(.accentColor)
+                            Text("Projects").foregroundColor(.accentColor).font(.headline)
                         }
+                    
                 }
-                    else {
-                        SearchView(searchText: $searchText)
-                    }
             }
-            .listStyle(.insetGrouped)
-            .padding(.zero)
-            
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    // EditButton()
-                    sortByLanguageButton
-                }
-                ToolbarItem(placement: .automatic) {
-                    addButton
-                }
-//            }
-               
+            else {
+                SearchView(searchText: $searchText)
             }
-            .navigationTitle("Welcome")
-//            .searchable(text: $searchText) {
-//                SearchView(searchText: $searchText)
-//            }
-//            .onSubmit(of: .search, performSearch)
-//            .onAppear {
-//                NotificationUtility.hasPermissions(completion: { hasPermissions in
-//                    if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
-//                        self.showEnableRemindersModal = true
-//                    }
-//                })
-//            }
-//            .fullScreenCover(isPresented: $showEnableRemindersModal) {
-//                EnableRemindersModalView().tint(tintColor)
-//            }
-            .padding(.zero)
-            
-            //NavigationLink(destination: TodoDetail(entityId: searchTodoId), isActive: $isPresentingSearchedTodo) { EmptyView()}
-            //NavigationLink(destination: TodoDetail(entityId: item.0))
-            
         
-    
+        }
+        
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                
+                sortByLanguageButton
+            }
+            ToolbarItem(placement: .automatic) {
+                addButton
+            }
+            
+        }
+        .navigationTitle("Welcome")
+        //            .searchable(text: $searchText) {
+        //                SearchView(searchText: $searchText)
+        //            }
+        //            .onSubmit(of: .search, performSearch)
+        //            .onAppear {
+        //                NotificationUtility.hasPermissions(completion: { hasPermissions in
+        //                    if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
+        //                        self.showEnableRemindersModal = true
+        //                    }
+        //                })
+        //            }
+        //            .fullScreenCover(isPresented: $showEnableRemindersModal) {
+        //                EnableRemindersModalView().tint(tintColor)
+        //            }
+        .padding(.zero)
+        
+        //NavigationLink(destination: TodoDetail(entityId: searchTodoId), isActive: $isPresentingSearchedTodo) { EmptyView()}
+        //NavigationLink(destination: TodoDetail(entityId: item.0))
+        
+        
+        
     }
     
-    private func performSearch() {
-        // TODO: implement global search functionality
-    }
+   
     
     private var addButton: some View {
         
@@ -186,69 +183,91 @@ struct SearchableView: View {
         )
     }
     
+    func saveLanguageDict(){
+        
+        languageProjectDict = [:]
+        
+        for item in $viewModel.projects {
+            
+            let key = item.1.wrappedValue?.selectedLanguage.name ?? "None"
+            let value = (item.0.wrappedValue,item.1.self)
+            
+            
+            if var projects = languageProjectDict[key] {
+                projects.append(value)
+                languageProjectDict[key] = projects
+            } else {
+                languageProjectDict[key] = [value]
+            }
+            
+        }
+        
+    }
+    
     private var sortByLanguageButton : some View {
         
+       // var isEmpty =  saveLanguageDict.count == 0
         return AnyView(
-            Button(action: { sortByLanguage() }) {
-                Label("SortByLanguage", systemImage: "tray.fill")
+            Button(action: {
                 
-            }
+                saveLanguageDict()
+                    
+                
+                isSortedByLanguage = !isSortedByLanguage }) {
+                    Label("SortByLanguage", systemImage: "tray.fill")
+                    
+                }
         )
         
     }
     
-    private func sortByLanguage() {
+    private func sortByLanguage() -> some View {
+
+        var languageListsViews = [AnyView]()
+
+        languageProjectDict.forEach{ language, values in
+
+            let section = Section(header: Text(language)){
+
+                ForEach(values, id:\.0){ value in
+
+                    NavigationLink(destination: ProjectListView(projectId: value.0) ){
+
+                        //show a project list
+                        ProjectListRow(project: (value.0, value.1), isSortedByLanguage : $isSortedByLanguage)
+
+                    }
+                }
+            }
+            languageListsViews.append(AnyView(section))
+
+        }
         
+        
+        return Group {
+
+            ForEach(0...languageListsViews.count-1,id: \.self) { index in
+                languageListsViews[index]
+            }
+
+        }
     }
     
+    
+    fileprivate func projectList() -> some View {
+        return ForEach($viewModel.projects, id: \.0) { $item in
+            // navigate to Project to do list
+            NavigationLink(destination: ProjectListView(projectId: item.0)) {
+                
+                //show a project list
+                ProjectListRow(project: (item.0, $item.1),isSortedByLanguage : $isSortedByLanguage)
+                
+            }
+        }
+        .headerProminence(.standard)
+    }
 }
 
-struct ProjectListRow: View {
-    
-    
-    @Binding var project : Project?
-    @State var projectId :String
-    @State var showModal = false
-    
-    
-    init(project: (String, Binding<Project?>)){
-        
-        self._project = project.1
-        self.projectId = project.0
-        
-    }
-    
-    
-    var body: some View {
-        HStack {
-            
-            Circle().frame(width: 12, height: 12)
-                .overlay(
-                    Circle().foregroundColor(Color(hex: project!.colorHexString ?? "#FFFFFF"))
-                        .frame(width: 10, height: 10)
-                )
-            
-            Text(project?.projectName ?? "Untitled")
-            Text(project?.selectedLanguage.name ?? "English")
-                .foregroundColor(.gray)
-        }
-        .swipeActions(){
-            
-            //Edit Mode Button
-            Button (action: {
-                showModal = true }){
-                    Label("info", systemImage: "info.circle")
-                }
-            
-        }.sheet(isPresented: $showModal) {
-            //EditMode
-            CreateProjectView(project: (self.projectId, self.$project), showModal: $showModal)
-            
-        }.tint(.indigo)
-        
-    }
-    
-}
 
 
 struct HomeView_Previews: PreviewProvider {

@@ -153,26 +153,17 @@ class ProjectViewModel : ObservableObject {
     }
     
     
-    func deleteProject(at index: Int) {
-        
-        let projectId = projects[index].0
+    func deleteProject(projectId : String) {
         
         // code to delete the project from Firestore
         db.collection("projects").document(projectId).delete() { err in
                 self.error = err
                 self.showAlert = true
         }
-            
-        projects.remove(at: index)
+  
     }
 
     
-//    private let itemFormatter: DateFormatter = {
-//        let formatter = DateFormatter()
-//        formatter.dateStyle = .short
-//        formatter.timeStyle = .medium
-//        return formatter
-//    }()
     
 }
 

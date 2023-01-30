@@ -118,7 +118,7 @@ struct CreateTodoView: View {
                             self.showBeforeDueDatePicker = true
                         }) {
                      
-                            Label("\(NotificationUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions() {
+                            Label("\(RemindersWidgetUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions() {
                                     Button {
                                         viewModel.muteDefaultReminder()
                                     } label: {
@@ -210,4 +210,55 @@ private var reminderDateFormatter: DateFormatter {
     formatter.dateStyle = .medium
     formatter.timeStyle = .short
     return formatter
+}
+
+struct CreateQuickTodoView: View {
+    @Environment(\.tintColor) var tintColor
+
+    @Binding private var showModal: Bool
+    @ObservedObject private var viewModel: TodoEditorViewModel
+    
+    init(show: Binding<Bool>) {
+        viewModel = TodoEditorViewModel()
+        self._showModal = show
+    }
+    
+    init(projectId: String, show: Binding<Bool>) {
+        viewModel = TodoEditorViewModel(projectId: projectId)
+        self._showModal = show
+    }
+    
+    
+    private func saveTodo() {
+        viewModel.todo.dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+        viewModel.save()
+    }
+    
+    var body: some View {
+        VStack{
+            HStack {
+                TextField("Task Name", text: $viewModel.todo.task)
+                
+                Spacer()
+                
+                Text("Cancel")
+                    .onTapGesture {
+                        showModal = false
+                    }
+                    .foregroundColor(tintColor)
+            }
+            HStack {
+                Text("Create Task")
+                    .onTapGesture {
+                        saveTodo()
+                        showModal = false
+                    }.foregroundColor(viewModel.todo.task.isEmpty ? .gray : tintColor)
+                    .disabled(viewModel.todo.task.isEmpty)
+                    .alert("Error add todo", isPresented: $viewModel.showAlert, actions: {
+                        Button("Ok", action: { self.viewModel.showAlert = false })
+                    }, message: { Text(self.viewModel.error?.localizedDescription ?? "Unknown error") })
+                
+            }
+        }
+    }
 }

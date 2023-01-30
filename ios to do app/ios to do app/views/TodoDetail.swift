@@ -8,6 +8,7 @@
 import Combine
 import SwiftUI
 
+/// View to display all the details of a todo
 struct TodoDetail: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
@@ -18,6 +19,10 @@ struct TodoDetail: View {
     @ObservedObject var tagViewModel = TagViewModel()
     @State private var showBeforeDueDatePicker = false
     
+    /// Creates an instance with the given entityId.
+    ///
+    /// - Parameters:
+    ///   - entityId: Id of the todo to list the details
     init(entityId: String) {
         self.entityId = entityId
         viewModel = TodoEditorViewModel(id: entityId)
@@ -29,6 +34,7 @@ struct TodoDetail: View {
                 Text(viewModel.error?.localizedDescription ?? "")
             } else {
                 List {
+                    /// show basic information
                     Section {
                         TextField("Task Name", text: $viewModel.todo.task)
                         Picker(selection: $viewModel.todo.selectedLanguage, label: Text("Language")) {
@@ -37,8 +43,25 @@ struct TodoDetail: View {
                         TextField("Description", text: $viewModel.todo.description)
                     }
                     
-                    FlashcardsView(flashcards: viewModel.todo.flashcards, showFlashcardEditor: false)
-                                
+                    /// show flashcards and a button to add flashcards
+                    Section{
+                        if !$viewModel.todo.flashcards.isEmpty {
+                            NavigationLink(destination: FlashcardView(viewModel: viewModel)){
+                                HStack {
+                                    Text("All Flashcards")
+                                    Spacer()
+                                    Text("\(viewModel.flashcards.count) Cards")
+                                }
+                            }
+                        }
+                        Button(action: viewModel.toggleFlashcardEditor) {
+                            Label("Add Flashcard", systemImage: "plus")
+                        }.sheet(isPresented: $viewModel.showFlashcardEditor) {
+                            FlashcardEditor(viewModel: viewModel)
+                        }
+                    }
+                    
+                    /// show the date and time of the todo
                     Section {
                         if dynamicTypeSize > DynamicTypeSize.medium {
                             VStack(alignment: .leading){
@@ -73,7 +96,8 @@ struct TodoDetail: View {
                             }
                         }
                     }
-                                
+                    
+                    /// Priority and Tags
                     Section {
                         Picker(selection: $viewModel.todo.priority, label: Text("Priority")) {
                             ForEach(Priority.allCases, id: \.self) { v in
@@ -89,9 +113,9 @@ struct TodoDetail: View {
                                 Text("\(tagViewModel.tagCount(todo: entityId)) Tags")
                             }
                         }
-                        
                     }
-                                
+                    
+                    /// Reminders list
                     Section {
                         Button(action: {
                             if viewModel.todo.reminderBeforeDueDate < 0 {
@@ -99,7 +123,7 @@ struct TodoDetail: View {
                             }
                             self.showBeforeDueDatePicker = true
                         }) {
-                            Label("\(NotificationUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions {
+                            Label("\(RemindersWidgetUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions {
                                 Button {
                                     print("weird")
                                     viewModel.muteDefaultReminder()
