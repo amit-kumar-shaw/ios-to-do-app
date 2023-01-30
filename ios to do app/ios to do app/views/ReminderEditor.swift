@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct ReminderEditor: View {
+    /// The environment presentation mode to control dismissing the view
     @Environment(\.presentationMode) var presentation
+    /// The observable object `reminder` for the Reminder to be edited
     @ObservedObject var reminder: Reminder
+    /// The completion handler to be called when the reminder is saved
     var onComplete: (Reminder) -> Void
 
     init(reminder: Reminder?, onComplete: @escaping (Reminder) -> Void) {
@@ -17,6 +20,7 @@ struct ReminderEditor: View {
         self.onComplete = onComplete
     }
 
+    /// Function to save the edited reminder
     func saveReminder() {
         onComplete(reminder)
         presentation.wrappedValue.dismiss()
@@ -31,6 +35,7 @@ struct ReminderEditor: View {
         }
     }
 }
+
 
 struct ReminderEditor_Previews: PreviewProvider {
     static var previews: some View {

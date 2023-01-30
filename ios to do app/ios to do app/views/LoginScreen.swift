@@ -80,12 +80,15 @@ struct SignUpView: View {
 
 /// Define the ForgetPasswordView struct
 struct ForgetPasswordView: View {
-    // State properties to store user inputs and status
+    /// State property `email` to store user's email input
     @State private var email: String = ""
+    /// State property `error` to store error message during sign up
     @State private var error: String = ""
+    /// State property `isLoading` to store the loading status during sign up
     @State private var isLoading = false
+    /// State property `isSuccess` to store the success status during sign up
     @State private var isSuccess = false
-    // Binding property to control the visibility of the forget password view
+    /// Binding property `showForgetPasswordView` to control the visibility of the forget password view
     @Binding var showForgetPasswordView: Bool
     
     var body: some View {
@@ -130,13 +133,17 @@ struct ForgetPasswordView: View {
 
 /// Define the LoginScreen struct
 struct LoginScreen: View {
-    // State properties to store user inputs and status
+    /// State property `email` to store user's email input
     @State private var email: String = ""
+    /// State property `password` to store user's password input
     @State private var password: String = ""
+    /// State property `error` to store error message during sign up
     @State private var error: String = ""
+    /// State property `isLoading` to store the loading status during sign up
     @State private var isLoading = false
+    /// State property `isSuccess` to store the success status during sign up
     @State private var isSuccess = false
-    // State properties to control the visibility of the sign up and forget password views
+    /// State properties `showSignUpView` and `showForgetPasswordView` to control the visibility of the sign up and forget password views
     @State private var showSignUpView = false
     @State private var showForgetPasswordView = false
 
