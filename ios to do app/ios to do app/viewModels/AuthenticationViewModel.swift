@@ -9,8 +9,10 @@ import Foundation
 import FirebaseAuth
 import SwiftUI
 
+///This class is for Login Screen View.
 class AuthenticationViewModel: ObservableObject {
     
+    ///if this is true, pass the login process
     @Published var isAuthenticated = false;
     @Published var currentUser: User? = nil;
     
@@ -23,7 +25,7 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     private func listener(auth: Auth, user: User?)-> Void{
-        //TODO: implement auth listener logic
+        
         isAuthenticated = user != nil
         currentUser = user
     }

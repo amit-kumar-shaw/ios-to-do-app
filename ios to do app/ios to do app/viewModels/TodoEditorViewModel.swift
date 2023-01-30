@@ -12,6 +12,7 @@ import FirebaseFirestoreSwift
 import Foundation
 import SwiftUI
 
+/// This class is for creating and modifying a project 
 class TodoEditorViewModel: ObservableObject {
     @Environment(\.presentationMode) var presentation
     
@@ -21,22 +22,27 @@ class TodoEditorViewModel: ObservableObject {
     private var auth = Auth.auth()
     private var id: String?
     
+    ///Published variables to store a to-do information
     @Published var todo: Todo = .init()
     @Published var project: Project?
     @Published var reminderList: [Reminder] = []
     @Published var flashcards: [Flashcard] = []
+    
     @Published var error: Error?
     @Published var showAlert = false
     @Published var showReminderEditor = false
     @Published var showFlashcardEditor = false
     @Published var showProjectSelector = false
     
+    
+    ///Initialize TodoEditorViewModel with 'todos' document id
     init(id: String?) {
         self.id = id
         getTodo()
         setupRestrictions()
     }
     
+    ///Initialize TodoEditorViewModel with 'projects' document id
     init(projectId: String = "") {
         todo.projectId = projectId
     }
@@ -117,6 +123,7 @@ class TodoEditorViewModel: ObservableObject {
         reminderList.remove(atOffsets: offsets)
     }
     
+    ///Save todo information to firebase Database
     func save() {
         todo.reminders = reminderList
         todo.flashcards = flashcards
