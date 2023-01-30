@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProjectListView: View {
     
+    @Environment(\.editMode) var editMode
+    
     @ObservedObject var viewModel: ProjectListViewModel
     var projectId: String
     
@@ -29,13 +31,9 @@ struct ProjectListView: View {
                     ForEach($viewModel.todoList, id: \.0, editActions: .all){
                         $item in
                         NavigationLink(destination: TodoDetail(entityId: item.0)){
-                            HStack {
-                                Text(item.1.task)
-                                Spacer()
-                                Checkbox(isChecked: $item.1.isCompleted, onToggle: {
-                                    viewModel.saveTodo(entityId: item.0, Todo: item.1)
-                                }
-                                )
+                            TodoRow(item: $item).onChange(of: item.1.isCompleted) { newValue in
+                                viewModel.saveTodo(entityId: item.0, todo: item.1)
+                                viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
                             }
                         }
                     }
@@ -46,17 +44,46 @@ struct ProjectListView: View {
             //TodoList(selectedFilter, self.project.0).listStyle(.inset)
             
             HStack {
-                Picker(selection: $viewModel.filter, label: Text("Filter"), content: {
-                    ForEach(FilterType.allCases, id: \.self) { v in
-                        Text(v.localizedName).tag(v)
+                
+                if editMode?.wrappedValue == EditMode.active {
+                    Spacer()
+                    VerticalLabelButton("Project", systemImage: "folder.fill", action: {
+                        viewModel.showMoveToProject = true
+                    }).sheet(isPresented: $viewModel.showMoveToProject) {
+                        SelectProjectView { projectId in
+                            viewModel.selectionMoveToProject(projectId: projectId)
+                        }
+                    }.disabled(viewModel.selection.count == 0)
+                    Spacer()
+                    VerticalLabelButton("Priority", systemImage: "exclamationmark.circle.fill") {
+                        viewModel.showChangePriority = true
+                    }.sheet(isPresented: $viewModel.showChangePriority) {
+                        SelectPriorityView(priority: .medium) { newPriority in
+                            viewModel.selectionChangePriority(newPriority: newPriority)
+                        }
+                    }.disabled(viewModel.selection.count == 0)
+                    Spacer()
+                    VerticalLabelButton("Due date", systemImage: "calendar.badge.clock") {
+                        viewModel.showChangeDueDate = true
+                    }.sheet(isPresented: $viewModel.showChangeDueDate) {
+                        SelectDueDateView(date: Date()) { newDate in
+                            viewModel.selectionChangeDueDate(newDueDate: newDate)
+                        }
+                    }.disabled(viewModel.selection.count == 0)
+                    Spacer()
+                } else {
+                    Picker(selection: $viewModel.filter, label: Text("Filter"), content: {
+                        ForEach(FilterType.allCases, id: \.self) { v in
+                            Text(v.localizedName).tag(v)
+                        }
+                    }).onChange(of: viewModel.filter) { newFilter in
+                        viewModel.loadList(filter: newFilter)
                     }
-                }).onChange(of: viewModel.filter) { newFilter in
-                    viewModel.loadList(filter: newFilter)
-                }
-                NavigationLink {
-                    CreateTodoView(projectId: projectId)
-                } label: {
-                    Text("Add").padding()
+                    NavigationLink {
+                        CreateTodoView(projectId: projectId)
+                    } label: {
+                        Text("Add").padding()
+                    }
                 }
             }
             .padding()
@@ -67,7 +94,7 @@ struct ProjectListView: View {
             }
         }.toolbar {
             EditButton()
-        }.navigationTitle(viewModel.project?.projectName ?? "Project Title")
+        }.navigationTitle(viewModel.project?.projectName ?? "Project")
     }
     
     var header: some View {

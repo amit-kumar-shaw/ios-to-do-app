@@ -228,8 +228,8 @@ struct ProjectListRow: View {
                         .frame(width: 10, height: 10)
                 )
             
-            Text(project!.projectName ?? "Untitled")
-            Text(project!.selectedLanguage.name)
+            Text(project?.projectName ?? "Untitled")
+            Text(project?.selectedLanguage.name ?? "English")
                 .foregroundColor(.gray)
         }
         .swipeActions(){

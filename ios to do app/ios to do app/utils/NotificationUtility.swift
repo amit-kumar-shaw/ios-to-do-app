@@ -76,6 +76,7 @@ struct NotificationUtility{
             
             if let error = error {
                 // Handle the error here.
+                print("Error asking for notifications permission: \(error.localizedDescription)")
                 return
             }
             UserDefaults.standard.set(true, forKey: "didAskForNotificationPermissions")

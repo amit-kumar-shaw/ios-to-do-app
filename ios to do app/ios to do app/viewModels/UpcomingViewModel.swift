@@ -6,15 +6,6 @@
 //
 
 import Foundation
-
-//
-//  TodayViewModel.swift
-//  ios to do app
-//
-//  Created by Cristi Conecini on 25.01.23.
-//
-
-import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 import FirebaseFirestoreSwift
@@ -61,11 +52,9 @@ class UpcomingViewModel: GenericTodoViewModel {
     private func determineDateRange(weekday: Int) throws ->  (Date, Date){
         let currentDate = Date()
         
-        var calender = Calendar.current
+        let calender = Calendar.current
         
         let currentWeekday = calender.component(.weekday, from: currentDate)
-        let currentHour = calender.component(.hour, from: currentDate)
-        let currentMinute = calender.component(.minute, from: currentDate)
         
         var componentsToSubtract = DateComponents()
         componentsToSubtract.weekday = weekday - currentWeekday
