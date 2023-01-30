@@ -114,7 +114,6 @@ class TodoEditorViewModel: ObservableObject {
     }
     
     func deleteReminders(offsets: IndexSet) {
-        print("deleting reminders: \(offsets)")
         reminderList.remove(atOffsets: offsets)
     }
     

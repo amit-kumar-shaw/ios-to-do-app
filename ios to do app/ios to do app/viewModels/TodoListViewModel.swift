@@ -26,13 +26,6 @@ class TodoListViewModel: GenericTodoViewModel {
     private var cancelables: [AnyCancellable] = []
     private var querySubscription: ListenerRegistration? = nil
     
-//    var progress: Double {
-//        let totalTodos = todoList.count
-//        guard totalTodos != 0 else { return 0 }
-//        let completedTodos = todoList.filter { $1.isCompleted }.count
-//        return Double(completedTodos) / Double(totalTodos)
-//    }
-    
     override init() {
         super.init()
         setupBindings()

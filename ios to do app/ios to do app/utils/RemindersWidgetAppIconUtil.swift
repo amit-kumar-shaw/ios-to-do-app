@@ -172,14 +172,11 @@ struct RemindersWidgetAppIconUtil{
             if let error = error {
                 print("Error scheduling notification: \(error)")
             } else {
-                print("scheduled: ")
-                print(title)
                 let formatter = DateComponentsFormatter()
                 formatter.allowedUnits = [.day, .hour, .minute, .second]
                 formatter.unitsStyle = .abbreviated
 
                 let formattedInterval = formatter.string(from: date.timeIntervalSinceNow)
-                print(formattedInterval ?? "")
               
             }
         }
