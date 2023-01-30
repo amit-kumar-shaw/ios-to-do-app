@@ -28,6 +28,8 @@ class GenericTodoViewModel: ObservableObject {
     @Published var showChangeDueDate = false
     @Published var showChangePriority = false
     
+    let semaphore = DispatchSemaphore(value: 1)
+    
     private var querySubscription: ListenerRegistration?
 
     init() {
@@ -226,7 +228,7 @@ class GenericTodoViewModel: ObservableObject {
     ///   - entityId: id of the todo that might be clonsed
     ///   - todo: the todo object that might be cloned
     func cloneRecurringTodoIfNecessary(entityId : String, todo : Todo) {
-        
+        semaphore.wait()
         // only clone when todo is marked done and is recurring
         if !todo.isCompleted || todo.recurring == .none {
             return
@@ -298,7 +300,7 @@ class GenericTodoViewModel: ObservableObject {
         // done
         self.refresh()
         self.objectWillChange.send()
-        
+        semaphore.signal()
         
     }
     

@@ -12,20 +12,18 @@ import SwiftUI
 
 /// The HomeView is the main landing page for a user after a successful login. This View struct mainly encapsulates the SearchableView that describes all the components visible on the home view.
 struct HomeView: View {
+    //State variable to hold the search text entered by the user
     @State private var searchText = ""
+    
     var body: some View {
         NavigationView {
             SearchableView(searchText:$searchText)
         }
+        // Adds a search bar to the navigation bar
         .searchable(text: $searchText)
         .disableAutocorrection(true)
-        .onSubmit(of: .search, performSearch)
-        
     }
     
-    private func performSearch() {
-        // TODO: implement global search functionality
-    }
 }
 
 /// The SearchableView struct holds all the components visible on the home screen and provides a search functionality for users to search for projects or todos directly from the home screen.
@@ -37,20 +35,20 @@ struct SearchableView: View {
     
     @State private var offset: CGFloat = 0
     @State private var searchTerm = ""
-   
     @State private var showModal = false
-    @State var isSortedByLanguage = false
-    @State private var languageProjectDict = [String:[(String,Binding<Project?>)]]()
- 
-    @State var projectForBinding :Project? = Project()
     
-    @ObservedObject var viewModel = ProjectViewModel()
-    @ObservedObject var todoViewModel = TodoListViewModel()
+    ///State property `languageProjectDict` is a dictionary for sorting projects by their language
+    @State private var languageProjectDict = [String:[(String,Binding<Project?>)]]()
     
     @State var showTodayView : Bool = false
+    @State var isSortedByLanguage = false
+    @State var projectForBinding : Project? = Project()
     
     @Binding public var searchText : String
-
+    
+    ///Observed object property  `View Model`  to load projects list and their info
+    @ObservedObject var viewModel = ProjectViewModel()
+    
     @Environment(\.isSearching) private var isSearching
     @Environment(\.dismissSearch) private var dismissSearch
     
@@ -108,21 +106,26 @@ struct SearchableView: View {
         }
     }
     
-    //// Returns the settings navigation link component in a horizontal stack.
-    /// - Returns: A horizontal stack containing the settings navigation link component.
-    fileprivate func settingList() -> some View {
-        return HStack {
-            NavigationLink(destination: SettingsView(), label: {
-                Image(systemName: "gearshape").foregroundColor(tintColor)
-                Text("Settings")
-            })
+    /// Function projectList displays a list of projects by navigating to ProjectListView
+    /// - Parameters:
+    ///     Inputs  : $viewModel.projects - an array of tuple representing projects
+    /// - Returns: A list of project names each linked to its respective ProjectListView
+    fileprivate func projectList() -> some View {
+        return ForEach($viewModel.projects, id: \.0) { $item in
+            // navigate to Project to do list
+            NavigationLink(destination: ProjectListView(projectId: item.0)) {
+                
+                //show a project list
+                ProjectListRow(project: (item.0, $item.1),isSortedByLanguage : $isSortedByLanguage)
+                
+            }
         }
+        .headerProminence(.standard)
     }
-    
+
     
     /// This viewbuilder uses all functions declared above and builds the final HomeView
     @ViewBuilder var body: some View {
-        
         
         List {
             if (!isSearching) {
@@ -134,9 +137,12 @@ struct SearchableView: View {
                 tagList()
                 
                 if self.isSortedByLanguage {
-                    // Projects Section sorted by language
-                    sortByLanguage() } else {
-                    // Projects Section
+                    /// Projects Section sorted by language
+                    sortByLanguage()
+                    
+                } else {
+                        
+                    /// Projects Section
                     Section {
                         
                         if viewModel.projects.isEmpty { addButton
@@ -163,7 +169,7 @@ struct SearchableView: View {
                 addButton
             }
             ToolbarItem(placement: .automatic) {
-                settingList()
+                settingButton
             }
             
         }
@@ -174,9 +180,10 @@ struct SearchableView: View {
         
     }
     
+
    
     
-    /// Creates a button that opens a modal view to add a new project.
+    ///Creates a button that opens a modal view to add a new project.
     private var addButton: some View {
         return AnyView(
             Button(action: { self.showModal = true }) {
@@ -187,7 +194,18 @@ struct SearchableView: View {
         )
     }
     
-    /// Saves language dictionary for projects
+    ///Displays a button that allows the user to access and change app settings such as color scheme.
+    fileprivate var settingButton : some View {
+        return HStack {
+            NavigationLink(destination: SettingsView(), label: {
+                Image(systemName: "gearshape").foregroundColor(tintColor)
+                
+            })
+        }
+    }
+    
+    ///Sorts and saves the projects by their selected language in a dictionary called languageProjectDict.
+    ///The dictionary uses the language name as the key and a tuple of project ID and project information as the value.
     func saveLanguageDict(){
         
         languageProjectDict = [:]
@@ -257,21 +275,9 @@ struct SearchableView: View {
         }
     }
     
+ 
     
-    /// This function returns a ForEach view which iterates over the projects stored in the viewModel. For each project, a NavigationLink is created that will take the user to the ProjectListView when tapped.
-    /// - Returns: A view showing all projects
-    fileprivate func projectList() -> some View {
-        return ForEach($viewModel.projects, id: \.0) { $item in
-            // navigate to Project to do list
-            NavigationLink(destination: ProjectListView(projectId: item.0)) {
-                
-                //show a project list
-                ProjectListRow(project: (item.0, $item.1),isSortedByLanguage : $isSortedByLanguage)
-                
-            }
-        }
-        .headerProminence(.standard)
-    }
+   
 }
 
 

@@ -4,7 +4,6 @@ import Foundation
 /// View for each row in the project list.
 struct ProjectListRow: View {
     
-    @Environment(\.tintColor) var tintColor
     
     /// Binding for the project to display in the row.
     @Binding var project : Project?
