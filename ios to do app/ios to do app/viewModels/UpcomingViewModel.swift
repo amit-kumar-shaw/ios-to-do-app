@@ -31,7 +31,7 @@ class UpcomingViewModel: GenericTodoViewModel {
     override init(){
         super.init()
         setupBindings()
-        selectedWeekday = Calendar.current.component(.weekdayOrdinal, from: Date()) - 1
+        selectedWeekday = Calendar.current.component(.weekday, from: Date()) - 1
         do{
             let (s, e) = try determineDateRange(weekday: selectedWeekday+1)
             loadList(filter: filter, startDate: s, endDate: e)
