@@ -8,34 +8,33 @@
 import Combine
 import SwiftUI
 
-///View which allows the creation of todos
+/// View which allows the creation of todos
 struct CreateTodoView: View {
     @Environment(\.presentationMode) var presentation
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.tintColor) var tintColor
     
     @ObservedObject private var viewModel: TodoEditorViewModel
+    @ObservedObject private var projectViewModel = ProjectViewModel()
     @State private var showBeforeDueDatePicker = false
-
     
     private var languageList = Language.getAllLanguages()
-   
-    ///Initialize CreateTodoView.
+    
+    /// Initialize CreateTodoView.
     ///
-    ///Associated project will be chosen later
+    /// Associated project will be chosen later
     init() {
         viewModel = TodoEditorViewModel()
     }
     
-    ///Initialize CreateTodoView and associte the new to do to the specified project
-    ///- Parameters
+    /// Initialize CreateTodoView and associte the new to do to the specified project
+    /// - Parameters
     ///    - projectId: id of the project to associate with
-    init(projectId: String){
+    init(projectId: String) {
         viewModel = TodoEditorViewModel(projectId: projectId)
     }
     
     private func saveTodo() {
-       
         viewModel.save()
         close()
     }
@@ -51,42 +50,41 @@ struct CreateTodoView: View {
                 Section(header: Text("Task Details")) {
                     Group {
                         TextField("Task Name", text: $viewModel.todo.task)
-                        Picker(selection: $viewModel.todo.selectedLanguage, label: Text("Language")) {
-                            LanguageList()
+                        HStack{
+                            Text("Project")
+                            Spacer()
+                            Button(action: {viewModel.showProjectSelector = true}){
+                                Text(viewModel.project?.projectName ?? "None")
+                            }.sheet(isPresented: $viewModel.showProjectSelector) {
+                                SelectProjectView { projectId, project in
+                                    viewModel.todo.projectId = projectId
+                                    viewModel.project = project
+                                }
+                            }
                         }
-                        /// Description
                         TextEditor(text: $viewModel.todo.description)
-                        
                     }
                 }
                     
                 /// Aditional Details
                 Section(header: Text("Additional Details")) {
                     if dynamicTypeSize > DynamicTypeSize.medium {
-                        VStack(alignment: .leading){
+                        VStack(alignment: .leading) {
                             Text("Start Date")
-                            DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
-                                
-                            }
+                            DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {}
                         }
-                        VStack(alignment: .leading){
+                        VStack(alignment: .leading) {
                             Text("Due Date")
-                            DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
-                                
-                            }
+                            DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {}
                         }
                     } else {
-                        HStack{
+                        HStack {
                             Text("Start Date")
-                            DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
-
-                            }
+                            DatePicker(selection: $viewModel.todo.startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {}
                         }
-                        HStack{
+                        HStack {
                             Text("Due Date")
-                            DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {
-
-                            }
+                            DatePicker(selection: $viewModel.todo.dueDate, in: viewModel.todo.startDate..., displayedComponents: [.date, .hourAndMinute]) {}
                         }
                     }
                     Group {
@@ -104,36 +102,29 @@ struct CreateTodoView: View {
                     }
                 }
                     
-                
-                    
                 /// Reminders
                 Section(header: Text("Reminders")) {
                     List {
-                        
-                        
                         Button(action: {
-                            if (viewModel.todo.reminderBeforeDueDate < 0) {
+                            if viewModel.todo.reminderBeforeDueDate < 0 {
                                 viewModel.todo.reminderBeforeDueDate = -1 * viewModel.todo.reminderBeforeDueDate
                             }
                             self.showBeforeDueDatePicker = true
                         }) {
-                     
-                            Label("\(RemindersWidgetUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions() {
-                                    Button {
-                                        viewModel.muteDefaultReminder()
-                                    } label: {
-                                        Label("Mute", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.fill" : "bell.slash.fill")
-                                    }.tint(.indigo)
-                                }
-                            
-                            
+                            Label("\(RemindersWidgetUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions {
+                                Button {
+                                    viewModel.muteDefaultReminder()
+                                } label: {
+                                    Label("Mute", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.fill" : "bell.slash.fill")
+                                }.tint(.indigo)
+                            }
+                                
                         }.sheet(isPresented: $showBeforeDueDatePicker) {
-                            //TimePicker(selectedTime: self.$selectedTime)TimePicker(selectedTime: $viewModel.todo.reminderBeforeDueDate)
-                           
-                            
-                            RemindMeBeforeDueDatePicker(reminderBeforeDueDate: $viewModel.todo.reminderBeforeDueDate, isPresented: $showBeforeDueDatePicker).presentationDetents([.medium, ])
+                            // TimePicker(selectedTime: self.$selectedTime)TimePicker(selectedTime: $viewModel.todo.reminderBeforeDueDate)
+                                
+                            RemindMeBeforeDueDatePicker(reminderBeforeDueDate: $viewModel.todo.reminderBeforeDueDate, isPresented: $showBeforeDueDatePicker).presentationDetents([.medium])
                         }
-                        
+                            
                         ForEach($viewModel.reminderList, id: \.id) {
                             reminder in
                             Label(reminderDateFormatter.string(from: reminder.date.wrappedValue), systemImage: "bell")
@@ -141,7 +132,7 @@ struct CreateTodoView: View {
                             
                         Button(action: viewModel.toggleReminderEditor) {
                             Label("Add reminder", systemImage: "plus")
-                        }.sheet(isPresented: $viewModel.showReminderEditor){
+                        }.sheet(isPresented: $viewModel.showReminderEditor) {
                             ReminderEditor(reminder: nil, onComplete: viewModel.addReminder)
                         }
                     }
@@ -167,18 +158,18 @@ struct CreateTodoView: View {
         }
     }
 }
-
+    
 struct RemindMeBeforeDueDatePicker: View {
     @Binding var reminderBeforeDueDate: Int
     @Binding var isPresented: Bool
-
+        
     var body: some View {
         VStack {
             Text("Remind me...")
                 .multilineTextAlignment(TextAlignment.center)
-              
+                
                 .padding()
-        
+                
             Picker("Select time", selection: $reminderBeforeDueDate) {
                 Text("5 minutes").tag(5)
                 Text("10 minutes").tag(10)
@@ -190,7 +181,7 @@ struct RemindMeBeforeDueDatePicker: View {
             }.pickerStyle(.wheel)
             Text("...before due date.").multilineTextAlignment(TextAlignment.center)
                 .padding()
-            
+                
             Button("Save") {
                 // Save the selected time and close the sheet
                 self.isPresented = false
@@ -204,43 +195,42 @@ struct TodoEditor_Previews: PreviewProvider {
         CreateTodoView()
     }
 }
-
+    
 private var reminderDateFormatter: DateFormatter {
     let formatter = DateFormatter()
     formatter.dateStyle = .medium
     formatter.timeStyle = .short
     return formatter
 }
-
+    
 struct CreateQuickTodoView: View {
     @Environment(\.tintColor) var tintColor
-
+        
     @Binding private var showModal: Bool
     @ObservedObject private var viewModel: TodoEditorViewModel
-    
+        
     init(show: Binding<Bool>) {
         viewModel = TodoEditorViewModel()
-        self._showModal = show
+        _showModal = show
     }
-    
+        
     init(projectId: String, show: Binding<Bool>) {
         viewModel = TodoEditorViewModel(projectId: projectId)
-        self._showModal = show
+        _showModal = show
     }
-    
-    
+        
     private func saveTodo() {
         viewModel.todo.dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
         viewModel.save()
     }
-    
+        
     var body: some View {
-        VStack{
+        VStack {
             HStack {
                 TextField("Task Name", text: $viewModel.todo.task)
-                
+                    
                 Spacer()
-                
+                    
                 Text("Cancel")
                     .onTapGesture {
                         showModal = false
@@ -257,7 +247,6 @@ struct CreateQuickTodoView: View {
                     .alert("Error add todo", isPresented: $viewModel.showAlert, actions: {
                         Button("Ok", action: { self.viewModel.showAlert = false })
                     }, message: { Text(self.viewModel.error?.localizedDescription ?? "Unknown error") })
-                
             }
         }
     }

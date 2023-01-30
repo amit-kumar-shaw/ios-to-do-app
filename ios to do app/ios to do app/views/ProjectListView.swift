@@ -24,19 +24,17 @@ struct ProjectListView: View {
     
     var body: some View {
         VStack {
-            List{
+            List(selection: $viewModel.selection){
                 Section{
                     header
                 }
                 Section{
-                    ForEach($viewModel.todoList, id: \.0, editActions: .all){
+                    ForEach($viewModel.todoList, id: \.0, editActions: .delete){
                         $item in
-                        NavigationLink(destination: TodoDetail(entityId: item.0)){
                             TodoRow(item: $item).onChange(of: item.1.isCompleted) { newValue in
                                 viewModel.saveTodo(entityId: item.0, todo: item.1)
                                 viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
                             }
-                        }
                     }
                     if showModal {
                         CreateQuickTodoView(projectId: self.projectId, show: $showModal)
@@ -50,9 +48,7 @@ struct ProjectListView: View {
                     }
                 }
             }
-            .overlay(content: emptyView)
             
-            //TodoList(selectedFilter, self.project.0).listStyle(.inset)
             
             HStack {
                 
@@ -61,7 +57,7 @@ struct ProjectListView: View {
                     VerticalLabelButton("Project", systemImage: "folder.fill", action: {
                         viewModel.showMoveToProject = true
                     }).sheet(isPresented: $viewModel.showMoveToProject) {
-                        SelectProjectView { projectId in
+                        SelectProjectView { projectId, _ in
                             viewModel.selectionMoveToProject(projectId: projectId)
                         }
                     }.disabled(viewModel.selection.count == 0)
@@ -117,24 +113,6 @@ struct ProjectListView: View {
             }.frame(width: UIScreen.main.bounds.width)
     }
     
-    func emptyView()-> AnyView {
-        
-        if viewModel.todoList.isEmpty {
-                switch(viewModel.filter){
-                case .all: return AnyView(VStack{
-                    
-                    NavigationLink {
-                        CreateTodoView(projectId: projectId)
-                    } label: {
-                        Label("New Todo", systemImage: "plus")
-                    }.buttonStyle(.bordered)
-                })
-                case .incomplete: return AnyView(Text("No incomplete todos"))
-                case .completed: return AnyView(Text("No completed todos"))
-                }
-        }
-        return AnyView(EmptyView())
-    }
 }
 
 struct ProjectListView_Previews: PreviewProvider {

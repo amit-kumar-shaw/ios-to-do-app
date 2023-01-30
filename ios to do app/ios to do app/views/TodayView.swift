@@ -58,7 +58,7 @@ struct TodayView: View {
                 VerticalLabelButton("Project", systemImage: "folder.fill", action: {
                     viewModel.showMoveToProject = true
                 }).sheet(isPresented: $viewModel.showMoveToProject) {
-                    SelectProjectView { projectId in
+                    SelectProjectView { projectId, _ in
                         viewModel.selectionMoveToProject(projectId: projectId)
                     }
                 }

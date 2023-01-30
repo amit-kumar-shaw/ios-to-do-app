@@ -61,6 +61,7 @@
 		7C9F1BA02987445100328560 /* VerticalLabelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9F1B9F2987445100328560 /* VerticalLabelButton.swift */; };
 		7C9F1BA2298749A400328560 /* SelectPriorityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9F1BA1298749A400328560 /* SelectPriorityView.swift */; };
 		7C9F1BA4298749B800328560 /* SelectDueDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9F1BA3298749B800328560 /* SelectDueDateView.swift */; };
+		7C9F1BA52987733300328560 /* CreateTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D02A2972C70F008F0702 /* CreateTodoView.swift */; };
 		7CE7CFE92964DD58008F0702 /* ios_to_do_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7CFE82964DD58008F0702 /* ios_to_do_appApp.swift */; };
 		7CE7CFEB2964DD58008F0702 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7CFEA2964DD58008F0702 /* HomeView.swift */; };
 		7CE7CFED2964DD5A008F0702 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CE7CFEC2964DD5A008F0702 /* Assets.xcassets */; };
@@ -72,7 +73,6 @@
 		7CE7D00C2964DD5A008F0702 /* ios_to_do_appUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D00B2964DD5A008F0702 /* ios_to_do_appUITestsLaunchTests.swift */; };
 		7CE7D0252972B9E7008F0702 /* BindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D0242972B9E7008F0702 /* BindingExtension.swift */; };
 		7CE7D0272972BA82008F0702 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D0262972BA82008F0702 /* ToDo.swift */; };
-		7CE7D02B2972C70F008F0702 /* CreateTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D02A2972C70F008F0702 /* CreateTodoView.swift */; };
 		7CE7D02D297305F0008F0702 /* ReminderEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D02C297305F0008F0702 /* ReminderEditor.swift */; };
 		7CE7D02F29749549008F0702 /* LanguageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D02E29749549008F0702 /* LanguageList.swift */; };
 		7CE7D0312974961B008F0702 /* languages.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CE7D0302974961B008F0702 /* languages.json */; };
@@ -413,7 +413,6 @@
 				7C9F1B9E2987442000328560 /* components */,
 				7C6826592975E2B2002DF5C6 /* ContentView.swift */,
 				CD646DB1298134C20061A380 /* CreateProjectView.swift */,
-				28B9F4592981A6D1008C9150 /* CreateTagView.swift */,
 				7CE7D02A2972C70F008F0702 /* CreateTodoView.swift */,
 				50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */,
 				CE890B9529758FC400233D7A /* FlashcardEditor.swift */,
@@ -424,13 +423,10 @@
 				CD646DB2298134C20061A380 /* ProjectListView.swift */,
 				7CE7D02C297305F0008F0702 /* ReminderEditor.swift */,
 				7C3B579D298561E4000815CD /* rowViews */,
-				7C3B57992981B657000815CD /* SearchView.swift */,
 				7C9F1BA3298749B800328560 /* SelectDueDateView.swift */,
 				7C9F1BA1298749A400328560 /* SelectPriorityView.swift */,
 				7C9F1B9C2987345600328560 /* SelectProjectView.swift */,
 				7C6826602975EEE5002DF5C6 /* SettingsView.swift */,
-				28B9F4572981A122008C9150 /* TagsInTodoView.swift */,
-				286C014529848856004D2033 /* TagView.swift */,
 				7C3B578D29815001000815CD /* TodayView.swift */,
 				7C6826642976F1FB002DF5C6 /* TodoDetail.swift */,
 				7C6826682976F850002DF5C6 /* TodoList.swift */,
@@ -667,6 +663,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C9F1BA52987733300328560 /* CreateTodoView.swift in Sources */,
 				CD646DB4298134C20061A380 /* ProjectListView.swift in Sources */,
 				286C014629848856004D2033 /* TagView.swift in Sources */,
 				7CE7CFF22964DD5A008F0702 /* Persistence.swift in Sources */,
@@ -692,8 +689,6 @@
 				7C9F1B9D2987345600328560 /* SelectProjectView.swift in Sources */,
 				28B9F45429819A46008C9150 /* Tag.swift in Sources */,
 				7C3B579429816F7D000815CD /* Color.swift in Sources */,
-				7CE7D02B2972C70F008F0702 /* CreateTodoView.swift in Sources */,
-				7CE7D02B2972C70F008F0702 /* CreateTodoView.swift in Sources */,
 				CD646DB6298134E40061A380 /* ProjectListViewModel.swift in Sources */,
 				7CE7D02F29749549008F0702 /* LanguageList.swift in Sources */,
 				7C3B578E29815001000815CD /* TodayView.swift in Sources */,
@@ -701,7 +696,6 @@
 				7C6826652976F1FB002DF5C6 /* TodoDetail.swift in Sources */,
 				7C3B579629817E56000815CD /* UpcomingViewModel.swift in Sources */,
 				7C68266B2977036F002DF5C6 /* TodoListViewModel.swift in Sources */,
-				CE890B9229758E6500233D7A /* Flashcards.swift in Sources */,
 				7C9F1BA02987445100328560 /* VerticalLabelButton.swift in Sources */,
 				7C3B579029815014000815CD /* TodayViewModel.swift in Sources */,
 				CE890B9629758FC400233D7A /* FlashcardEditor.swift in Sources */,

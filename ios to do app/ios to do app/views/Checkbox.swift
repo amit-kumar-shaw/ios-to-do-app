@@ -15,13 +15,19 @@ struct Checkbox: View {
     public var onToggle: () -> Void
     
     var body: some View {
-        Image(systemName: isChecked ? "checkmark.circle.fill" : "circle")
+        Image(systemName: "circle")
             .resizable()
             .frame(width: 25, height: 25)
             .onTapGesture {
                 self.isChecked.toggle()
                 self.onToggle()
-            }.foregroundColor(tintColor)
+            }.foregroundColor(tintColor).overlay {
+                if isChecked {
+                    Image(systemName: "circle.fill")
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(tintColor)
+                }
+            }
     }
 }
 

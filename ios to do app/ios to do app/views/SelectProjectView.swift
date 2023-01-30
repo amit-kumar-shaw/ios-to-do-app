@@ -9,9 +9,11 @@ import SwiftUI
 
 ///List of projects of the current user allowing selection
 struct SelectProjectView: View {
+    @Environment(\.dismiss) var dismiss
     @ObservedObject private var viewModel = ProjectViewModel()
     
-    var onSelect: (_ projectId: String) -> Void
+    ///Handler for selection of new Project
+    var onSelect: (_ projectId: String?, _ project: Project?) -> Void
     
     var body: some View {
         List(selection: $viewModel.selection){
@@ -28,17 +30,31 @@ struct SelectProjectView: View {
                 }
             }
         }.environment(\.editMode, .constant(EditMode.active))
-        Button("Move"){
-            guard let projectId = viewModel.selection else {
-                return
+        HStack{
+            Button("Remove project"){
+                dismiss()
+                onSelect("", nil)
             }
-            onSelect(projectId)
-        }.disabled(viewModel.selection == nil).padding()
+            Button("Move"){
+                guard let projectId = viewModel.selection else {
+                    return
+                }
+                
+                guard let project = viewModel.projects.first(where: { (id, _) in
+                    viewModel.selection == id
+                })?.1 else {
+                    return
+                }
+                dismiss()
+                onSelect(projectId, project)
+            }.disabled(viewModel.selection == nil).padding()
+        }
+        
     }
 }
 
 struct SelectProjectView_Previews: PreviewProvider {
     static var previews: some View {
-        SelectProjectView(onSelect: {projectId in })
+        SelectProjectView(onSelect: {projectId, project in })
     }
 }

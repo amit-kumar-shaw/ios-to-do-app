@@ -36,7 +36,7 @@ class GenericTodoViewModel: ObservableObject {
         self.loadUnfilteredList()
     }
     
-    func selectionMoveToProject(projectId: String){
+    func selectionMoveToProject(projectId: String?){
         let db = Firestore.firestore()
         
         
@@ -57,7 +57,7 @@ class GenericTodoViewModel: ObservableObject {
             }
             
             for d in refrences{
-                transaction.updateData(["projectId" : projectId], forDocument: d)
+                transaction.updateData(["projectId" : projectId ?? ""], forDocument: d)
             }
             return nil
         } completion: {_,_ in

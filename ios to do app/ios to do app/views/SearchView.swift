@@ -39,19 +39,7 @@ struct SearchView: View {
             ForEach($todoViewModel.todoList, id: \.0, editActions: .all){
                 $item in
                 if item.1.task.range(of: searchText, options: .caseInsensitive) != nil {
-                    
-                    NavigationLink(destination: TodoDetail(entityId: item.0)){
-             
-                        HStack {
-                            Text(item.1.task)
-                            Spacer()
-                            Button(action: {}) {
-                                Checkbox(isChecked: ($item.1.isCompleted), onToggle: {
-                                    todoViewModel.saveTodo(entityId: item.0, todo: item.1)
-                                })
-                            }
-                        }
-                    }
+                        TodoRow(item: $item)
                 }
             }
         }

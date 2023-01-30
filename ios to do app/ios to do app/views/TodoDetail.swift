@@ -37,10 +37,19 @@ struct TodoDetail: View {
                     /// show basic information
                     Section {
                         TextField("Task Name", text: $viewModel.todo.task)
-                        Picker(selection: $viewModel.todo.selectedLanguage, label: Text("Language")) {
-                            LanguageList()
+                        HStack{
+                            Text("Project")
+                            Spacer()
+                            Button(action: {viewModel.showProjectSelector = true}){
+                                Text(viewModel.project?.projectName ?? "None")
+                            }.sheet(isPresented: $viewModel.showProjectSelector) {
+                                SelectProjectView { projectId, project in
+                                    viewModel.todo.projectId = projectId
+                                    viewModel.project = project
+                                }
+                            }
                         }
-                        TextField("Description", text: $viewModel.todo.description)
+                        TextEditor(text: $viewModel.todo.description)
                     }
                     
                     /// show flashcards and a button to add flashcards
