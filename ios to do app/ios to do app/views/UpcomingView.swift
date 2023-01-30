@@ -10,19 +10,22 @@ import SwiftUI
 
 
 
-
+/// Upcomingview
 struct UpcomingView: View {
     @ObservedObject var viewModel = UpcomingViewModel()
+    /// Color from he color setting
     @Environment(\.tintColor) var tintColor
     @Environment(\.editMode) var editMode
-
+    
+    /// The structure of the view
     var body: some View {
         VStack {
             List(selection: $viewModel.selection) {
+            /// Header
             Section{
                 header
             }
-            
+            /// Todo List
                Section{
                    ForEach($viewModel.todoList, id: \.0) { $item in
                        TodoRow(item: $item).onChange(of: item.1.isCompleted) { newValue in
@@ -35,7 +38,7 @@ struct UpcomingView: View {
                    }
                }
             }.listStyle(.insetGrouped)
-            
+            /// Bottom
             bottomBar
             
         }.alert("Error: \(self.viewModel.error?.localizedDescription ?? "")", isPresented: $viewModel.showAlert) {
@@ -51,12 +54,15 @@ struct UpcomingView: View {
         }
     }
     
+    /// Header 
     var header: some View {
         VStack(alignment: .center) {
+            /// Complete Process percent
             Text("\(Int(viewModel.progress * 100))%")
                 .font(.system(size: 50, weight: .ultraLight, design: .rounded))
             Text("completed")
                 .font(.system(size: 18, design: .rounded))
+            /// Picker one day of the week
             Picker(selection: $viewModel.selectedWeekday) {
                 ForEach(WEEKDAYS.indices, id: \.self) { index in
                     Text(WEEKDAYS[index].prefix(3))
@@ -68,11 +74,12 @@ struct UpcomingView: View {
         
     }
     
+    /// Bottom
     var bottomBar: some View {
         HStack {
-            
+            /// Collection edit
             if editMode?.wrappedValue == .active{
-                
+                /// Project move
                 Spacer()
                 VerticalLabelButton("Project", systemImage: "folder.fill", action: {
                     viewModel.showMoveToProject = true
@@ -81,6 +88,7 @@ struct UpcomingView: View {
                         viewModel.selectionMoveToProject(projectId: projectId)
                     }
                 }
+                /// Priority change
                 Spacer()
                 VerticalLabelButton("Priority", systemImage: "exclamationmark.circle.fill") {
                     viewModel.showChangePriority = true
@@ -89,6 +97,7 @@ struct UpcomingView: View {
                         viewModel.selectionChangePriority(newPriority: newPriority)
                     }
                 }
+                /// Due Date change
                 Spacer()
                 VerticalLabelButton("Due date", systemImage: "calendar.badge.clock") {
                     viewModel.showChangeDueDate = true
@@ -99,6 +108,7 @@ struct UpcomingView: View {
                 }
                 Spacer()
             }else{
+                /// Picker of the filter of completing
                 Picker(selection: $viewModel.filter, label: Text("Filter"), content: {
                     ForEach(FilterType.allCases, id: \.self) { v in
                         Text(v.localizedName).tag(v)
@@ -109,6 +119,7 @@ struct UpcomingView: View {
                    // }
                // }
                 Spacer()
+                /// Add button
                 NavigationLink {
                     CreateTodoView()
                 } label: {
