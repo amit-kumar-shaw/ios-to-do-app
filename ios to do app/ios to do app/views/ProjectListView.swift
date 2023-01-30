@@ -5,23 +5,40 @@
 //  Created by Cristi Conecini on 24.01.23.
 //
 
+// ProjectListView.swift
+// ios to do app
+//
+// Created by Cristi Conecini on 24.01.23.
+
 import SwiftUI
 
+/// The ProjectListView is a View that displays the list of to-dos for a given project, and allows you to perform various operations on the to-dos such as edit, add, and filter.
 struct ProjectListView: View {
+    /// The `tintColor` is the color used for various visual elements in the view, such as the add button.
     @Environment(\.tintColor) var tintColor
     
+    /// The `editMode` environment determines whether the view is in editing mode or not.
     @Environment(\.editMode) var editMode
     
+    /// The `viewModel` is an `ObservedObject` that contains the logic and data for the view.
     @ObservedObject var viewModel: ProjectListViewModel
+    
+    /// The `projectId` parameter specifies the ID of the project for which the list of to-dos is being displayed.
     var projectId: String
+    
+    /// The `showModal` state property determines whether the quick to-do creation modal is shown or not.
     @State private var showModal = false
+    
+    /// The `selectedFilter` state property determines the selected filter type for the list of to-dos.
     @State var selectedFilter: FilterType = .all
     
+    /// The `init` method initializes the view with a given `projectId`.
     init(projectId: String){
         self.projectId = projectId
         viewModel = ProjectListViewModel(projectId: projectId)
     }
     
+    /// The `body` property defines the content and layout of the view.
     var body: some View {
         VStack {
             List(selection: $viewModel.selection){
@@ -54,6 +71,12 @@ struct ProjectListView: View {
                 
                 if editMode?.wrappedValue == EditMode.active {
                     Spacer()
+                    /// The `VerticalLabelButton` is a button that displays a label and an icon vertically.
+                    ///
+                    /// - Parameters:
+                    ///   - label: The text displayed on the button.
+                    ///   - systemImage: The system image displayed on the button.
+                    ///   - action: The action to perform when the button is tapped.
                     VerticalLabelButton("Project", systemImage: "folder.fill", action: {
                         viewModel.showMoveToProject = true
                     }).sheet(isPresented: $viewModel.showMoveToProject) {

@@ -11,17 +11,23 @@ import FirebaseAuth
 
 let lightGreyColor = Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0)
 
-// Define the SignUpView struct
+/// Define the `SignUpView` struct
 struct SignUpView: View {
-    /// State properties to store user inputs and status
+    /// State property `email` to store user's email input
     @State private var email: String = ""
+    /// State property `password` to store user's password input
     @State private var password: String = ""
+    /// State property `error` to store error message during sign up
     @State private var error: String = ""
+    /// State property `isLoading` to store the loading status during sign up
     @State private var isLoading = false
+    /// State property `isSuccess` to store the success status during sign up
     @State private var isSuccess = false
-    /// Binding property to control the visibility of the sign up view
+    /// Binding property `showSignUpView` to control the visibility of the sign up view
     @Binding var showSignUpView: Bool
+    /// State property `firstName` to store user's first name input
     @State private var firstName: String = ""
+    /// State property `lastName` to store user's last name input
     @State private var lastName: String = ""
 
     var body: some View {
@@ -31,14 +37,14 @@ struct SignUpView: View {
             TextField("Last Name", text: $lastName)
             TextField("Email", text: $email)
             SecureField("Password", text: $password)
-            /// Display error message if there is any
+            // Display error message if there is any
             if (error != "") {
                 Text(error)
                     .font(.caption)
                     .foregroundColor(.red)
                     .padding()
             }
-            /// Sign up button
+            // Sign up button
             Button(action: {
                 self.signup()
             }) {
@@ -70,6 +76,7 @@ struct SignUpView: View {
         }
     }
 }
+
 
 /// Define the ForgetPasswordView struct
 struct ForgetPasswordView: View {

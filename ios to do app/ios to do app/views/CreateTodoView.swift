@@ -29,8 +29,8 @@ struct CreateTodoView: View {
     }
     
     /// Initialize CreateTodoView and associte the new to do to the specified project
-    /// - Parameters
-    ///    - projectId: id of the project to associate with
+    /// - Parameters:
+    ///   - projectId: id of the project to associate with
     init(projectId: String) {
         viewModel = TodoEditorViewModel(projectId: projectId)
     }
