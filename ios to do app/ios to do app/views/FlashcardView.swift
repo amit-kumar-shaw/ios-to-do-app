@@ -8,8 +8,9 @@ struct FlashcardView: View {
     @ObservedObject var viewModel: TodoEditorViewModel
     @State private var currentCard: Int = 0
     @State private var isFlipped: Bool = false
-    @State var flashcardRotation = 0.0
-    @State var contentRotation = 0.0
+    @State private var flashcardRotation = 0.0
+    @State private var contentRotation = 0.0
+    @State private var offset = CGSize.zero
     @State private var showFlashcardEditor: Bool = false
     
     /// Creates an instance with the given viewModel.
@@ -24,30 +25,79 @@ struct FlashcardView: View {
         VStack{
             
             /// Flashcard
-            VStack {
-                if viewModel.flashcards.isEmpty {
-                    Text("No flashcards yet")
-                } else {
-                    Text(isFlipped ? viewModel.flashcards[currentCard].back : viewModel.flashcards[currentCard].front)
+            ZStack {
+                if self.currentCard < viewModel.flashcards.count - 1 {
+                    VStack {
+                        
+                        Text(viewModel.flashcards[currentCard + 1].front)
+                        
+                    }
+                    
+                    .bold()
+                    .frame(width: 200, height: 300)
+                    .padding()
+                    .background(colorScheme == .dark ? .black : .white)
+                    .foregroundColor(tintColor)
+                    .cornerRadius(16)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(tintColor).shadow(radius: 5)
+                    )
                 }
+
+                VStack {
+                    if viewModel.flashcards.isEmpty {
+                        Text("No flashcards yet")
+                    } else {
+                        Text(isFlipped ? viewModel.flashcards[currentCard].back : viewModel.flashcards[currentCard].front)
+                    }
+                }
+                .bold()
+                .rotation3DEffect(.degrees(contentRotation), axis: (x: 0, y: 1, z: 0))
+                .frame(width: 200, height: 300)
+                .padding()
+                .background(colorScheme == .dark ? (isFlipped ? tintColor : .black) : (isFlipped ? tintColor : .white))
+                .foregroundColor(isFlipped ? .white : tintColor)
+                .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(tintColor).shadow(radius: 5)
+                )
+                .rotationEffect(.degrees(Double(offset.width / 5)))
+                .offset(x: offset.width * 5, y: 0)
+                .opacity(2 - Double(abs(offset.width / 50)))
+                .gesture(
+                    DragGesture()
+                        .onChanged{ gesture in
+                            offset = gesture.translation
+                        }
+                        .onEnded { _ in
+                            if abs(offset.width) > 100 {
+                                if self.currentCard < viewModel.flashcards.count - 1 {
+                                    isFlipped = false
+                                    self.currentCard += 1
+                                    
+                                }
+                                offset = .zero
+                            } else {
+                                offset = .zero
+                            }
+                        }
+                )
+                .onTapGesture {
+                    flipFlashcard()
+                }
+                .rotation3DEffect(.degrees(flashcardRotation), axis: (x: 0, y: 1, z: 0))
             }
-            .bold()
-            .rotation3DEffect(.degrees(contentRotation), axis: (x: 0, y: 1, z: 0))
-            .frame(width: 200, height: 300)
-            .padding()
-            .background(colorScheme == .dark ? (isFlipped ? tintColor : .black) : (isFlipped ? tintColor : .white))
-            .foregroundColor(isFlipped ? .white : tintColor)
-            .cornerRadius(16)
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(tintColor).shadow(radius: 5)
-            )
-            .onTapGesture {
-                flipFlashcard()
-            }
-            .rotation3DEffect(.degrees(flashcardRotation), axis: (x: 0, y: 1, z: 0))
             
             Spacer()
+            if !viewModel.flashcards.isEmpty {
+                VStack {
+                    Text("\(self.currentCard)/\(viewModel.flashcards.count)")
+                        .foregroundColor(Color.gray)
+                    
+                }
+            }
             
             /// Buttons to flip and move between flashcards
             HStack {
@@ -72,6 +122,13 @@ struct FlashcardView: View {
             }.padding()
         }.navigationBarTitle("Flashcards")
                         .toolbar {
+                            Button(action: {
+                                isFlipped = false
+                                self.currentCard = 0
+                                offset = .zero
+                            }) {
+                                Text("Reset")
+                            }.disabled(viewModel.flashcards.isEmpty)
                             NavigationLink(destination: FlashcardListView(viewModel: viewModel)){
                                 Text("Edit")
                             }

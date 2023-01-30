@@ -5,16 +5,27 @@
 //  Created by Cristi Conecini on 16.01.23.
 //
 
+import FirebaseCore
 import Foundation
 import SwiftUI
-import FirebaseCore
 
-
+/// App delegate used for initialising Firebase and notification navigation
 class FirebaseAppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
+    weak var notificationManager: NotificationNavigationManager?
 
-    return true
-  }
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool
+    {
+        FirebaseApp.configure()
+
+        return true
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void)
+    {
+        notificationManager?.pageToNavigateTo = "today"
+        completionHandler()
+    }
 }

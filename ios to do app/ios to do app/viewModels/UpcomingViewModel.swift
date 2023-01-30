@@ -12,7 +12,7 @@ import FirebaseFirestoreSwift
 import Combine
 
 
-
+/// View model for the UpcomingView
 class UpcomingViewModel: GenericTodoViewModel {
     
     private var cancelables: [AnyCancellable] = []
@@ -50,6 +50,9 @@ class UpcomingViewModel: GenericTodoViewModel {
         super.refresh()
     }
     
+    /// Determines the date range for a specific weekday specified by the weekday parameter and returns the start and end dates for that range.
+    /// - Parameter weekday: An Int representing the weekday (e.g. Monday = 0, Tuesday = 1, etc.).
+    /// - Returns:  A tuple of two Date objects representing the start and end dates of the date range for the specified weekday.
     private func determineDateRange(weekday: Int) throws ->  (Date, Date){
         let currentDate = Date()
         
@@ -72,6 +75,7 @@ class UpcomingViewModel: GenericTodoViewModel {
         return (startHour,endHour)
     }
     
+    /// Makes sure the view is properly when the todolist or the selectedWeekday changes
     func setupBindings(){
         $todoList.receive(on: DispatchQueue.main).sink{
             list in
@@ -100,6 +104,11 @@ class UpcomingViewModel: GenericTodoViewModel {
 
     
     
+    /// Loads a list of to-dos based on the specified filter and only includes those with a due date between the startDate and endDate parameters.
+    /// - Parameters:
+    ///   - filter: A FilterType (e.g. show all todos, show only completed ...)
+    ///   - startDate: The start date of the range
+    ///   - endDate: The end date of the range
     func loadList(filter: FilterType, startDate: Date, endDate: Date){
         lastActiveFilter = filter
         querySubscription?.remove()

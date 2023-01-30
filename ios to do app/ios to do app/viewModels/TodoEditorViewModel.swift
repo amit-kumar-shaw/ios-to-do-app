@@ -45,6 +45,7 @@ class TodoEditorViewModel: ObservableObject {
     ///Initialize TodoEditorViewModel with 'projects' document id
     init(projectId: String = "") {
         todo.projectId = projectId
+        getProject(projectId: projectId)
     }
     
     private func setupRestrictions() {

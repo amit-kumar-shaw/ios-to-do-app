@@ -9,6 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
+/// ViewModel to display the details of a Todo
 class TodoDetailViewModel: ObservableObject{
     
     @Published var todo: Todo = .init()
@@ -19,11 +20,16 @@ class TodoDetailViewModel: ObservableObject{
     let db = Firestore.firestore()
     private var listenerRegistration: ListenerRegistration?
     
+    /// Creates an instance with the given todo id
+    ///
+    /// Parameters:
+    ///     - entityId: The todo id
     init(entityId: String){
         self.id = entityId
         getData()
     }
     
+    /// Fetch the details of todo
     func getData(){
             let docRef = db.collection("todos").document(id)
             
