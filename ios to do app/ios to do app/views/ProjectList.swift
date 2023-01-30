@@ -37,16 +37,9 @@ struct ProjectListRow: View {
     
     var body: some View {
         HStack {
-            
-            Circle().frame(width: 12, height: 12)
-                .overlay(
-                    Circle()
-                        .stroke(Color(hex: project!.colorHexString ?? "#FFFFFF"), lineWidth: 10)
-                        .foregroundColor(Color(hex: project!.colorHexString ?? "#FFFFFF"))
-                        .frame(width: 6, height: 6)
-                        
-                )
-            
+            Circle()
+                .foregroundColor(Color(hex: project!.colorHexString ?? "#FFFFFF"))
+                .frame(width: 12, height: 12)
             Text(project!.projectName ?? "Untitled")
             Text(project!.selectedLanguage.name)
                 .foregroundColor(.gray)
