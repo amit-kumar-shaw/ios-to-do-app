@@ -96,7 +96,7 @@ struct SearchableView: View {
         return HStack {
             NavigationLink(destination: SettingsView(), label: {
                 Image(systemName: "gearshape").foregroundColor(tintColor)
-                Text("Settings").foregroundColor(tintColor)
+                //Text("Settings").foregroundColor(tintColor)
             })
         }
     }
@@ -108,14 +108,11 @@ struct SearchableView: View {
         List {
             if (!isSearching) {
                 
+                todayList()
                 
                 upcomingList()
                 
-                todayList()
-                
                 tagList()
-                
-                settingList()
                 
                 if self.isSortedByLanguage {
                     // Projects Section sorted by language
@@ -145,6 +142,9 @@ struct SearchableView: View {
             }
             ToolbarItem(placement: .automatic) {
                 addButton
+            }
+            ToolbarItem(placement: .automatic) {
+                settingList()
             }
             
         }
