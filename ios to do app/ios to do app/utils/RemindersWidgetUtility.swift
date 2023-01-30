@@ -202,11 +202,102 @@ struct RemindersWidgetUtility{
         }
     }
     
+    static func setAppIcon(tintColor: String, themePrefix: String) async {
+        
+        
+        
+        getTodoList(completion: {todoList in
+            var isDayCompleted = true
+            
+            for (_, todo) in todoList {
+                if todo.dueDate >= Calendar.current.startOfDay(for:  Date()) && todo.dueDate <= Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for:  Date()))! {
+                    if (!todo.isCompleted) {
+                        isDayCompleted = false
+                        break
+                    }
+                }
+            }
+            
+            self._setAppIcon(tintColor: tintColor, isTodayNotCompleted: !isDayCompleted, themePrefix: themePrefix)
+            
+        })
+        
+       
+    }
+    
+    static func _setAppIcon(tintColor: String, isTodayNotCompleted : Bool, themePrefix : String) {
+        
+        var iconSuffix = "BlueUntickedIcon"
+        
+        if tintColor.lowercased() == "#007aff" {
+            // blue
+            if (isTodayNotCompleted) {
+                iconSuffix = "BlueUntickedIcon"
+            } else {
+                iconSuffix = "BlueTickedIcon"
+            }
+           
+        }
+        if tintColor.lowercased() == "#18eb09" {
+            // green
+            if (isTodayNotCompleted) {
+                iconSuffix = "GreenUntickedIcon"
+            } else {
+                iconSuffix = "GreenTickedIcon"
+            }
+        }
+        if tintColor.lowercased() == "#e802e0" {
+            // "pink"
+            if (isTodayNotCompleted) {
+                iconSuffix = "PinkUntickedIcon"
+            } else {
+                iconSuffix = "PinkTickedIcon"
+            }
+        }
+        if tintColor.lowercased() == "#eb7a09" {
+            // orange
+            if (isTodayNotCompleted) {
+                iconSuffix = "OrangeUntickedIcon"
+            } else {
+                iconSuffix = "OrangeTickedIcon"
+            }
+        }
+        
+        let iconName : String = "\(themePrefix)\(iconSuffix)"
+
+        let lastAppIconName = UserDefaults.standard.string(forKey: "lastAppIconName") ?? "DarkBlueTickedIcon"
+
+        if iconName != lastAppIconName {
+            DispatchQueue.main.async {
+                RemindersWidgetUtility.setApplicationIconName(iconName)
+            }
+            UserDefaults.standard.set(iconName, forKey: "lastAppIconName")
+        }
+        
+    }
+    
+    static func setApplicationIconName(_ iconName: String) {
+            if UIApplication.shared.responds(to: #selector(getter: UIApplication.supportsAlternateIcons)) && UIApplication.shared.supportsAlternateIcons {
+                
+                typealias setAlternateIconName = @convention(c) (NSObject, Selector, NSString, @escaping (NSError) -> ()) -> ()
+                
+                let selectorString = "_setAlternateIconName:completionHandler:"
+                
+                let selector = NSSelectorFromString(selectorString)
+                let imp = UIApplication.shared.method(for: selector)
+                let method = unsafeBitCast(imp, to: setAlternateIconName.self)
+                method(UIApplication.shared, selector, iconName as NSString, { _ in })
+            }
+        }
+    
     ///  Takes a list of todos and calculates the timeline for the widget for today and the next 7 days. It encodes the timeline as JSON and saves it using UserDefaults and AppGroups so that the WidgetTimeLineProvider can decode it again.
     /// - Parameters:
     ///   - tintColor: the accent color that got selected by the user
     ///   - todoList: list of all todos which should be displayed in the widget
     static func provideWidgetTimeline(tintColor: String, todoList: [(String, Todo)]) {
+        
+    
+        
         
       var dailyTodosTuple : [(Date, [SimpleTodo])] = []
         
@@ -267,55 +358,60 @@ struct RemindersWidgetUtility{
 
     }
     
+    static func getTodoList(completion: @escaping ([(String, Todo)]) -> Void) {
+        let db = Firestore.firestore()
+        let auth = Auth.auth()
+
+        guard let currentUserId = auth.currentUser?.uid else {
+            completion([])
+            return
+        }
+
+        let userTodosQuery = db.collection("todos").whereField("userId", in: [currentUserId])
+        userTodosQuery.addSnapshotListener { querySnapshot, error in
+            if error != nil {
+                completion([])
+                return
+            }
+
+            do {
+                let docs = try querySnapshot?.documents.map({ docSnapshot in
+                    return (docSnapshot.documentID, try docSnapshot.data(as: Todo.self))
+                })
+                let todoList: [(String, Todo)] = docs!
+
+                completion(todoList)
+            } catch {
+                completion([])
+            }
+        }
+    }
+
+    
     
     /// Schedules reminders and updates the timeline of the widget. Uses directly the Firestore to retrieve all relevant todos.
     /// - Parameter tintColor: the accent color that got selected by the user
     static func scheduleRemindersAndWidgetTimeline(tintColor : String) async {
         
-        let db = Firestore.firestore()
-        let auth = Auth.auth()
-        
-        guard let currentUserId = auth.currentUser?.uid else{
-            return
-        }
-        
-        
-        
-        let userTodosQuery = db.collection("todos").whereField("userId", in: [currentUserId])
-        
-        userTodosQuery.addSnapshotListener { querySnapshot, error in
-            if error != nil {
-                return
-            }
+        getTodoList(completion: {todoList in
             
-            do{
-                let docs = try querySnapshot?.documents.map({ docSnapshot in
-                    return (docSnapshot.documentID, try docSnapshot.data(as: Todo.self))
-                })
-                let todoList: [(String, Todo)] = docs!
-                
-                // schedule notifications if possible
-                UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-                    if settings.authorizationStatus == .authorized {
-                        // The user has granted permission to send notifications
-                        print("Has permissions to send notifications")
-                        self.scheduleReminders(todoList: todoList)
-                    }
-                    
-                    else {
-                        print("No permissions to send notifications")
-                    }
+            // schedule notifications if possible
+            UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+                if settings.authorizationStatus == .authorized {
+                    // The user has granted permission to send notifications
+                    print("Has permissions to send notifications")
+                    self.scheduleReminders(todoList: todoList)
                 }
                 
-                // provide timeline for today-widget
-                provideWidgetTimeline(tintColor: tintColor, todoList: todoList)
-                
-            } catch {
-                
+                else {
+                    print("No permissions to send notifications")
+                }
             }
             
-        }
-        
+            // provide timeline for today-widget
+            provideWidgetTimeline(tintColor: tintColor, todoList: todoList)
+            
+        })
         
     }
     

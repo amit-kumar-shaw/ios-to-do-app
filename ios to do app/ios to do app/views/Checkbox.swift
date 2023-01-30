@@ -11,14 +11,21 @@ import SwiftUI
 struct Checkbox: View {
     @Binding var isChecked: Bool
     @Environment(\.tintColor) var tintColor
-    
+    @Environment(\.colorScheme) var colorScheme
     public var onToggle: () -> Void
+    
+    func setAppIcon(tintColor: String, themePrefix: String) {
+        Task {
+            await RemindersWidgetUtility.setAppIcon(tintColor: tintColor, themePrefix: themePrefix)
+        }
+    }
     
     var body: some View {
         Image(systemName: "circle")
             .resizable()
             .frame(width: 25, height: 25)
             .onTapGesture {
+                self.setAppIcon(tintColor: "#\(tintColor.toHex()?.lowercased() ?? "" )", themePrefix: colorScheme == .dark ? "Dark" : "Light")
                 self.isChecked.toggle()
                 self.onToggle()
             }.foregroundColor(tintColor).overlay {

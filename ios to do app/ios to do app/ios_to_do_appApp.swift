@@ -14,7 +14,6 @@ struct ios_to_do_appApp: App {
     
     let persistenceController = PersistenceController.shared
     @UIApplicationDelegateAdaptor(FirebaseAppDelegate.self) var delegate
-
     @AppStorage("tintColorHex") var tintColorHex = TINT_COLORS[0]
     
     @State private var showEnableRemindersModal : Bool = false
@@ -25,11 +24,20 @@ struct ios_to_do_appApp: App {
         }
     }
     
+    func setAppIcon(tintColor: String) {
+        Task {
+            await RemindersWidgetUtility.setAppIcon(tintColor: tintColor, themePrefix: UITraitCollection.current.userInterfaceStyle.rawValue == UIUserInterfaceStyle(.dark).rawValue ? "Dark" : "Light")
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView(tintColor: Color(hex: tintColorHex))
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environment(\.tintColor, Color(hex: tintColorHex))
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                    setAppIcon(tintColor: tintColorHex)
+                }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
                     schedule(tintColor: tintColorHex)
                 }
@@ -40,9 +48,12 @@ struct ios_to_do_appApp: App {
                         }
                     })
                 }
+            
                 .fullScreenCover(isPresented: $showEnableRemindersModal) {
                     EnableRemindersModalView().tint(Color(hex: tintColorHex)).environment(\.tintColor, Color(hex: tintColorHex))
                 }
+        
+                
         }
     }
 }

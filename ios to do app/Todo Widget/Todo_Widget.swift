@@ -10,19 +10,18 @@ import SwiftUI
 import Intents
 
 
+/// Defines the look and timeline of the Today's Tasks widget
 struct Provider: IntentTimelineProvider {
+    
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date(), upcomingTodos: [SimpleTodo(task: "Example task 1", isCompleted: true, color: "#025ee8"), SimpleTodo(task: "Example task 2", isCompleted: true, color: "#18eb09"), SimpleTodo(task: "Example task 3", isCompleted: true, color: "#e802e0"),], configuration: ConfigurationIntent())
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-     
-        
-
         completion(SimpleEntry(date: Date(), upcomingTodos: [SimpleTodo(task: "Example task 1", isCompleted: true, color: "#025ee8"), SimpleTodo(task: "Example task 2", isCompleted: true, color: "#18eb09"), SimpleTodo(task: "Example task 3", isCompleted: true, color: "#e802e0")], configuration: ConfigurationIntent()))
-
     }
-
+    
+    /// Calculates the timeline of the widget. Uses the UserDefaults to access the timeline that was provided by the RemindersWidgetUtility and decodes the json..
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         
         var jsonString = ""
@@ -51,38 +50,14 @@ struct Provider: IntentTimelineProvider {
     }
 }
 
-struct SimpleEntry: TimelineEntry {
-    var date: Date
-    
-    let upcomingTodos : [SimpleTodo]
-    let configuration: ConfigurationIntent
-}
 
-
-struct UpcomingDays: Decodable {
-    let dailyTodos: [DailyTodo]
-}
-
-struct DailyTodo: Decodable {
-    let date: Date
-    let dailyTodoList: [SimpleTodo]
-}
-
-struct SimpleTodo: Decodable {
-    let task : String
-    let isCompleted : Bool
-    let color : String
-}
-
-
+/// The parent view of the widget
 struct Todo_WidgetEntryView : View {
     var entry: Provider.Entry
     var upcomingTodos : [SimpleTodo] = []
     
     init(entry: Provider.Entry) {
         self.entry = entry
-        
-    
     }
     
     var body: some View {
@@ -90,6 +65,8 @@ struct Todo_WidgetEntryView : View {
     }
 }
 
+
+/// Definition and setup of the widget
 struct Todo_Widget: Widget {
     let kind: String = "Todo_Widget"
 
@@ -107,4 +84,33 @@ struct Todo_Widget_Previews: PreviewProvider {
         Todo_WidgetEntryView(entry: SimpleEntry(date: Date(), upcomingTodos: [], configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
+}
+
+
+/// A single time line entry which is presented by the widget
+struct SimpleEntry: TimelineEntry {
+    var date: Date
+    let upcomingTodos : [SimpleTodo]
+    let configuration: ConfigurationIntent
+}
+
+
+/// The parent JSON-object which is used for decoding the timeline provided by the RemindersWidgetUtility
+struct UpcomingDays: Decodable {
+    let dailyTodos: [DailyTodo]
+}
+
+
+/// Used to describe the todos for a single day
+struct DailyTodo: Decodable {
+    let date: Date
+    let dailyTodoList: [SimpleTodo]
+}
+
+
+/// Simplified version of a ToDo that only consists of a task, whether it is completed or not and the user selected accent color of the checkmark
+struct SimpleTodo: Decodable {
+    let task : String
+    let isCompleted : Bool
+    let color : String
 }

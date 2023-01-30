@@ -10,11 +10,18 @@ import SwiftUI
 struct SettingsView: View {
     @ObservedObject var viewModel: SettingsViewModel
     @State private var showEnableRemindersButton : Bool = false
-    
+    @Environment(\.colorScheme) var colorScheme
     @AppStorage("tintColorHex") var tintColorHex: String = TINT_COLORS[0]
+    
     
     init(){
         self.viewModel = SettingsViewModel()
+    }
+    
+    func setAppIcon(tintColor: String, themePrefix: String) {
+        Task {
+            await RemindersWidgetUtility.setAppIcon(tintColor: tintColor, themePrefix: themePrefix)
+        }
     }
     
     
@@ -27,7 +34,12 @@ struct SettingsView: View {
                             let tintColor = TintColor(colorHex: colorHex)
                             Text(tintColor.name).foregroundColor(tintColor.color)
                         }
-                    }
+                    }.onChange(of: $tintColorHex.wrappedValue, perform: { newState in
+                        print(tintColorHex)
+                        setAppIcon(tintColor: tintColorHex, themePrefix:  colorScheme == .dark ? "Dark" : "Light")
+                        //RemindersWidgetUtility.setAppIcon(tintColor: tintColorHex, themePrefix: colorScheme == .dark ? "Dark" : "Light")
+       
+                    })
                     
                 }
                 
@@ -45,6 +57,7 @@ struct SettingsView: View {
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                 }}
         }.navigationTitle("Settings")
+        
     }
 }
   
