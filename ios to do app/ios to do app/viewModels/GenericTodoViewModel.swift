@@ -39,10 +39,10 @@ class GenericTodoViewModel: ObservableObject {
         self.loadUnfilteredList()
     }
     
+    /// Moves the selected items to a project specified by the projectId parameter.
+    /// - Parameter projectId: An optional String representing the identifier of the project to which the selected items should be moved. If nil, the items are moved to the default project and this means it isn't part of any project.
     func selectionMoveToProject(projectId: String?){
         let db = Firestore.firestore()
-        
-        
         
         guard !selection.isEmpty else {
             return
@@ -70,6 +70,8 @@ class GenericTodoViewModel: ObservableObject {
         
     }
     
+    /// Changes the due date of the selected items to the date specified by the newDueDate parameter.
+    /// - Parameter newDueDate: A Date object representing the new due date for the selected items.
     func selectionChangeDueDate(newDueDate: Date){
         let db = Firestore.firestore()
         
@@ -108,6 +110,8 @@ class GenericTodoViewModel: ObservableObject {
         
     }
     
+    /// Changes the priority of the selected items to the priority specified by the newPriority parameter.
+    /// - Parameter newPriority: A Priority enum representing the new priority for the selected items.
     func selectionChangePriority(newPriority: Priority){
         let db = Firestore.firestore()
         
@@ -145,6 +149,8 @@ class GenericTodoViewModel: ObservableObject {
 
     }
     
+    /// Deletes the items specified by the indexSet parameter from the selection.
+    /// - Parameter indexSet: An optional IndexSet representing the indices of the items to be deleted from the selection. If nil, all items are deleted.
     func deleteSelection(indexSet: IndexSet?){
         let db = Firestore.firestore()
         
