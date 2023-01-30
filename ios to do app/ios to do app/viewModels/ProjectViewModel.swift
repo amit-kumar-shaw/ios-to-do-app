@@ -12,6 +12,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
+///ViewModel for Project List on HomeView
 class ProjectViewModel : ObservableObject {
 
     
@@ -28,13 +29,7 @@ class ProjectViewModel : ObservableObject {
     @Published var showReminderEditor = false
     
     
-    
     private var cancelables: [AnyCancellable] = []
-    
-    init(id: String?) {
-        self.id = id
-        getProject()
-    }
     
     init() {
        
@@ -42,6 +37,7 @@ class ProjectViewModel : ObservableObject {
 
     }
     
+    ///Retrieve the project list associated with a user ID from the projects collection in the Firebase database
     func loadList(){
         
         guard let currentUserId = auth.currentUser?.uid else{
@@ -52,6 +48,7 @@ class ProjectViewModel : ObservableObject {
         let collectionRef = Firestore.firestore().collection("projects").whereField("userId", in: [currentUserId])
        
         
+        ///Funtion addSnapshotListener to the collection reference to listen for changes in the data
         collectionRef.addSnapshotListener { querySnapshot, error in
             if error != nil{
                 self.showAlert = true
@@ -70,31 +67,13 @@ class ProjectViewModel : ObservableObject {
                 self.showAlert = true
             }
 
-            
-
+            ///The projects are sorted based on the time they were created or modified.
             self.projects = self.projects.sorted(by: { $0.1?.timestamp ?? Date() < $1.1?.timestamp ?? Date() })
             
         }
     }
     
-    private func getProject() {
-        if id != nil {
-            let docRef = db.collection("projects").document(id!)
-            
-            docRef.getDocument(as: Project.self) { result in
-                
-                switch result {
-                    case .success(let project):
-                        self.newProject = project
-                    
-                    case .failure(let error):
-                        print("Error getting project \(error)")
-                }
-            }
-        }
-    }
-    
-    
+    ///Create a project based on user inputs, including name, color, and language.
     func addProject(projectInfo : ProjectInfo) {
             
       
@@ -105,7 +84,7 @@ class ProjectViewModel : ObservableObject {
         newProject.timestamp = Date()
         
             guard let documentId = id else {
-                // add new project
+                /// create a new project document from the firebase
                 let newDocRef = db.collection("projects").document()
                 id = newDocRef.documentID
                 
@@ -120,6 +99,7 @@ class ProjectViewModel : ObservableObject {
                 return
             }
             
+        /// If the document id is not nil, save the project under that ID.
             do {
                 
                 try db.collection("projects").document(documentId).setData(from: newProject)
@@ -132,6 +112,7 @@ class ProjectViewModel : ObservableObject {
         
     }
     
+    ///Modify a project selected by the user.
     func editProject(projectId: String, projectInfo : ProjectInfo) {
 
         let _project = Project(projectName: projectInfo.projectName, projectColor: projectInfo.projectColor, language: projectInfo.selectedLanguage)
@@ -150,10 +131,9 @@ class ProjectViewModel : ObservableObject {
         
     }
     
-    
+    ///Delete a project selected by the user.
     func deleteProject(projectId : String) {
         
-        // code to delete the project from Firestore
         db.collection("projects").document(projectId).delete() { err in
                 self.error = err
                 self.showAlert = true
