@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// View to create a Tag
 struct CreateTagView: View {
     @Environment(\.tintColor) var tintColor
 
@@ -15,11 +16,20 @@ struct CreateTagView: View {
     private var todo: String?
     @ObservedObject private var viewModel: TagViewModel
     
+    /// Creates an instance.
+    ///
+    /// - Parameters:
+    ///   - show: Used to make the view appear or disappear
     init(show: Binding<Bool>) {
         viewModel = TagViewModel()
         self._showModal = show
     }
     
+    /// Creates an instance.
+    ///
+    /// - Parameters:
+    ///   - todoId: To create a tag and add it to this todo
+    ///   - show: Used to make the view appear or disappear
     init(todoId: String, show: Binding<Bool>) {
         viewModel = TagViewModel()
         self.todo = todoId

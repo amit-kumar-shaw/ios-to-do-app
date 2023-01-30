@@ -70,13 +70,13 @@ struct TodoView: View {
                             Text(v.localizedName).tag(v)
                         }
                     })
+                    Spacer()
                     NavigationLink {
                         CreateTodoView(projectId :project.0)
                     } label: {
-                        Text("Add").padding()
+                        Text("Add")
                     }
-                }
-                .padding()
+                }.padding(.horizontal, 20)
             }
     }
 }

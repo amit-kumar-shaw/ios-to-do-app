@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-/// SearchView is used to display the search results for a specific query
+/// View to display search results of matching Projects and Todos
 struct SearchView: View {
     
     @Binding var searchText: String
@@ -18,9 +18,8 @@ struct SearchView: View {
     
     
     var body: some View {
-        
-        
-        
+            
+        /// List all the matching projects
         Section(header: Text("Projects").font(.headline).foregroundColor(.accentColor)) {
             ForEach($projectViewModel.projects, id: \.0) { $item in
                 
@@ -31,36 +30,18 @@ struct SearchView: View {
                 }
             }.headerProminence(.standard)
         }.padding(.bottom)
+            
         
-        
-        
+        /// List all the matching Todos
         Section(header: Text("Todos").font(.headline).foregroundColor(.accentColor)) {
             
             
             ForEach($todoViewModel.todoList, id: \.0, editActions: .all){
                 $item in
                 if item.1.task.range(of: searchText, options: .caseInsensitive) != nil {
-                                        
-                    NavigationLink(destination: TodoDetail(entityId: item.0)){
-                        
-                        HStack {
-                            Text(item.1.task)
-                            Spacer()
-                            Button(action: {}) {
-                                Checkbox(isChecked: ($item.1.isCompleted), onToggle: {
-                                    todoViewModel.saveTodo(entityId: item.0, todo: item.1)
-                                })
-                            }
-                            
-                        }
-                        
-                        
-                    }
+                        TodoRow(item: $item)
                 }
             }
         }
-        
-        
-        
     }
 }

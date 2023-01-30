@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Model for a Flashcard
 class Flashcard: ObservableObject, Identifiable, Codable{
     @Published var id = UUID().uuidString
     @Published var front: String = ""

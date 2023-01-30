@@ -22,6 +22,8 @@ class TodayViewModel: GenericTodoViewModel {
     @Published var lastActiveFilter: FilterType = .all
     @Published var progress: Double = 0.0
     
+   
+    
     override init(){
         super.init()
         setupBindings()
@@ -33,7 +35,8 @@ class TodayViewModel: GenericTodoViewModel {
         super.refresh()
     }
     
-    func setupBindings(){
+    ///Initializes Publisher bindings for seamlessly updating state
+    private func setupBindings(){
         $todoList.receive(on: DispatchQueue.main).sink{
             list in
             let totalTodos = self.todoList.count
@@ -47,7 +50,9 @@ class TodayViewModel: GenericTodoViewModel {
     }
 
     
-    
+    ///Loads the list of todos due today from firestore
+    ///- Parameters:
+    ///- filter: filtering condition in regard to the completion status
     func loadList(filter: FilterType){
         lastActiveFilter = filter
         querySubscription?.remove()

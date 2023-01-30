@@ -76,6 +76,8 @@ struct SearchableView: View {
         }
     }
     
+    /// Link to Tags filter View
+    /// - Returns: A cell to access Tags filter view
     fileprivate func tagList() -> some View{
         return HStack {
             NavigationLink(destination: TagView(),
@@ -90,7 +92,7 @@ struct SearchableView: View {
         return HStack {
             NavigationLink(destination: SettingsView(), label: {
                 Image(systemName: "gearshape")
-                Text("Setting")
+                Text("Settings")
             })
         }
     }

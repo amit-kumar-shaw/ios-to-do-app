@@ -21,6 +21,13 @@ class GenericTodoViewModel: ObservableObject {
     @Published var error: Error?
     @Published var todoList: [(String, Todo)] = []
     @Published var unfilteredTodoList: [(String, Todo)] = []
+    
+    @Published var selection = Set<String>()
+    
+    @Published var showMoveToProject = false
+    @Published var showChangeDueDate = false
+    @Published var showChangePriority = false
+    
     private var querySubscription: ListenerRegistration?
 
     init() {
@@ -32,8 +39,114 @@ class GenericTodoViewModel: ObservableObject {
         self.loadUnfilteredList()
     }
     
+    func selectionMoveToProject(projectId: String?){
+        let db = Firestore.firestore()
+        
+        
+        
+        guard !selection.isEmpty else {
+            return
+        }
+        
+        let selectedEntries = todoList.filter { (id, todo) in
+            selection.contains(id)
+        }
+        
+        
+        db.runTransaction { transaction, error in
+            let refrences = selectedEntries.map { (id, _) in
+                
+                db.document("/todos/\(id)")
+            }
+            
+            for d in refrences{
+                transaction.updateData(["projectId" : projectId ?? ""], forDocument: d)
+            }
+            return nil
+        } completion: {_,_ in
+            print("successfully saved changes")
+        }
+
+        
+    }
     
-    /// loads all todos for the current user and saves them as self.unfilteredTodoList.  This list is mainly needed because of the cloneRecurringTodoIfNecessary-function.
+    func selectionChangeDueDate(newDueDate: Date){
+        let db = Firestore.firestore()
+        
+        
+        
+        guard !selection.isEmpty else {
+            return
+        }
+        
+        let selectedEntries = todoList.filter { (id, todo) in
+            selection.contains(id)
+        }
+        
+        
+        db.runTransaction { transaction, error in
+            let refrences = selectedEntries.map { (id, _) in
+                
+                db.document("/todos/\(id)")
+            }
+            
+            for d in refrences{
+                transaction.updateData(["dueDate" : newDueDate.ISO8601Format()], forDocument: d)
+            }
+            
+            return nil
+        } completion: {_,err in
+            guard err != nil else {
+                print("saved chages!");
+                return
+            }
+            
+            self.error = err;
+            self.showAlert = true
+        }
+
+        
+    }
+    
+    func selectionChangePriority(newPriority: Priority){
+        let db = Firestore.firestore()
+        
+        
+        
+        guard !selection.isEmpty else {
+            return
+        }
+        
+        let selectedEntries = todoList.filter { (id, todo) in
+            selection.contains(id)
+        }
+        
+        
+        db.runTransaction { transaction, error in
+            let refrences = selectedEntries.map { (id, _) in
+                
+                db.document("/todos/\(id)")
+            }
+            
+            for d in refrences{
+                transaction.updateData(["priority" : newPriority.rawValue], forDocument: d)
+            }
+            
+            return nil
+        } completion: {_,err in
+            guard err != nil else {
+                print("saved chages!");
+                return
+            }
+            
+            self.error = err;
+            self.showAlert = true
+        }
+
+    }
+    
+    
+    
     func loadUnfilteredList(){
         querySubscription?.remove()
         

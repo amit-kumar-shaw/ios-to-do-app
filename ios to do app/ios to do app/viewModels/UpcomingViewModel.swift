@@ -6,15 +6,6 @@
 //
 
 import Foundation
-
-//
-//  TodayViewModel.swift
-//  ios to do app
-//
-//  Created by Cristi Conecini on 25.01.23.
-//
-
-import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 import FirebaseFirestoreSwift
@@ -61,11 +52,9 @@ class UpcomingViewModel: GenericTodoViewModel {
     private func determineDateRange(weekday: Int) throws ->  (Date, Date){
         let currentDate = Date()
         
-        var calender = Calendar.current
+        let calender = Calendar.current
         
         let currentWeekday = calender.component(.weekday, from: currentDate)
-        let currentHour = calender.component(.hour, from: currentDate)
-        let currentMinute = calender.component(.minute, from: currentDate)
         
         var componentsToSubtract = DateComponents()
         componentsToSubtract.weekday = weekday - currentWeekday
@@ -98,6 +87,8 @@ class UpcomingViewModel: GenericTodoViewModel {
         $selectedWeekday.receive(on: DispatchQueue.main).sink { weekday in
             do{
                 let (s, e) = try self.determineDateRange(weekday: weekday + 1)
+                self.lastStartDate = s
+                self.lastEndDate = e
                 self.loadList(filter: self.filter, startDate: s, endDate: e)
             }catch {
                 self.error = error
@@ -109,6 +100,7 @@ class UpcomingViewModel: GenericTodoViewModel {
     
     
     func loadList(filter: FilterType, startDate: Date, endDate: Date){
+        lastActiveFilter = filter
         querySubscription?.remove()
         
         guard let currentUserId = Auth.auth().currentUser?.uid else{
@@ -134,7 +126,7 @@ class UpcomingViewModel: GenericTodoViewModel {
             if error != nil {
                 self.showAlert = true
                 self.error = error
-                print("[TodayViewModel][loadList] Error getting todo list \(error!.localizedDescription)")
+                print("[UpcomingViewModel][loadList] Error getting todo list \(error!.localizedDescription)")
                 return
             }
             
@@ -145,7 +137,7 @@ class UpcomingViewModel: GenericTodoViewModel {
                 self.todoList = docs!
                 
             } catch {
-                print("[TodayViewModel][loadList] Error decoding todo list \(error.localizedDescription)")
+                print("[UpcomingViewModel][loadList] Error decoding todo list \(error.localizedDescription)")
                 self.error = error
                 self.showAlert = true
             }

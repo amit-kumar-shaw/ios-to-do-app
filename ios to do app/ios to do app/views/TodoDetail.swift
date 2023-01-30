@@ -8,6 +8,7 @@
 import Combine
 import SwiftUI
 
+/// View to display all the details of a todo
 struct TodoDetail: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
@@ -18,6 +19,10 @@ struct TodoDetail: View {
     @ObservedObject var tagViewModel = TagViewModel()
     @State private var showBeforeDueDatePicker = false
     
+    /// Creates an instance with the given entityId.
+    ///
+    /// - Parameters:
+    ///   - entityId: Id of the todo to list the details
     init(entityId: String) {
         self.entityId = entityId
         viewModel = TodoEditorViewModel(id: entityId)
@@ -29,37 +34,41 @@ struct TodoDetail: View {
                 Text(viewModel.error?.localizedDescription ?? "")
             } else {
                 List {
+                    /// show basic information
                     Section {
                         TextField("Task Name", text: $viewModel.todo.task)
-                        Picker(selection: $viewModel.todo.selectedLanguage, label: Text("Language")) {
-                            LanguageList()
-                        }
-                        TextField("Description", text: $viewModel.todo.description)
-                    }
-                    Section{
-                        if !$viewModel.todo.flashcards.isEmpty {
-                            NavigationLink(destination: FlashcardView(viewModel: viewModel)){
-                                HStack {
-                                    Text("All Flashcards")
-                                    Spacer()
-                                    Text("\(viewModel.flashcards.count) Cards")
+                        HStack{
+                            Text("Project")
+                            Spacer()
+                            Button(action: {viewModel.showProjectSelector = true}){
+                                Text(viewModel.project?.projectName ?? "None")
+                            }.sheet(isPresented: $viewModel.showProjectSelector) {
+                                SelectProjectView { projectId, project in
+                                    viewModel.todo.projectId = projectId
+                                    viewModel.project = project
                                 }
                             }
-//                            ForEach(viewModel.flashcards, id: \.id) {
-//                                flashcard in
-//                                NavigationLink(destination: FlashcardView(viewModel: viewModel)){
-//                                    Text(flashcard.front)
-//                                }
-//                            }.onDelete(perform: { viewModel.deleteFlashcard(offsets: $0) })
+                        }
+                        TextEditor(text: $viewModel.todo.description)
+                    }
+                    
+                    /// show flashcards and a button to add flashcards
+                    Section{
+                        NavigationLink(destination: FlashcardView(viewModel: viewModel)){
+                            HStack {
+                                Text("All Flashcards")
+                                Spacer()
+                                Text("\(viewModel.flashcards.count) Cards")
+                            }
                         }
                         Button(action: viewModel.toggleFlashcardEditor) {
                             Label("Add Flashcard", systemImage: "plus")
                         }.sheet(isPresented: $viewModel.showFlashcardEditor) {
-//                            FlashcardEditor(flashcard: nil, onComplete: viewModel.addFlashcard)
                             FlashcardEditor(viewModel: viewModel)
                         }
                     }
-                                
+                    
+                    /// show the date and time of the todo
                     Section {
                         if dynamicTypeSize > DynamicTypeSize.medium {
                             VStack(alignment: .leading){
@@ -94,7 +103,8 @@ struct TodoDetail: View {
                             }
                         }
                     }
-                                
+                    
+                    /// Priority and Tags
                     Section {
                         Picker(selection: $viewModel.todo.priority, label: Text("Priority")) {
                             ForEach(Priority.allCases, id: \.self) { v in
@@ -110,9 +120,9 @@ struct TodoDetail: View {
                                 Text("\(tagViewModel.tagCount(todo: entityId)) Tags")
                             }
                         }
-                        
                     }
-                                
+                    
+                    /// Reminders list
                     Section {
                         Button(action: {
                             if viewModel.todo.reminderBeforeDueDate < 0 {
