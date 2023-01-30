@@ -11,6 +11,8 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
+
+/// ViewModel to display the list of Todos
 class TodoListViewModel: GenericTodoViewModel {
     @Published var filter: FilterType = .all
     @Published var dateFilter: Date?
@@ -32,16 +34,17 @@ class TodoListViewModel: GenericTodoViewModel {
         loadList()
     }
     
+    /// makes the unfiltered list up to date
     override func refresh() {
         loadList()
         super.refresh()
     }
-    
+    /// creates an instance with the given project id
     init(projectId: String){
         self.projectId = projectId;
     }
     
-    
+    /// Set up bindings for the todos in the View Model
     private func setupBindings(){
         $filter.sink { _ in
             self.loadList()
@@ -68,7 +71,7 @@ class TodoListViewModel: GenericTodoViewModel {
     }    
     
     
-    
+    /// Loads the list of todos from the database
     func loadList() {
         guard let currentUserId = auth.currentUser?.uid else {
             error = AuthError()
