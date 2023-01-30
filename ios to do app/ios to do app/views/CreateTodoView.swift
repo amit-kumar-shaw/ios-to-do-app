@@ -12,6 +12,7 @@ import SwiftUI
 struct CreateTodoView: View {
     @Environment(\.presentationMode) var presentation
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.colorScheme) var colorScheme
     @Environment(\.tintColor) var tintColor
     
     @ObservedObject private var viewModel: TodoEditorViewModel
@@ -34,10 +35,19 @@ struct CreateTodoView: View {
         viewModel = TodoEditorViewModel(projectId: projectId)
     }
     
+    func setAppIcon(tintColor: String, themePrefix: String) {
+        Task {
+            await RemindersWidgetUtility.setAppIcon(tintColor: tintColor, themePrefix: themePrefix)
+        }
+    }
+    
     private func saveTodo() {
        
         viewModel.save()
         close()
+        setAppIcon(tintColor: "#\(tintColor.toHex()?.lowercased() ?? "" )", themePrefix: colorScheme == .dark ? "Dark" : "Light")
+        
+        
     }
     
     private func close() {

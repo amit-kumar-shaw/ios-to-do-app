@@ -143,24 +143,7 @@ struct SearchableView: View {
             
         }
         .navigationTitle("Welcome")
-        //            .searchable(text: $searchText) {
-        //                SearchView(searchText: $searchText)
-        //            }
-        //            .onSubmit(of: .search, performSearch)
-        //            .onAppear {
-        //                NotificationUtility.hasPermissions(completion: { hasPermissions in
-        //                    if !hasPermissions, !NotificationUtility.getDontShowRemindersModal() {
-        //                        self.showEnableRemindersModal = true
-        //                    }
-        //                })
-        //            }
-        //            .fullScreenCover(isPresented: $showEnableRemindersModal) {
-        //                EnableRemindersModalView().tint(tintColor)
-        //            }
         .padding(.zero)
-        
-        //NavigationLink(destination: TodoDetail(entityId: searchTodoId), isActive: $isPresentingSearchedTodo) { EmptyView()}
-        //NavigationLink(destination: TodoDetail(entityId: item.0))
         
         
         

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// Shows a pretty modal to friendly ask the user for notification permissions. It gives either the option to directly enable the reminders or to jump to the settings setting of our app. This modal should only be visible once per app launch after a successfull login. It also offers an option to not showing the modal again after appearing three times.
 struct EnableRemindersModalView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.tintColor) var tintColor
