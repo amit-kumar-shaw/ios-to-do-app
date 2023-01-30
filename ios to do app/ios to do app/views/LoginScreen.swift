@@ -9,6 +9,8 @@
 import SwiftUI
 import FirebaseAuth
 
+let lightGreyColor = Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0)
+
 // Define the SignUpView struct
 struct SignUpView: View {
     // State properties to store user inputs and status
@@ -133,9 +135,18 @@ struct LoginScreen: View {
 
     var body: some View {
             VStack{
-                Text("Log in").font(.largeTitle)
+                Text("Welcome")
+                    .font(.largeTitle)
                 TextField("Email", text: $email)
+                    .padding()
+                    .background(lightGreyColor)
+                    .cornerRadius(5.0)
+                    .padding(.bottom, 20)
                 SecureField("Password", text: $password)
+                    .padding()
+                    .background(lightGreyColor)
+                    .cornerRadius(5.0)
+                    .padding(.bottom, 20)
                 // Display error message if there is any
                 if (error != "") {
                     Text(error)
@@ -144,26 +155,38 @@ struct LoginScreen: View {
                         .padding()
                 }
                 // Login button
-                Button("Login", action: {
-                    self.login()
-                })
+                Button(action: {self.login()}){
+                    Text("LOGIN")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(width: 220, height: 60)
+                        .background(Color.blue)
+                        .cornerRadius(15.0)
+                }
                 .padding()
                 .disabled(isLoading)
                 .opacity(isLoading ? 0.6 : 1)
-                .buttonStyle(.borderedProminent)
+                //.buttonStyle(.borderedProminent)
                 // Sign up button
-                Button("Sign Up", action: {
-                    self.showSignUpView = true
-                })
-                .padding()
-                .buttonStyle(.bordered)
+                HStack{
+                    Text("Don't have an account?")
+                        .font(.callout)
+                    Button(action: {self.showSignUpView = true}){
+                        Text("Sign Up")
+                    }
+                    .padding()
+                }
+                //.buttonStyle(.bordered)
                 // Forget password button
-                Button("Forget password", action: {
-                    self.showForgetPasswordView = true
-                })
+                Button(action: {self.showForgetPasswordView = true}){
+                    Text("Forget password")
+                }
                 .padding()
-                .buttonStyle(.bordered)
-            }.padding().textFieldStyle(.roundedBorder)
+                //.buttonStyle(.bordered)
+            }
+            .padding()
+            //.textFieldStyle(.roundedBorder)
         }
     // Function to handle the login process
     func login() {
