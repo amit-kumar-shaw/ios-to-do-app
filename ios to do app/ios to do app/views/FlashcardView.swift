@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// View to display flashcards of a todo with option to edit and add flashcards
 struct FlashcardView: View {
     @Environment(\.tintColor) var tintColor
     @Environment(\.colorScheme) var colorScheme
@@ -11,12 +12,18 @@ struct FlashcardView: View {
     @State var contentRotation = 0.0
     @State private var showFlashcardEditor: Bool = false
     
+    /// Creates an instance with the given viewModel.
+    ///
+    /// - Parameters:
+    ///   - viewModel: The TodoEditorViewModel to display, edit and add flashcards in the todo
     init (viewModel: TodoEditorViewModel) {
         self.viewModel = viewModel
     }
     
     var body: some View {
         VStack{
+            
+            /// Flashcard
             VStack {
                 if viewModel.flashcards.isEmpty {
                     Text("No flashcards yet")
@@ -42,6 +49,7 @@ struct FlashcardView: View {
             
             Spacer()
             
+            /// Buttons to flip and move between flashcards
             HStack {
                 Button("Previous") {
                     if self.currentCard > 0 {
@@ -76,12 +84,16 @@ struct FlashcardView: View {
 
     }
     
+    /// Flips the flashcard with animation.
     func flipFlashcard() {
             let animationTime = 0.5
+        
+            /// animate the card flip
             withAnimation(Animation.linear(duration: animationTime)) {
                 flashcardRotation += 180
             }
             
+            /// flip the card text exactly when the card is perpendicular to screen
             withAnimation(Animation.linear(duration: 0.001).delay(animationTime / 2)) {
                 contentRotation += 180
                 isFlipped.toggle()
