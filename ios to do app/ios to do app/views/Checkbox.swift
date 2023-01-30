@@ -21,20 +21,14 @@ struct Checkbox: View {
     }
     
     var body: some View {
-        Image(systemName: "circle")
+        Image(systemName: !isChecked ? "circle" : "checkmark.circle.fill")
             .resizable()
             .frame(width: 25, height: 25)
             .onTapGesture {
                 self.setAppIcon(tintColor: "#\(tintColor.toHex()?.lowercased() ?? "" )", themePrefix: colorScheme == .dark ? "Dark" : "Light")
                 self.isChecked.toggle()
                 self.onToggle()
-            }.foregroundColor(tintColor).overlay {
-                if isChecked {
-                    Image(systemName: "circle.fill")
-                        .frame(width: 20, height: 20)
-                        .foregroundColor(tintColor)
-                }
-            }
+            }.foregroundColor(tintColor)
     }
 }
 

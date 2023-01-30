@@ -146,7 +146,7 @@ class GenericTodoViewModel: ObservableObject {
     }
     
     
-    
+    /// loads all todos for the current user and saves them as self.unfilteredTodoList.  This list is mainly needed because of the cloneRecurringTodoIfNecessary-function.
     func loadUnfilteredList(){
         querySubscription?.remove()
         
