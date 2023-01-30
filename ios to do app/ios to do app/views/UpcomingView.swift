@@ -104,14 +104,15 @@ struct UpcomingView: View {
                         viewModel.loadList(filter: newFilter, startDate: lsd, endDate: led)
                     }
                 }
+                Spacer()
                 NavigationLink {
                     CreateTodoView()
                 } label: {
-                    Text("Add").padding()
+                    Text("Add")
+                    
                 }
             }
-        }
-        .padding()
+        }.padding(.horizontal, 20)
     }
 }
 

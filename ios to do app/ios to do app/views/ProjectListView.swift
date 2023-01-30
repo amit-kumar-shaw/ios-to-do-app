@@ -86,14 +86,15 @@ struct ProjectListView: View {
                     }).onChange(of: viewModel.filter) { newFilter in
                         viewModel.loadList(filter: newFilter)
                     }
+                    Spacer()
                     NavigationLink {
                         CreateTodoView(projectId: projectId)
                     } label: {
-                        Text("Add").padding()
+                        Text("Add")
                     }
                 }
             }
-            .padding()
+            .padding(.horizontal,20)
         }.alert("Error: \(self.viewModel.error?.localizedDescription ?? "")", isPresented: $viewModel.showAlert) {
             Button("Ok", role: .cancel){
                 self.viewModel.showAlert = false;

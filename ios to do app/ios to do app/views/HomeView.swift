@@ -92,7 +92,7 @@ struct SearchableView: View {
         return HStack {
             NavigationLink(destination: SettingsView(), label: {
                 Image(systemName: "gearshape")
-                Text("Setting")
+                Text("Settings")
             })
         }
     }

@@ -13,13 +13,13 @@ let lightGreyColor = Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255
 
 // Define the SignUpView struct
 struct SignUpView: View {
-    // State properties to store user inputs and status
+    /// State properties to store user inputs and status
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var error: String = ""
     @State private var isLoading = false
     @State private var isSuccess = false
-    // Binding property to control the visibility of the sign up view
+    /// Binding property to control the visibility of the sign up view
     @Binding var showSignUpView: Bool
     @State private var firstName: String = ""
     @State private var lastName: String = ""
@@ -31,14 +31,14 @@ struct SignUpView: View {
             TextField("Last Name", text: $lastName)
             TextField("Email", text: $email)
             SecureField("Password", text: $password)
-            // Display error message if there is any
+            /// Display error message if there is any
             if (error != "") {
                 Text(error)
                     .font(.caption)
                     .foregroundColor(.red)
                     .padding()
             }
-            // Sign up button
+            /// Sign up button
             Button(action: {
                 self.signup()
             }) {
@@ -50,7 +50,7 @@ struct SignUpView: View {
             .buttonStyle(.borderedProminent)
         }.padding().textFieldStyle(.roundedBorder)
     }
-    // Function to handle the sign up process
+    /// Function to handle the sign up process
     func signup() {
         self.error = ""
         self.isLoading = true
@@ -71,7 +71,7 @@ struct SignUpView: View {
     }
 }
 
-// Define the ForgetPasswordView struct
+/// Define the ForgetPasswordView struct
 struct ForgetPasswordView: View {
     // State properties to store user inputs and status
     @State private var email: String = ""
@@ -104,7 +104,7 @@ struct ForgetPasswordView: View {
             .buttonStyle(.bordered)
         }.padding().textFieldStyle(.roundedBorder)
     }
-    // Function to handle the password reset process
+    /// Function to handle the password reset process
     func forgotPassword() {
         self.error = ""
         self.isLoading = true
@@ -121,7 +121,7 @@ struct ForgetPasswordView: View {
     }
 }
 
-// Define the LoginScreen struct
+/// Define the LoginScreen struct
 struct LoginScreen: View {
     // State properties to store user inputs and status
     @State private var email: String = ""
@@ -139,12 +139,10 @@ struct LoginScreen: View {
                     .font(.largeTitle)
                 TextField("Email", text: $email)
                     .padding()
-                    .background(lightGreyColor)
                     .cornerRadius(5.0)
                     .padding(.bottom, 20)
                 SecureField("Password", text: $password)
                     .padding()
-                    .background(lightGreyColor)
                     .cornerRadius(5.0)
                     .padding(.bottom, 20)
                 // Display error message if there is any
@@ -188,7 +186,7 @@ struct LoginScreen: View {
             .padding()
             //.textFieldStyle(.roundedBorder)
         }
-    // Function to handle the login process
+    /// Function to handle the login process
     func login() {
         self.error = ""
         self.isLoading = true
