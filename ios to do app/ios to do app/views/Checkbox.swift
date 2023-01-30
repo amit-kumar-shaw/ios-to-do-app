@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// A View struct representing a checkbox that can be used to mark a todo as completed or uncompleted accordingly
 struct Checkbox: View {
     @Binding var isChecked: Bool
     @Environment(\.tintColor) var tintColor

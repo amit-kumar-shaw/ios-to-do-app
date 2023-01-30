@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Represents the UI for creating a new project.
 struct CreateProjectView: View {
         
     @Environment(\.tintColor) var tintColor
