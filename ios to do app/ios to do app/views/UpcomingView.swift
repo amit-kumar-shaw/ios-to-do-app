@@ -8,8 +8,6 @@
 import Foundation
 import SwiftUI
 
-import SlideOverCard
-
 struct UpcomingView: View {
     @ObservedObject var viewModel = UpcomingViewModel()
     @Environment(\.tintColor) var tintColor
@@ -24,7 +22,10 @@ struct UpcomingView: View {
             
                Section{
                    ForEach($viewModel.todoList, id: \.0) { $item in
-                       TodoRow(item: $item)
+                       TodoRow(item: $item).onChange(of: item.1.isCompleted) { newValue in
+                           viewModel.saveTodo(entityId: item.0, todo: item.1)
+                           viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
+                       }
                    }
                    .onDelete { indexSet in
                        viewModel.todoList.remove(atOffsets: indexSet)
