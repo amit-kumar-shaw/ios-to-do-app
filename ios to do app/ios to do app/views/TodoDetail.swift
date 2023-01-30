@@ -132,7 +132,6 @@ struct TodoDetail: View {
                         }) {
                             Label("\(RemindersWidgetAppIconUtil.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions {
                                 Button {
-                                    print("weird")
                                     viewModel.muteDefaultReminder()
                                 } label: {
                                     Label("Mute", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.fill" : "bell.slash.fill")

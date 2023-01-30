@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/// SettingView
 struct SettingsView: View {
     @ObservedObject var viewModel: SettingsViewModel
     @State private var showEnableRemindersButton : Bool = false
@@ -14,6 +14,10 @@ struct SettingsView: View {
     @AppStorage("tintColorHex") var tintColorHex: String = TINT_COLORS[0]
     
     
+    /// Creates an instance with the given entityId.
+    ///
+    /// - Parameters:
+    ///   - None
     init(){
         self.viewModel = SettingsViewModel()
     }
@@ -24,10 +28,11 @@ struct SettingsView: View {
         }
     }
     
-    
+    /// The structure of the view
     var body: some View {
         ZStack{
             Form {
+                /// Accent color setting
                 Section("Theme") {
                     Picker("Accent color", selection: $tintColorHex) {
                         ForEach(TINT_COLORS, id: \.self) { colorHex in
@@ -39,7 +44,7 @@ struct SettingsView: View {
                     })
                     
                 }
-                
+                /// Enabling notifications
                 if viewModel.showEnableRemindersButton {
                     Section("Notifications"){
                         Button( action: viewModel.requestNotificationsPermission){
@@ -47,7 +52,7 @@ struct SettingsView: View {
                         }
                     }
                 }
-                
+                /// Log out button 
                 Section{
                     Button("Log out", action: viewModel.signOut)
                         .foregroundColor(Color.red)

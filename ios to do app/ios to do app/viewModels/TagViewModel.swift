@@ -159,7 +159,6 @@ class TagViewModel : ObservableObject {
     func addTodo(id: String, todo: String) {
        
         let docRef = db.collection("tags").document(id)
-        print(docRef)
         docRef.getDocument(as: Tag.self) { result in
             
             switch result {
@@ -186,7 +185,6 @@ class TagViewModel : ObservableObject {
     func removeTodo(id: String, todo: String) {
        
         let docRef = db.collection("tags").document(id)
-        print(docRef)
         docRef.getDocument(as: Tag.self) { result in
             
             switch result {

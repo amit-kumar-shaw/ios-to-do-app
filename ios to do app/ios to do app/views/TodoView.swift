@@ -20,28 +20,7 @@ struct TodoView: View {
     
     @State var selectedFilter: FilterType = .all
     
-    
-    
-    
-    
-    
-//    private func shouldShow(at index: Int) -> Bool {
-//        switch selectedFilter {
-//        case .all:
-//            return true
-//        case .completed:
-//            return todoList[index].isCompleted
-//        case .incomplete:
-//            return !todoList[index].isCompleted
-//        }
-//    }
-//
-//    private func saveTodo() {
-//        todoList.append(newTodo)
-//        // self.newTodo = Todo()
-//    }
-    
-    
+
     var body: some View {
             VStack {
                 HStack(alignment: .bottom) {
