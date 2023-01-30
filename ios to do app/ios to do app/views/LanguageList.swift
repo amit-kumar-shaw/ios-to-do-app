@@ -7,7 +7,9 @@
 
 import SwiftUI
 
+/// Language List
 struct LanguageList: View {
+    /// State property `languages` to get all the language from swift API
     @State var languages: [Language] = Language.getAllLanguages()
     
     var body: some View {
