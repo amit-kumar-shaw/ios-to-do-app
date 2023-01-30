@@ -11,7 +11,6 @@ import SwiftUI
 import Combine
 
 
-
 ///View model for SettingsView
 class SettingsViewModel: ObservableObject {
     @Published var error: Error? = nil

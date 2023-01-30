@@ -12,15 +12,16 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-///ViewModel for Project List on HomeView
+///ViewModel for all Projects List on HomeView
 class ProjectViewModel : ObservableObject {
 
     
     private var db = Firestore.firestore()
     private var auth = Auth.auth()
     private var id: String?
+    
+    ///Publisched variables for binding with Home view
     @Published var filter: FilterType = .all
-
     @Published var projects: [(String, Project?)] = []
     @Published var newProject: Project = .init()
     
@@ -33,13 +34,14 @@ class ProjectViewModel : ObservableObject {
     
     private var cancelables: [AnyCancellable] = []
     
+    /// Initialize ProjectViewModel  by loading all projects associated with the current user.
     init() {
        
         self.loadList()
 
     }
     
-    ///Retrieve the project list associated with a user ID from the projects collection in the Firebase database
+    ///Retrieve projects associated with a user ID from the projects collection in the Firebase database
     func loadList(){
         
         guard let currentUserId = auth.currentUser?.uid else{

@@ -11,12 +11,14 @@ struct CreateProjectView: View {
         
     
     @State var projectInfo : ProjectInfo = ProjectInfo()
+    
+    ///For editing 
     @Binding var selectedProject : Project?
     @Binding var showModal: Bool
     @ObservedObject var viewModel = ProjectViewModel()
     @State var editMode : Bool = true
 
-    // Init to create Project
+    ///Initialize CreateProjectView for creating a new project.
     init(project: Binding<Project?>,showModal: Binding<Bool>){
         editMode = false
         self._showModal = showModal
@@ -24,7 +26,7 @@ struct CreateProjectView: View {
        
     }
     
-    // Init to edit Project
+    /// Initialize CreateProjectView for modifying a project.
     init(project: (String,Binding<Project?>), showModal: Binding<Bool>){
         
         projectInfo = ProjectInfo(project: (project.0,project.1.wrappedValue!))
@@ -148,43 +150,3 @@ struct CreateProjectView: View {
     
     
 }
-
-struct ProjectInfo {
-    
-    var projectName : String
-    var projectColor : Color
-    var selectedLanguage : Language
-    var projectId : String?
-    
-    init(){
-        projectName = ""
-        projectColor = Color.white
-        selectedLanguage = Language(id: "en", name: "English", nativeName: "English")
-       
-    }
-    
-    init(id : String ,name:String,color:Color,language:Language){
-        self.init()
-        projectId = id
-        projectName = name
-        projectColor = color
-        selectedLanguage = language
-   
-    }
-    
-    init(project : (String, Project)){
-        
-        projectId = project.0
-        projectName = project.1.projectName!
-        projectColor = Color(hex:project.1.colorHexString!)
-        selectedLanguage = project.1.selectedLanguage
-    }
-    
-    
-}
-
-//struct CreateProjectView_Previews: PreviewProvider {
-//    static var previews: some View {
-//       CreateProjectView(_newProject: $newProject(),showModal: .constant(false))
-//    }
-//}

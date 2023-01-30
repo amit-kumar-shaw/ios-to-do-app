@@ -15,7 +15,7 @@ import FirebaseFirestoreSwift
 import Foundation
 
 
-/// This view model is the basis for the TodayViewModel, UpcomingViewModel and TodoListView model. It has a filtered and unfiltered list of todos and provides a saving functionality as well as a method that clones recurring todos if necessary
+/// This view model is the basis for the TodayViewModel, UpcomingViewMode, ProjectListViewModel and TodoListView model. It has a filtered and unfiltered list of todos and provides a saving functionality as well as a method that clones recurring todos if necessary
 class GenericTodoViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var error: Error?
