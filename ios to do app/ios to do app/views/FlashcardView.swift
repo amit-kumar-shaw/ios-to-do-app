@@ -93,7 +93,7 @@ struct FlashcardView: View {
             Spacer()
             if !viewModel.flashcards.isEmpty {
                 VStack {
-                    Text("\(self.currentCard)/\(viewModel.flashcards.count)")
+                    Text("\(self.currentCard + 1)/\(viewModel.flashcards.count)")
                         .foregroundColor(Color.gray)
                     
                 }
