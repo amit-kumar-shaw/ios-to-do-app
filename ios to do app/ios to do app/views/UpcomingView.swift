@@ -103,11 +103,11 @@ struct UpcomingView: View {
                     ForEach(FilterType.allCases, id: \.self) { v in
                         Text(v.localizedName).tag(v)
                     }
-                }).onChange(of: viewModel.filter) { newFilter in
-                    if let lsd = viewModel.lastStartDate, let led = viewModel.lastEndDate{
-                        viewModel.loadList(filter: newFilter, startDate: lsd, endDate: led)
-                    }
-                }
+                })//.onChange(of: viewModel.filter) { //newFilter in
+                   // if let lsd = viewModel.lastStartDate, //let led = viewModel.lastEndDate{
+                       // viewModel.loadList(filter: //newFilter, startDate: lsd, //endDate: led)
+                   // }
+               // }
                 Spacer()
                 NavigationLink {
                     CreateTodoView()
