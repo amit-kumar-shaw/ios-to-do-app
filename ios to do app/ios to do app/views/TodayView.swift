@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-/// Today List View 
+/// Displays all todos that are due for today.
 struct TodayView: View {
     
     @Environment(\.editMode) var editMode

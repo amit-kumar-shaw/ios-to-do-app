@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A view for editing / creating a reminder
 struct ReminderEditor: View {
     /// The environment presentation mode to control dismissing the view
     @Environment(\.presentationMode) var presentation

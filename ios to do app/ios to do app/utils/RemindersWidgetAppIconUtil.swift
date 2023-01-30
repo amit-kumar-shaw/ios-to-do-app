@@ -152,7 +152,8 @@ struct RemindersWidgetAppIconUtil{
     /// - Parameters:
     ///     - date: The date when the reminder should trigger
     ///     - title: The title of the reminder
-    ///     - body: The body or message of the reminder
+    ///     - body: The message of the reminder
+    ///     - todoId: The id of the todo the notification belongs to
     private static func scheduleSingleReminder(date : Date, title: String, body: String, todoId: String) {
         let content = UNMutableNotificationContent()
         content.title = title
