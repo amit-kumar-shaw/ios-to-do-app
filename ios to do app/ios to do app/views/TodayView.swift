@@ -82,6 +82,7 @@ struct TodayView: View {
                 
 
             } else {
+                
                 Picker(selection: $viewModel.filter, label: Text("Filter"), content: {
                     ForEach(FilterType.allCases, id: \.self) { v in
                         Text(v.localizedName).tag(v)
@@ -89,14 +90,14 @@ struct TodayView: View {
                 }).onChange(of: viewModel.filter) { newFilter in
                     viewModel.loadList(filter: newFilter)
                 }
+                Spacer()
                 NavigationLink {
                     CreateTodoView()
                 } label: {
-                    Text("Add").padding()
+                    Text("Add")
                 }
             }
-        }
-        .padding()
+        }.padding(.horizontal, 20)
     }
     
     var header: some View {

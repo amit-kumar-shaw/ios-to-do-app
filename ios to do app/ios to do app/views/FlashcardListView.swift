@@ -37,7 +37,7 @@ struct FlashcardListView: View {
                         /// Delete a flashcard with swipe gesture.
                         }.onDelete(perform: { viewModel.deleteFlashcard(offsets: $0) })
                     }
-                }.animation(.default)
+                }
             }
             
     }

@@ -10,7 +10,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Combine
 
-
+///View Model for PojectListRow,  SearchableView in the Home View
 class ProjectListViewModel: GenericTodoViewModel {
     
     let projectId: String
@@ -18,12 +18,14 @@ class ProjectListViewModel: GenericTodoViewModel {
     private var querySubscription: ListenerRegistration?
     private var projectSubscription: ListenerRegistration?
     
-    
+    ///Publisched variables for binding with Home view and TodoListView
     @Published var filter: FilterType = .all
     @Published var progress: Double = 0.0
     @Published var project: Project?
+    
     private var db = Firestore.firestore()
     
+    ///Initialize ProjectListViewModel by loading a
     init(projectId: String){
         self.projectId = projectId
         super.init()
@@ -33,6 +35,7 @@ class ProjectListViewModel: GenericTodoViewModel {
         loadList(filter: filter)
     }
     
+   ///Set up bindings for the project, the filter and the progress in the View Model
     func setupBindings(){
         $filter.receive(on: DispatchQueue.main).sink { filter in
             self.loadList(filter: filter)
@@ -50,6 +53,7 @@ class ProjectListViewModel: GenericTodoViewModel {
         }.store(in: &cancelables)
     }
     
+    ///Retrieve a project document based on project ID frome projects collection
     func loadProject(){
         projectSubscription = db.document("projects/\(projectId)").addSnapshotListener({ docSnapshot, error in
             if error != nil {
@@ -77,7 +81,7 @@ class ProjectListViewModel: GenericTodoViewModel {
     }
     
 
-
+    /// Save a To-do item to the "todos" collection
     func saveTodo(entityId : String, Todo : Todo){
         do {
             try db.collection("todos").document(entityId).setData(from: Todo)
@@ -88,9 +92,9 @@ class ProjectListViewModel: GenericTodoViewModel {
         
     }
     
-
+    ///Retrieve the to-do list associated with a specific project ID from the "todos" collection in the database
     func loadList(filter: FilterType){
-       // print("Loading list with filter \(filter) ...");
+       
         querySubscription?.remove()
         
         let collectionRef = db.collection("todos").whereField("projectId", isEqualTo: projectId)

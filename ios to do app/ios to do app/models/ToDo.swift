@@ -11,21 +11,50 @@ import SwiftUI
 
 class Todo: ObservableObject, Codable{
     
-    @Published var selectedLanguage: Language = Language(id: "en", name: "English", nativeName: "English")
-    @Published var description = ""
-    @Published var startDate = Date()
-    @Published var dueDate = Date()
-    @Published var reminderBeforeDueDate : Int = 5 // default: remind me 5 minutes before due date; < 0 indicates the absence of reminders
-    @Published var reminders: [Reminder] = []
-    @Published var priority: Priority = .medium
-    @Published var recurring: Recurring = .none
-    @Published var flashcards : [Flashcard] = []
-    @Published var isCompleted = false
-    @Published var task = ""
-    @Published var userId: String?
-    @Published var completed = false
-    @Published var projectId: String?
-    @Published var createdByRecurringTodoId : String = ""
+    /// Holds the selected language
+      @Published var selectedLanguage: Language = Language(id: "en", name: "English", nativeName: "English")
+      
+      /// Holds the description of the task
+      @Published var description = ""
+      
+      /// Start date of the task
+      @Published var startDate = Date()
+      
+      /// Due date of the task
+      @Published var dueDate = Date()
+      
+      /// Remind before due date in minutes; default: 5 minutes, negative value indicates no reminder
+      @Published var reminderBeforeDueDate : Int = 5
+      
+      /// An array of reminders for the task
+      @Published var reminders: [Reminder] = []
+      
+      /// Priority of the task, with values - .high, .medium, .low
+      @Published var priority: Priority = .medium
+      
+      /// Recurring frequency of the task, with values - .none, .daily, .weekly, .monthly, .yearly
+      @Published var recurring: Recurring = .none
+      
+      /// An array of flashcards associated with the task
+      @Published var flashcards : [Flashcard] = []
+      
+      /// Boolean indicating if the task is completed
+      @Published var isCompleted = false
+      
+      /// Name of the task
+      @Published var task = ""
+      
+      /// User id who created the task
+      @Published var userId: String?
+      
+      /// Boolean indicating if the task is completed
+      @Published var completed = false
+      
+      /// Project id to which the task is associated
+      @Published var projectId: String?
+      
+      /// Id of the recurring task from which this task is created
+      @Published var createdByRecurringTodoId : String = ""
     
     enum CodingKeys: CodingKey {
         case selectedLanguage
@@ -48,10 +77,12 @@ class Todo: ObservableObject, Codable{
     init(){
         
     }
-    
-    required init(from decoder: Decoder) throws{
+/// Initialize a Todo from a decoder
+    required init(from decoder: Decoder) throws {
+        /// An ISO8601 formatter to parse dates
         let isoFormatter = ISO8601DateFormatter()
         
+        /// Get the values from the decoder
         let values = try decoder.container(keyedBy: CodingKeys.self)
         selectedLanguage = try values.decode(Language.self, forKey: .selectedLanguage)
         description = try values.decode(String.self, forKey: .description)
@@ -59,9 +90,12 @@ class Todo: ObservableObject, Codable{
         let dueDateISO = try values.decode(String.self, forKey: .dueDate)
         
         
+        
+        /// Parse the start date from ISO8601 format
         guard let startDate = isoFormatter.date(from: startDateISO) else {
             throw DateError()
         }
+        /// Parse the due date from ISO8601 format
         guard let dueDate = isoFormatter.date(from: dueDateISO) else {
             throw DateError()
         }

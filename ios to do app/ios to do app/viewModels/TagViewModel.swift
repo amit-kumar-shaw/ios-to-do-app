@@ -12,6 +12,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import SwiftUI
 
+/// ViewModel for Tags
 class TagViewModel : ObservableObject {
 
     
@@ -40,6 +41,7 @@ class TagViewModel : ObservableObject {
 
     }
     
+    /// load all the tags of the user from the database
     func loadList(){
         
         guard let currentUserId = auth.currentUser?.uid else{
@@ -77,6 +79,7 @@ class TagViewModel : ObservableObject {
         }
     }
     
+    /// Fetch a tag with the given id
     private func getTag() {
         if id != nil {
             let docRef = db.collection("tags").document(id!)
@@ -94,7 +97,10 @@ class TagViewModel : ObservableObject {
         }
     }
     
-    
+    /// Adds a new tag to the database
+    /// - Parameters:
+    ///   - tag: Tag name
+    ///   - todo: Optional todo to add it to the tag
     func addTag(tag: String, todo : String?) {
             
       
@@ -130,6 +136,9 @@ class TagViewModel : ObservableObject {
         
     }
     
+    /// Deletes a tag
+    /// - Parameters:
+    ///   - id: Id of the tag to delete
     func deleteTag(id: String) {
         
         let tagId = id
@@ -143,6 +152,10 @@ class TagViewModel : ObservableObject {
         self.loadList()
     }
     
+    /// Adds a todo to the given tag
+    /// - Parameters:
+    ///   - id: Tag id
+    ///   - todo: Todo id to add it to the tag
     func addTodo(id: String, todo: String) {
        
         let docRef = db.collection("tags").document(id)
@@ -165,7 +178,11 @@ class TagViewModel : ObservableObject {
             }
         }
     }
-
+    
+    /// Remove a todo from the given tag
+    /// - Parameters:
+    ///   - id: Tag id
+    ///   - todo: Todo id to add it to the tag
     func removeTodo(id: String, todo: String) {
        
         let docRef = db.collection("tags").document(id)
@@ -189,6 +206,12 @@ class TagViewModel : ObservableObject {
         }
     }
     
+    /// Calculate the number of tags for a todo
+    ///
+    /// - Parameters:
+    ///   - todo: Todo id
+    ///
+    ///  Returns: Number of tags selected for the todo
     func tagCount(todo: String) -> Int {
         var count = 0
       

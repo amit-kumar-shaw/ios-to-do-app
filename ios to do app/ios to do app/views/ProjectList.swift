@@ -1,37 +1,43 @@
-//
-//  ProjectList.swift
-//  ios to do app
-//
-//  Created by dasoya on 29.01.23.
-//
-
 import SwiftUI
 import Foundation
 
+/// View for each row in the project list.
 struct ProjectListRow: View {
     
+    @Environment(\.tintColor) var tintColor
     
+    /// Binding for the project to display in the row.
     @Binding var project : Project?
+    
+    /// Binding for the flag to indicate if the list is sorted by language.
     @Binding var isSortedByLanguage : Bool
+    
+    /// String to store the project's identifier.
     @State var projectId :String
+    
+    /// State to store the flag to show the modal view.
     @State var showModal = false
     
-   // @ObservedObject var homeView = HomeView()
+    /// Observed object to store the view model for the projects.
     @ObservedObject var viewModel = ProjectViewModel()
     
+    /// Initializer that takes in the project and the flag to indicate if the list is sorted by language.
+    /// - Parameters:
+    ///    - project: Tuple of projectId and and an optional binding object of Project class
+    ///    - isSortedByLanguage:Boolean to order by language
     init(project: (String, Binding<Project?>),isSortedByLanguage: Binding<Bool>){
         
         self._project = project.1
         self.projectId = project.0
-        
         self._isSortedByLanguage = isSortedByLanguage
     }
     
+    /// Initializer that takes in only the project.
+    /// - Parameters:
+    ///    - project: Tuple of projectId and and an optional binding object of Project class
     init(project: (String, Binding<Project?>)){
-        
         self._project = project.1
         self.projectId = project.0
-        
         self._isSortedByLanguage = .constant(false)
     }
     
@@ -40,27 +46,26 @@ struct ProjectListRow: View {
             Circle()
                 .foregroundColor(Color(hex: project!.colorHexString ?? "#FFFFFF"))
                 .frame(width: 12, height: 12)
-            Text(project!.projectName ?? "Untitled")
+            Text(project!.projectName ?? "Untitled").foregroundColor(tintColor)
             Text(project!.selectedLanguage.name)
                 .foregroundColor(.gray)
         }
         .swipeActions(){
-            
-            //Delete Projet Button
+            /// Action to show the modal view with project information.
             Button (action: {
                 showModal = true
                 isSortedByLanguage = false
             }){
-                    Label("info", systemImage: "info.circle")
-                }.tint(.indigo)
+                Label("info", systemImage: "info.circle")
+            }.tint(.indigo)
             
-            //Edit Mode Button
+            /// Action to delete the project.
             Button (action: {
                 viewModel.deleteProject(projectId : projectId)
                 isSortedByLanguage = false
             }){
-                    Label("delete", systemImage: "minus.circle")
-                }.tint(.red)
+                Label("delete", systemImage: "minus.circle")
+            }.tint(.red)
             
         }.sheet(isPresented: $showModal) {
         
@@ -71,3 +76,4 @@ struct ProjectListRow: View {
     }
     
 }
+

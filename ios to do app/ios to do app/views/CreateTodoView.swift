@@ -8,10 +8,11 @@
 import Combine
 import SwiftUI
 
-/// View which allows the creation of todos
+/// View which allows the creation of todos with details
 struct CreateTodoView: View {
     @Environment(\.presentationMode) var presentation
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.colorScheme) var colorScheme
     @Environment(\.tintColor) var tintColor
     
     @ObservedObject private var viewModel: TodoEditorViewModel
@@ -28,15 +29,24 @@ struct CreateTodoView: View {
     }
     
     /// Initialize CreateTodoView and associte the new to do to the specified project
-    /// - Parameters
-    ///    - projectId: id of the project to associate with
+    /// - Parameters:
+    ///   - projectId: id of the project to associate with
     init(projectId: String) {
         viewModel = TodoEditorViewModel(projectId: projectId)
+    }
+    
+    func setAppIcon(tintColor: String, themePrefix: String) {
+        Task {
+            await RemindersWidgetAppIconUtil.setAppIcon(tintColor: tintColor, themePrefix: themePrefix)
+        }
     }
     
     private func saveTodo() {
         viewModel.save()
         close()
+        setAppIcon(tintColor: "#\(tintColor.toHex()?.lowercased() ?? "" )", themePrefix: colorScheme == .dark ? "Dark" : "Light")
+        
+        
     }
     
     private func close() {
@@ -111,14 +121,13 @@ struct CreateTodoView: View {
                             }
                             self.showBeforeDueDatePicker = true
                         }) {
-                            Label("\(RemindersWidgetUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions {
+                            Label("\(RemindersWidgetAppIconUtil.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions {
                                 Button {
                                     viewModel.muteDefaultReminder()
                                 } label: {
                                     Label("Mute", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.fill" : "bell.slash.fill")
                                 }.tint(.indigo)
                             }
-                                
                         }.sheet(isPresented: $showBeforeDueDatePicker) {
                             // TimePicker(selectedTime: self.$selectedTime)TimePicker(selectedTime: $viewModel.todo.reminderBeforeDueDate)
                                 
@@ -202,7 +211,8 @@ private var reminderDateFormatter: DateFormatter {
     formatter.timeStyle = .short
     return formatter
 }
-    
+
+/// View which allows the creation of todos quickly with task name
 struct CreateQuickTodoView: View {
     @Environment(\.tintColor) var tintColor
         

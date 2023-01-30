@@ -26,7 +26,7 @@
 		501E1CA3298530F700DC2D4E /* Todo_Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C9E298530F600DC2D4E /* Todo_Widget.intentdefinition */; };
 		501E1CA6298530F800DC2D4E /* Todo WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 501E1C94298530F500DC2D4E /* Todo WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		501E1CAD298531CA00DC2D4E /* TodoWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1CAB2985318000DC2D4E /* TodoWidgetView.swift */; };
-		50CCAFCC297ADF7900D5F2AA /* RemindersWidgetUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CCAFCB297ADF7900D5F2AA /* RemindersWidgetUtility.swift */; };
+		50CCAFCC297ADF7900D5F2AA /* RemindersWidgetAppIconUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CCAFCB297ADF7900D5F2AA /* RemindersWidgetAppIconUtil.swift */; };
 		50CCAFCE297C58A300D5F2AA /* EnableRemindersModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */; };
 		7C3B578229802B5E000815CD /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3B578129802B5E000815CD /* ColorScheme.swift */; };
 		7C3B578429802BC7000815CD /* EnvironmentValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3B578329802BC7000815CD /* EnvironmentValues.swift */; };
@@ -80,6 +80,7 @@
 		7CE7D03629749725008F0702 /* JSONUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D03529749725008F0702 /* JSONUtils.swift */; };
 		7CE7D0382974B0CB008F0702 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE7D0372974B0CB008F0702 /* Reminder.swift */; };
 		CD15C6D5298661C70020DF71 /* ProjectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD15C6D4298661C70020DF71 /* ProjectList.swift */; };
+		CD15C6D729882F8C0020DF71 /* ProjectInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD15C6D629882F8C0020DF71 /* ProjectInfo.swift */; };
 		CD54992629783E53007F0F3B /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD54992529783E53007F0F3B /* Project.swift */; };
 		CD54992A297843B2007F0F3B /* ProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD549929297843B2007F0F3B /* ProjectViewModel.swift */; };
 		CD646DB3298134C20061A380 /* CreateProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD646DB1298134C20061A380 /* CreateProjectView.swift */; };
@@ -150,7 +151,7 @@
 		501E1CAB2985318000DC2D4E /* TodoWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoWidgetView.swift; sourceTree = "<group>"; };
 		501E1CAE2985778300DC2D4E /* ios to do app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ios to do app.entitlements"; sourceTree = "<group>"; };
 		501E1CAF298577C400DC2D4E /* Todo WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Todo WidgetExtension.entitlements"; sourceTree = "<group>"; };
-		50CCAFCB297ADF7900D5F2AA /* RemindersWidgetUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersWidgetUtility.swift; sourceTree = "<group>"; };
+		50CCAFCB297ADF7900D5F2AA /* RemindersWidgetAppIconUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersWidgetAppIconUtil.swift; sourceTree = "<group>"; };
 		50CCAFCD297C58A300D5F2AA /* EnableRemindersModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableRemindersModalView.swift; sourceTree = "<group>"; };
 		7C3B578129802B5E000815CD /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		7C3B578329802BC7000815CD /* EnvironmentValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentValues.swift; sourceTree = "<group>"; };
@@ -202,6 +203,7 @@
 		7CE7D03529749725008F0702 /* JSONUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONUtils.swift; sourceTree = "<group>"; };
 		7CE7D0372974B0CB008F0702 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		CD15C6D4298661C70020DF71 /* ProjectList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectList.swift; sourceTree = "<group>"; };
+		CD15C6D629882F8C0020DF71 /* ProjectInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectInfo.swift; sourceTree = "<group>"; };
 		CD54992529783E53007F0F3B /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		CD549929297843B2007F0F3B /* ProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewModel.swift; sourceTree = "<group>"; };
 		CD646DB1298134C20061A380 /* CreateProjectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateProjectView.swift; sourceTree = "<group>"; };
@@ -453,6 +455,7 @@
 				7C3B578129802B5E000815CD /* ColorScheme.swift */,
 				7C3B579729817EF8000815CD /* Weekday.swift */,
 				28B9F45329819A46008C9150 /* Tag.swift */,
+				CD15C6D629882F8C0020DF71 /* ProjectInfo.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -471,7 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				7CE7D03529749725008F0702 /* JSONUtils.swift */,
-				50CCAFCB297ADF7900D5F2AA /* RemindersWidgetUtility.swift */,
+				50CCAFCB297ADF7900D5F2AA /* RemindersWidgetAppIconUtil.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -682,6 +685,7 @@
 				7CE7D0252972B9E7008F0702 /* BindingExtension.swift in Sources */,
 				7CE7D02D297305F0008F0702 /* ReminderEditor.swift in Sources */,
 				CD15C6D5298661C70020DF71 /* ProjectList.swift in Sources */,
+				CD15C6D729882F8C0020DF71 /* ProjectInfo.swift in Sources */,
 				7C68265A2975E2B2002DF5C6 /* ContentView.swift in Sources */,
 				501E1C89297DB9ED00DC2D4E /* UpcomingView.swift in Sources */,
 				28B9F4582981A122008C9150 /* TagsInTodoView.swift in Sources */,
@@ -704,7 +708,7 @@
 				CE890B982975900300233D7A /* FlashcardView.swift in Sources */,
 				286C014829871671004D2033 /* FlashcardListView.swift in Sources */,
 				7CE7CFEB2964DD58008F0702 /* HomeView.swift in Sources */,
-				50CCAFCC297ADF7900D5F2AA /* RemindersWidgetUtility.swift in Sources */,
+				50CCAFCC297ADF7900D5F2AA /* RemindersWidgetAppIconUtil.swift in Sources */,
 				7C68265D2975E43F002DF5C6 /* AuthenticationViewModel.swift in Sources */,
 				7C68266D29770523002DF5C6 /* Errors.swift in Sources */,
 				7C3B579A2981B657000815CD /* SearchView.swift in Sources */,
@@ -767,11 +771,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Todo WidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MDBA74Q3PJ;
+				ENABLE_ON_DEMAND_RESOURCES = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Todo Widget/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Todo Widget";
@@ -783,7 +789,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.todo.languages.Todo-Widget";
+				PRODUCT_BUNDLE_IDENTIFIER = com.todo.languages.TodoWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -796,11 +802,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Todo WidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MDBA74Q3PJ;
+				ENABLE_ON_DEMAND_RESOURCES = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Todo Widget/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Todo Widget";
@@ -812,7 +820,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.todo.languages.Todo-Widget";
+				PRODUCT_BUNDLE_IDENTIFIER = com.todo.languages.TodoWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -939,13 +947,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "DarkBlueUnticked LightBlueUnticked DarkBlueTicked LightBlueTicked DarkGreenUnticked LightGreenUnticked DarkGreenTicked LightGreenTicked DarkOrangeUnticked LightOrangeUnticked DarkOrangeTicked LightOrangeTicked DarkPinkUnticked LightPinkUnticked DarkPinkTicked LightPinkTicked";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "ios to do app/ios to do app.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ios to do app/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MDBA74Q3PJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -971,13 +981,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "DarkBlueUnticked LightBlueUnticked DarkBlueTicked LightBlueTicked DarkGreenUnticked LightGreenUnticked DarkGreenTicked LightGreenTicked DarkOrangeUnticked LightOrangeUnticked DarkOrangeTicked LightOrangeTicked DarkPinkUnticked LightPinkUnticked DarkPinkTicked LightPinkTicked";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "ios to do app/ios to do app.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ios to do app/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MDBA74Q3PJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
