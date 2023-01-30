@@ -153,10 +153,11 @@ struct RemindersWidgetAppIconUtil{
     ///     - date: The date when the reminder should trigger
     ///     - title: The title of the reminder
     ///     - body: The body or message of the reminder
-    private static func scheduleSingleReminder(date : Date, title: String, body: String) {
+    private static func scheduleSingleReminder(date : Date, title: String, body: String, todoId: String) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
+        content.userInfo = ["todoId": todoId]
     
         
         if (date.timeIntervalSinceNow.isLessThanOrEqualTo(0)) {
@@ -196,7 +197,7 @@ struct RemindersWidgetAppIconUtil{
             
             if todo.reminderBeforeDueDate >= 0, let timeInterval = TimeInterval(exactly: -todo.reminderBeforeDueDate * 60) {
          
-                self.scheduleSingleReminder(date: todo.dueDate.addingTimeInterval(timeInterval), title: todo.task, body: todo.description)
+                self.scheduleSingleReminder(date: todo.dueDate.addingTimeInterval(timeInterval), title: todo.task, body: todo.description, todoId: entityId)
                 
                 // only schedule future recurring reminders if no cloned recurring todo already exists:
                 if !todoList.contains(where: {(_, todo) in
@@ -208,7 +209,7 @@ struct RemindersWidgetAppIconUtil{
                             for i in 1...7 {
                                 
                                 if let recurringInterval = TimeInterval(exactly: 60 * 60 * 24 * (todo.recurring == .daily ? 1 : 7) * i) {
-                                    self.scheduleSingleReminder(date: todo.dueDate.addingTimeInterval(recurringInterval), title: todo.task, body: todo.description)
+                                    self.scheduleSingleReminder(date: todo.dueDate.addingTimeInterval(recurringInterval), title: todo.task, body: todo.description, todoId: entityId)
                                 }
                             }
                         } else {
@@ -217,7 +218,7 @@ struct RemindersWidgetAppIconUtil{
                             for i in 1...6 {
                                 
                                 if let iMonthsLater = calendar.date(byAdding: .month, value: i, to: todo.dueDate) {
-                                    self.scheduleSingleReminder(date: iMonthsLater, title: todo.task, body: todo.description)
+                                    self.scheduleSingleReminder(date: iMonthsLater, title: todo.task, body: todo.description, todoId: entityId)
                                 }
                             }
                         }
@@ -227,7 +228,7 @@ struct RemindersWidgetAppIconUtil{
                 
             }
             for reminder in todo.reminders {
-                self.scheduleSingleReminder(date: reminder.date, title: todo.task, body: todo.description)
+                self.scheduleSingleReminder(date: reminder.date, title: todo.task, body: todo.description, todoId: entityId)
             }
         }
     }
