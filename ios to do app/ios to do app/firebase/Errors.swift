@@ -16,10 +16,6 @@ struct ProjectNotFoundError: Error{
     var localizedDescription = "Project not found"
 }
 
-struct TodoNotFoundError: Error{
-    var localizedDescription = "Todo not found"
-}
-
 struct DateError: Error{
     var localizedDescription = "Provided dates are not valid"
 }

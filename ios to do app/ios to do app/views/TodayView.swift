@@ -6,24 +6,28 @@
 //
 
 import SwiftUI
-
+/// Today List View 
 struct TodayView: View {
     
     @Environment(\.editMode) var editMode
     @ObservedObject var viewModel: TodayViewModel
     
+    /// Creates an instance with the given entityId.
+    ///
+    /// - Parameters:
+    ///   - None
     init(){
         self.viewModel = TodayViewModel()
     }
-    
+    /// The structure of the view
     var body: some View {
         VStack {
             List(selection: $viewModel.selection){
-                
+                /// Header 
                 Section{
                     header
                 }
-                
+                /// Todo List
                 Section(){
                     if viewModel.todoList.isEmpty {
                         emptyView()
@@ -34,11 +38,11 @@ struct TodayView: View {
                                 viewModel.saveTodo(entityId: item.0, todo: item.1)
                                 viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
                             }
-                        }.onDelete(perform: viewModel.deleteSelection)
+                        }
                     }
                 }
             }.listStyle(.insetGrouped)
-            
+            /// Bottom
             bottomBar
             
         }.alert("Error: \(self.viewModel.error?.localizedDescription ?? "")", isPresented: $viewModel.showAlert) {
@@ -53,8 +57,10 @@ struct TodayView: View {
     
     var bottomBar: some View {
         HStack {
+            /// Collection edit
             if(editMode?.wrappedValue == EditMode.active){
                 Spacer()
+                /// Project move
                 VerticalLabelButton("Project", systemImage: "folder.fill", action: {
                     viewModel.showMoveToProject = true
                 }).sheet(isPresented: $viewModel.showMoveToProject) {
@@ -62,6 +68,7 @@ struct TodayView: View {
                         viewModel.selectionMoveToProject(projectId: projectId)
                     }
                 }
+                /// Priority change
                 Spacer()
                 VerticalLabelButton("Priority", systemImage: "exclamationmark.circle.fill") {
                     viewModel.showChangePriority = true
@@ -70,6 +77,7 @@ struct TodayView: View {
                         viewModel.selectionChangePriority(newPriority: newPriority)
                     }
                 }
+                /// Due Date change
                 Spacer()
                 VerticalLabelButton("Due date", systemImage: "calendar.badge.clock") {
                     viewModel.showChangeDueDate = true
@@ -99,9 +107,10 @@ struct TodayView: View {
             }
         }.padding(.horizontal, 20)
     }
-    
+    /// Header 
     var header: some View {
         VStack(alignment: .center) {
+            /// Complete Process percent
             Text("\(Int(viewModel.progress * 100))%")
                 .font(.system(size: 50, weight: .ultraLight, design: .rounded))
             Text("completed")
@@ -109,7 +118,7 @@ struct TodayView: View {
         }
         .frame(width: UIScreen.main.bounds.width)
     }
-    
+    /// Condition that the Todo List is empty 
     func emptyView()-> AnyView {
         
         if viewModel.todoList.isEmpty {

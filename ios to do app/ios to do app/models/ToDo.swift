@@ -47,7 +47,8 @@ class Todo: ObservableObject, Codable{
       /// User id who created the task
       @Published var userId: String?
       
-     
+      /// Boolean indicating if the task is completed
+      @Published var completed = false
       
       /// Project id to which the task is associated
       @Published var projectId: String?
@@ -68,6 +69,7 @@ class Todo: ObservableObject, Codable{
         case isCompleted
         case task
         case userId
+        case completed
         case projectId
         case createdByRecurringTodoId
     }
@@ -109,6 +111,7 @@ class Todo: ObservableObject, Codable{
         isCompleted = try values.decode(Bool.self, forKey: .isCompleted)
         task = try values.decode(String.self, forKey: .task)
         userId = try values.decode(String.self, forKey: .userId)
+        completed = try values.decode(Bool.self, forKey: .completed)
         projectId = try values.decode(String.self, forKey: .projectId)
         createdByRecurringTodoId = try values.decode(String.self, forKey: .createdByRecurringTodoId)
     }
@@ -132,6 +135,7 @@ class Todo: ObservableObject, Codable{
         try container.encode(isCompleted, forKey: .isCompleted)
         try container.encode(task, forKey: .task)
         try container.encode(userId, forKey: .userId)
+        try container.encode(completed, forKey: .completed)
         try container.encode(projectId, forKey: .projectId)
         try container.encode(createdByRecurringTodoId, forKey: .createdByRecurringTodoId)
         

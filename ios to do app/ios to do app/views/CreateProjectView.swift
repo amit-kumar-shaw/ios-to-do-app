@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Represents the UI for creating a new project.
 struct CreateProjectView: View {
         
     @Environment(\.tintColor) var tintColor
@@ -62,7 +63,7 @@ struct CreateProjectView: View {
     }
     
     fileprivate func selectLanguageView() -> some View {
-        return Picker(selection: self.$projectInfo.selectedLanguage, label: Text("Language")) {
+        return Picker(selection: self.$projectInfo.selectedLanguage, label: Text("Language").foregroundColor(tintColor)) {
             LanguageList()
         }.onReceive([self.projectInfo.selectedLanguage].publisher.first()) { (value) in
             self.projectInfo.selectedLanguage = value
@@ -72,7 +73,7 @@ struct CreateProjectView: View {
     
     fileprivate func selectColorView() -> some View {
         return VStack{
-            ColorPicker(selection: self.$projectInfo.projectColor,label:{ Text("Color")})
+            ColorPicker(selection: self.$projectInfo.projectColor,label:{ Text("Color").foregroundColor(tintColor)})
             
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(colorPalette, id: \.self){ colorHex in

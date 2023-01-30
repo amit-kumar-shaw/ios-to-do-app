@@ -9,6 +9,8 @@ import CoreData
 import FirebaseAuth
 import SwiftUI
 
+
+/// The HomeView is the main landing page for a user after a successful login. This View struct mainly encapsulates the SearchableView that describes all the components visible on the home view.
 struct HomeView: View {
     @State private var searchText = ""
     var body: some View {
@@ -26,6 +28,7 @@ struct HomeView: View {
     }
 }
 
+/// The SearchableView struct holds all the components visible on the home screen and provides a search functionality for users to search for projects or todos directly from the home screen.
 struct SearchableView: View {
     
     @Environment(\.tintColor) var tintColor
@@ -47,7 +50,7 @@ struct SearchableView: View {
     @State var showTodayView : Bool = false
     
     @Binding public var searchText : String
-    //    @State private var showEnableRemindersModal : Bool = false
+
     @Environment(\.isSearching) private var isSearching
     @Environment(\.dismissSearch) private var dismissSearch
     
@@ -58,6 +61,8 @@ struct SearchableView: View {
     }
     
     
+    /// Returns a View that displays a navigation link to the UpcomingView with an hourglass icon and "Upcoming" text in the specified tintColor.
+    /// - Returns: A View that displays a navigation link to the UpcomingView.
     fileprivate func upcomingList() -> some View {
         return HStack {
             NavigationLink(destination: UpcomingView(), label: {
@@ -67,6 +72,8 @@ struct SearchableView: View {
         }
     }
     
+    /// Returns a View that displays a navigation link to the TodayView with a calendar icon and "Today" text in the specified tintColor. When a deep link with the "widget-deeplink" scheme is opened, the showTodayView binding is set to true.
+    /// - Returns: A View that displays a navigation link to the TodayView and handles deep links.
     fileprivate func todayList() -> some View{
         return HStack {
 
@@ -75,7 +82,7 @@ struct SearchableView: View {
                            isActive: $showTodayView,
                            label: {
                 Image(systemName: "calendar.badge.exclamationmark").foregroundColor(tintColor)
-                Text("Today")
+                Text("Today").foregroundColor(tintColor)
             })
         }.onOpenURL{ url in
             guard url.scheme == "widget-deeplink" else { return }
@@ -96,21 +103,24 @@ struct SearchableView: View {
             NavigationLink(destination: TagView(),
                            label: {
                 Image(systemName: "number.square.fill").foregroundColor(tintColor)
-                Text("Tags")
+                Text("Tags").foregroundColor(tintColor)
             })
         }
     }
     
+    //// Returns the settings navigation link component in a horizontal stack.
+    /// - Returns: A horizontal stack containing the settings navigation link component.
     fileprivate func settingList() -> some View {
         return HStack {
             NavigationLink(destination: SettingsView(), label: {
                 Image(systemName: "gearshape").foregroundColor(tintColor)
-                Text("Settings")
+                //Text("Settings").foregroundColor(tintColor)
             })
         }
     }
     
     
+    /// This viewbuilder uses all functions declared above and builds the final HomeView
     @ViewBuilder var body: some View {
         
         
@@ -166,10 +176,8 @@ struct SearchableView: View {
     
    
     
+    /// Creates a button that opens a modal view to add a new project.
     private var addButton: some View {
-        
-        
-        
         return AnyView(
             Button(action: { self.showModal = true }) {
                 Label("Add Item", systemImage: "plus")
@@ -179,6 +187,7 @@ struct SearchableView: View {
         )
     }
     
+    /// Saves language dictionary for projects
     func saveLanguageDict(){
         
         languageProjectDict = [:]
@@ -200,23 +209,22 @@ struct SearchableView: View {
         
     }
     
+    /// Returns a button that sorts the list of items by language when pressed.
     private var sortByLanguageButton : some View {
         
-       // var isEmpty =  saveLanguageDict.count == 0
         return AnyView(
             Button(action: {
-                
                 saveLanguageDict()
-                    
-                
                 isSortedByLanguage = !isSortedByLanguage }) {
                     Label("SortByLanguage", systemImage: "tray.fill")
-                    
                 }
         )
         
     }
     
+    
+    /// This function returns a grouped view of project lists sorted by language. The view consists of multiple sections, each section contains the projects with the same language, represented by the header and the list of project names in the form of NavigationLink, which redirects to the detailed ProjectListView when clicked.
+    /// - Returns: A view showing a sorted list of projects based on the selected language
     private func sortByLanguage() -> some View {
 
         var languageListsViews = [AnyView]()
@@ -250,6 +258,8 @@ struct SearchableView: View {
     }
     
     
+    /// This function returns a ForEach view which iterates over the projects stored in the viewModel. For each project, a NavigationLink is created that will take the user to the ProjectListView when tapped.
+    /// - Returns: A view showing all projects
     fileprivate func projectList() -> some View {
         return ForEach($viewModel.projects, id: \.0) { $item in
             // navigate to Project to do list

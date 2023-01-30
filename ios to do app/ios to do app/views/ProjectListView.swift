@@ -58,6 +58,7 @@ struct ProjectListView: View {
                         
                     } else {
                         Label("Add Quick Todo", systemImage: "plus")
+                            .foregroundColor(tintColor)
                             .onTapGesture {
                                 showModal = true
                             }
