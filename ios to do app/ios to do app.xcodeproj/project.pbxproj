@@ -14,7 +14,6 @@
 		28B9F4582981A122008C9150 /* TagsInTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F4572981A122008C9150 /* TagsInTodoView.swift */; };
 		28B9F45A2981A6D1008C9150 /* CreateTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9F4592981A6D1008C9150 /* CreateTagView.swift */; };
 		400A2632296D5C6B00FA45E7 /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400A2631296D5C6B00FA45E7 /* TodoView.swift */; };
-		404EC67A296ECFF6006E6D59 /* SlideOverCard in Frameworks */ = {isa = PBXBuildFile; productRef = 404EC679296ECFF6006E6D59 /* SlideOverCard */; };
 		501E1C89297DB9ED00DC2D4E /* UpcomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C88297DB9ED00DC2D4E /* UpcomingView.swift */; };
 		501E1C8F2984740500DC2D4E /* GenericTodoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E1C8E2984740500DC2D4E /* GenericTodoViewModel.swift */; };
 		501E1C96298530F600DC2D4E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501E1C95298530F500DC2D4E /* WidgetKit.framework */; };
@@ -232,7 +231,6 @@
 				7C6826532975CA58002DF5C6 /* FirebaseStorageCombine-Community in Frameworks */,
 				7C6826492975CA58002DF5C6 /* FirebaseAnalytics in Frameworks */,
 				7C68264B2975CA58002DF5C6 /* FirebaseAuth in Frameworks */,
-				404EC67A296ECFF6006E6D59 /* SlideOverCard in Frameworks */,
 				7C68264D2975CA58002DF5C6 /* FirebaseAuthCombine-Community in Frameworks */,
 				7C6826512975CA58002DF5C6 /* FirebaseStorage in Frameworks */,
 			);
@@ -515,7 +513,6 @@
 			);
 			name = "ios to do app";
 			packageProductDependencies = (
-				404EC679296ECFF6006E6D59 /* SlideOverCard */,
 				7C6826482975CA58002DF5C6 /* FirebaseAnalytics */,
 				7C68264A2975CA58002DF5C6 /* FirebaseAuth */,
 				7C68264C2975CA58002DF5C6 /* FirebaseAuthCombine-Community */,
@@ -1157,11 +1154,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		404EC679296ECFF6006E6D59 /* SlideOverCard */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 40B1662F296EC4100071EC12 /* XCRemoteSwiftPackageReference "swiftUI-slide-over-card" */;
-			productName = SlideOverCard;
-		};
 		7C6826482975CA58002DF5C6 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7C6826472975CA58002DF5C6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
