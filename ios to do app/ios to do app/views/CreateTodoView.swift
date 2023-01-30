@@ -37,7 +37,7 @@ struct CreateTodoView: View {
     
     func setAppIcon(tintColor: String, themePrefix: String) {
         Task {
-            await RemindersWidgetUtility.setAppIcon(tintColor: tintColor, themePrefix: themePrefix)
+            await RemindersWidgetAppIconUtil.setAppIcon(tintColor: tintColor, themePrefix: themePrefix)
         }
     }
     
@@ -121,14 +121,13 @@ struct CreateTodoView: View {
                             }
                             self.showBeforeDueDatePicker = true
                         }) {
-                            Label("\(RemindersWidgetUtility.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions {
+                            Label("\(RemindersWidgetAppIconUtil.getRemindMeBeforeDueDateDescription(minutes: viewModel.todo.reminderBeforeDueDate)) before due date", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.slash" : "bell").strikethrough(viewModel.todo.reminderBeforeDueDate < 0).swipeActions {
                                 Button {
                                     viewModel.muteDefaultReminder()
                                 } label: {
                                     Label("Mute", systemImage: viewModel.todo.reminderBeforeDueDate < 0 ? "bell.fill" : "bell.slash.fill")
                                 }.tint(.indigo)
                             }
-                                
                         }.sheet(isPresented: $showBeforeDueDatePicker) {
                             // TimePicker(selectedTime: self.$selectedTime)TimePicker(selectedTime: $viewModel.todo.reminderBeforeDueDate)
                                 

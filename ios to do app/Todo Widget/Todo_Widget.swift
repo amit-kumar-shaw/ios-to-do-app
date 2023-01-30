@@ -21,7 +21,7 @@ struct Provider: IntentTimelineProvider {
         completion(SimpleEntry(date: Date(), upcomingTodos: [SimpleTodo(task: "Example task 1", isCompleted: true, color: "#025ee8"), SimpleTodo(task: "Example task 2", isCompleted: true, color: "#18eb09"), SimpleTodo(task: "Example task 3", isCompleted: true, color: "#e802e0")], configuration: ConfigurationIntent()))
     }
     
-    /// Calculates the timeline of the widget. Uses the UserDefaults to access the timeline that was provided by the RemindersWidgetUtility and decodes the json..
+    /// Calculates the timeline of the widget. Uses the UserDefaults to access the timeline that was provided by the RemindersWidgetAppIconUtil and decodes the json..
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         
         var jsonString = ""
@@ -95,7 +95,7 @@ struct SimpleEntry: TimelineEntry {
 }
 
 
-/// The parent JSON-object which is used for decoding the timeline provided by the RemindersWidgetUtility
+/// The parent JSON-object which is used for decoding the timeline provided by the RemindersWidgetAppIconUtil
 struct UpcomingDays: Decodable {
     let dailyTodos: [DailyTodo]
 }
