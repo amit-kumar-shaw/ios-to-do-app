@@ -87,6 +87,8 @@ class UpcomingViewModel: GenericTodoViewModel {
         $selectedWeekday.receive(on: DispatchQueue.main).sink { weekday in
             do{
                 let (s, e) = try self.determineDateRange(weekday: weekday + 1)
+                self.lastStartDate = s
+                self.lastEndDate = e
                 self.loadList(filter: self.filter, startDate: s, endDate: e)
             }catch {
                 self.error = error
@@ -98,6 +100,7 @@ class UpcomingViewModel: GenericTodoViewModel {
     
     
     func loadList(filter: FilterType, startDate: Date, endDate: Date){
+        lastActiveFilter = filter
         querySubscription?.remove()
         
         guard let currentUserId = Auth.auth().currentUser?.uid else{
@@ -123,7 +126,7 @@ class UpcomingViewModel: GenericTodoViewModel {
             if error != nil {
                 self.showAlert = true
                 self.error = error
-                print("[TodayViewModel][loadList] Error getting todo list \(error!.localizedDescription)")
+                print("[UpcomingViewModel][loadList] Error getting todo list \(error!.localizedDescription)")
                 return
             }
             
@@ -134,7 +137,7 @@ class UpcomingViewModel: GenericTodoViewModel {
                 self.todoList = docs!
                 
             } catch {
-                print("[TodayViewModel][loadList] Error decoding todo list \(error.localizedDescription)")
+                print("[UpcomingViewModel][loadList] Error decoding todo list \(error.localizedDescription)")
                 self.error = error
                 self.showAlert = true
             }
