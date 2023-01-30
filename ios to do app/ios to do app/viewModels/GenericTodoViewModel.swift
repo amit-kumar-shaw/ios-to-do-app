@@ -145,6 +145,38 @@ class GenericTodoViewModel: ObservableObject {
 
     }
     
+    func deleteSelection(indexSet: IndexSet?){
+        let db = Firestore.firestore()
+        
+        guard let indexes = indexSet else {
+            return
+        }
+    
+            let selectedRefrences = indexes.map { index in
+                let id = todoList[index].0
+                return db.document("/todos/\(id)")
+            }
+       
+        
+        db.runTransaction { transaction, err in
+            
+            for d in selectedRefrences {
+                transaction.deleteDocument(d);
+            }
+            
+            return nil
+        } completion: { _, err in
+            guard err != nil else {
+                print("saved chages!");
+                return
+            }
+            
+            self.error = err;
+            self.showAlert = true
+        }
+
+    }
+    
     
     /// loads all todos for the current user and saves them as self.unfilteredTodoList.  This list is mainly needed because of the cloneRecurringTodoIfNecessary-function.
     func loadUnfilteredList(){

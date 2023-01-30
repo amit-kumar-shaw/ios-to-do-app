@@ -34,7 +34,7 @@ struct TodayView: View {
                                 viewModel.saveTodo(entityId: item.0, todo: item.1)
                                 viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
                             }
-                        }
+                        }.onDelete(perform: viewModel.deleteSelection)
                     }
                 }
             }.listStyle(.insetGrouped)

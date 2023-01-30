@@ -68,7 +68,7 @@ struct SearchableView: View {
                            isActive: $showTodayView,
                            label: {
                 Image(systemName: "calendar.badge.exclamationmark").foregroundColor(tintColor)
-                Text("Today").foregroundColor(tintColor)
+                Text("Today")
             })
         }.onOpenURL{ url in
             guard url.scheme == "widget-deeplink" else { return }
@@ -83,7 +83,7 @@ struct SearchableView: View {
             NavigationLink(destination: TagView(),
                            label: {
                 Image(systemName: "number.square.fill").foregroundColor(tintColor)
-                Text("Tags").foregroundColor(tintColor)
+                Text("Tags")
             })
         }
     }
@@ -92,7 +92,7 @@ struct SearchableView: View {
         return HStack {
             NavigationLink(destination: SettingsView(), label: {
                 Image(systemName: "gearshape").foregroundColor(tintColor)
-                Text("Settings").foregroundColor(tintColor)
+                Text("Settings")
             })
         }
     }
