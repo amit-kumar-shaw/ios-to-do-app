@@ -11,6 +11,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
+
 class TodoListViewModel: GenericTodoViewModel {
     @Published var filter: FilterType = .all
     @Published var dateFilter: Date?
@@ -65,10 +66,13 @@ class TodoListViewModel: GenericTodoViewModel {
             let completedTodos = self.todoList.filter { $0.1.isCompleted }.count
             self.progress = Double(completedTodos) / Double(totalTodos)
         }.store(in: &cancelables)
-    }    
+    }
     
     
     
+    
+    
+    /// 
     func loadList() {
         guard let currentUserId = auth.currentUser?.uid else {
             error = AuthError()
@@ -82,8 +86,8 @@ class TodoListViewModel: GenericTodoViewModel {
         var queryRef: Query
         
         switch filter {
-            case .completed: queryRef = collectionRef.whereField("completed", isEqualTo: true)
-            case .incomplete: queryRef = collectionRef.whereField("completed", isEqualTo: false)
+            case .completed: queryRef = collectionRef.whereField("isCompleted", isEqualTo: true)
+            case .incomplete: queryRef = collectionRef.whereField("isCompleted", isEqualTo: false)
             default: queryRef = collectionRef
         }
         
