@@ -40,8 +40,11 @@ struct ProjectListRow: View {
             
             Circle().frame(width: 12, height: 12)
                 .overlay(
-                    Circle().foregroundColor(Color(hex: project!.colorHexString ?? "#FFFFFF"))
-                        .frame(width: 10, height: 10)
+                    Circle()
+                        .stroke(Color(hex: project!.colorHexString ?? "#FFFFFF"), lineWidth: 10)
+                        .foregroundColor(Color(hex: project!.colorHexString ?? "#FFFFFF"))
+                        .frame(width: 6, height: 6)
+                        
                 )
             
             Text(project!.projectName ?? "Untitled")
