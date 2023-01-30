@@ -32,6 +32,11 @@ struct TodoRow: View {
                 NavigationLink(destination: TodoDetail(entityId: item.0)){
                     HStack {
                         Text(item.1.task)
+                        Text(item.1.priority.rawValue)
+                            .font(.caption2)
+                            .padding(.horizontal, 4)
+                            .background(item.1.priority == .high ? .red : item.1.priority == .medium ? .orange : .yellow)
+                            .cornerRadius(16)
                         Spacer()
                         
                     }

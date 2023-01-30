@@ -27,20 +27,24 @@ struct HomeView: View {
 }
 
 struct SearchableView: View {
+    
     @Environment(\.tintColor) var tintColor
+    
     @State private var offset: CGFloat = 0
     @State private var searchTerm = ""
    
     @State private var showModal = false
     @State var isSortedByLanguage = false
     @State private var languageProjectDict = [String:[(String,Binding<Project?>)]]()
-    @Binding public var searchText : String
+ 
+    @State var projectForBinding :Project? = Project()
     
     @ObservedObject var viewModel = ProjectViewModel()
     @ObservedObject var todoViewModel = TodoListViewModel()
     
     @State var showTodayView : Bool = false
     
+    @Binding public var searchText : String
     //    @State private var showEnableRemindersModal : Bool = false
     @Environment(\.isSearching) private var isSearching
     @Environment(\.dismissSearch) private var dismissSearch
@@ -104,14 +108,11 @@ struct SearchableView: View {
         List {
             if (!isSearching) {
                 
+                todayList()
                 
                 upcomingList()
                 
-                todayList()
-                
                 tagList()
-                
-                settingList()
                 
                 if self.isSortedByLanguage {
                     // Projects Section sorted by language
@@ -142,6 +143,9 @@ struct SearchableView: View {
             ToolbarItem(placement: .automatic) {
                 addButton
             }
+            ToolbarItem(placement: .automatic) {
+                settingList()
+            }
             
         }
         .navigationTitle("Welcome")
@@ -155,7 +159,7 @@ struct SearchableView: View {
     
     private var addButton: some View {
         
-        @State var projectForBinding :Project? = Project()
+        
         
         return AnyView(
             Button(action: { self.showModal = true }) {

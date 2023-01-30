@@ -9,7 +9,7 @@ import SwiftUI
 
 ///View which allows the selection of a due date
 struct SelectDueDateView: View {
-    
+    @Environment(\.dismiss) var dismiss
     ///Due date
     @State var date: Date
     ///Selection handler
@@ -23,6 +23,7 @@ struct SelectDueDateView: View {
                 DatePicker(selection: $date, in: Date()..., displayedComponents: [.date, .hourAndMinute]) {
                 }.datePickerStyle(.graphical)
             Button("Save", action: {
+                dismiss()
                 onSelect(date)
             }).buttonStyle(.automatic).padding()
         }

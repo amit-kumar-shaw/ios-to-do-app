@@ -255,7 +255,6 @@ class GenericTodoViewModel: ObservableObject {
                     }
                     copiedTodo.dueDate = newDueDate
                     copiedTodo.startDate = newStartDate
-                    print("YES")
                     break
                 }
             }
@@ -279,9 +278,6 @@ class GenericTodoViewModel: ObservableObject {
         // set createdByRecurringTodoId
         
         copiedTodo.createdByRecurringTodoId = entityId
-        
-        print(copiedTodo.dueDate)
-        print(copiedTodo.startDate)
         
         let db = Firestore.firestore()
         let newDocRef = db.collection("todos").document()

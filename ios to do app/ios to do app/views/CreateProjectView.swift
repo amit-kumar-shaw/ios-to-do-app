@@ -35,14 +35,14 @@ struct CreateProjectView: View {
     }
     
     
-    private let colorPalette : [String] = ["#FFCA3A","#109648","#AB4E68","#B8B8FF","#F4A261","#FF595E","#8338EC","#3A86FF","#00AFB9"]
+    private let colorPalette : [String] = ["#d6542c","#eda28a","#124c81","#4e6190","#99a8bb","#3c345c","#a3c024","#f6bd74","#a098c2","#3c3c34","#afa356","#71a511"]
     private let columns = [GridItem(.adaptive(minimum: 80))]
     
     
     
     fileprivate func selectProjectNameView() -> some View {
         return VStack{
-            Text("Project Name")
+            Text("Create Project")
                 .bold()
                 .font(.title)
                 .foregroundColor(tintColor)

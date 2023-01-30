@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/// The View to choose shows homeView or LoginScreen
 struct ContentView: View {
     @StateObject var autheniticationViewModel = AuthenticationViewModel()
     var tintColor: Color
@@ -16,6 +16,7 @@ struct ContentView: View {
     }
     
     var body: some View {
+        /// if login then show the HomeView
         if(autheniticationViewModel.isAuthenticated){
             HomeView().tint(tintColor)
         }else{
