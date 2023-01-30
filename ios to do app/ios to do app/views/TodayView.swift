@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TodayView: View {
     
+    @Environment(\.editMode) var editMode
     @ObservedObject var viewModel: TodayViewModel
     
     init(){
@@ -17,7 +18,7 @@ struct TodayView: View {
     
     var body: some View {
         VStack {
-            List{
+            List(selection: $viewModel.selection){
                 
                 Section{
                     header
@@ -29,39 +30,17 @@ struct TodayView: View {
                     }else {
                         ForEach($viewModel.todoList, id: \.0, editActions: .delete){
                             $item in
-                            HStack{
-                                Checkbox(isChecked: $item.1.isCompleted) {
-                                    viewModel.saveTodo(entityId: item.0, todo: item.1)
-                                    viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
-                                }
-                                NavigationLink(destination: TodoDetail(entityId: item.0)){
-                                    HStack {
-                                        Text(item.1.task)
-                                        Spacer()
-                                        
-                                    }
-                                }
+                            TodoRow(item: $item).onChange(of: item.1.isCompleted) { newValue in
+                                viewModel.saveTodo(entityId: item.0, todo: item.1)
+                                viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
                             }
                         }
                     }
                 }
             }.listStyle(.insetGrouped)
             
-            HStack {
-                Picker(selection: $viewModel.filter, label: Text("Filter"), content: {
-                    ForEach(FilterType.allCases, id: \.self) { v in
-                        Text(v.localizedName).tag(v)
-                    }
-                }).onChange(of: viewModel.filter) { newFilter in
-                    viewModel.loadList(filter: newFilter)
-                }
-                NavigationLink {
-                    CreateTodoView()
-                } label: {
-                    Text("Add").padding()
-                }
-            }
-            .padding()
+            bottomBar
+            
         }.alert("Error: \(self.viewModel.error?.localizedDescription ?? "")", isPresented: $viewModel.showAlert) {
             Button("Ok", role: .cancel){
                 self.viewModel.showAlert = false;
@@ -72,6 +51,55 @@ struct TodayView: View {
         }.navigationTitle("Today")
     }
     
+    var bottomBar: some View {
+        HStack {
+            if(editMode?.wrappedValue == EditMode.active){
+                Spacer()
+                VerticalLabelButton("Project", systemImage: "folder.fill", action: {
+                    viewModel.showMoveToProject = true
+                }).sheet(isPresented: $viewModel.showMoveToProject) {
+                    SelectProjectView { projectId, _ in
+                        viewModel.selectionMoveToProject(projectId: projectId)
+                    }
+                }
+                Spacer()
+                VerticalLabelButton("Priority", systemImage: "exclamationmark.circle.fill") {
+                    viewModel.showChangePriority = true
+                }.sheet(isPresented: $viewModel.showChangePriority) {
+                    SelectPriorityView(priority: .medium) { newPriority in
+                        viewModel.selectionChangePriority(newPriority: newPriority)
+                    }
+                }
+                Spacer()
+                VerticalLabelButton("Due date", systemImage: "calendar.badge.clock") {
+                    viewModel.showChangeDueDate = true
+                }.sheet(isPresented: $viewModel.showChangeDueDate) {
+                    SelectDueDateView(date: Date()) { newDate in
+                        viewModel.selectionChangeDueDate(newDueDate: newDate)
+                    }
+                }
+                Spacer()
+                
+
+            } else {
+                
+                Picker(selection: $viewModel.filter, label: Text("Filter"), content: {
+                    ForEach(FilterType.allCases, id: \.self) { v in
+                        Text(v.localizedName).tag(v)
+                    }
+                }).onChange(of: viewModel.filter) { newFilter in
+                    viewModel.loadList(filter: newFilter)
+                }
+                Spacer()
+                NavigationLink {
+                    CreateTodoView()
+                } label: {
+                    Text("Add")
+                }
+            }
+        }.padding(.horizontal, 20)
+    }
+    
     var header: some View {
         VStack(alignment: .center) {
             Text("\(Int(viewModel.progress * 100))%")
@@ -80,12 +108,6 @@ struct TodayView: View {
                 .font(.system(size: 18, design: .rounded)).textCase(.uppercase)
         }
         .frame(width: UIScreen.main.bounds.width)
-//        HStack(alignment: .center) {
-//                Text("Today")
-//                    .font(.system(size: 50, weight: .ultraLight, design: .rounded))
-//                    .frame(width: UIScreen.main.bounds.width * 0.6)
-//
-//        }.padding(.top, 50)
     }
     
     func emptyView()-> AnyView {
@@ -113,3 +135,5 @@ struct TodayView_Previews: PreviewProvider {
         TodayView()
     }
 }
+
+

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-
+/// View to list, select and create tags
 struct TagsInTodoView: View {
     @Environment(\.tintColor) var tintColor
     
@@ -15,6 +15,10 @@ struct TagsInTodoView: View {
     @ObservedObject var viewModel: TagViewModel
     @State private var showModal = false
     
+    /// Creates an instance with the given todoId.
+    ///
+    /// - Parameters:
+    ///   - todoId: Id of the todo to list the tags
     init(todoId: String) {
         self.todoId = todoId
         viewModel = TagViewModel()
@@ -25,8 +29,9 @@ struct TagsInTodoView: View {
             if viewModel.error != nil {
                 Text(viewModel.error?.localizedDescription ?? "")
             } else {
-                                
+                
                 List {
+                    /// list the selected tags
                     Section(header: Text("Selected Tags")) {
                         ForEach($viewModel.tags, id: \.0) { $item in
                             if item.1!.todos.contains(todoId) {
@@ -61,7 +66,7 @@ struct TagsInTodoView: View {
                                 }
                         }
                     }
-                                
+                    /// list the avaialbe tags which are not selected
                     Section(header: Text("Available Tags")) {
                         ForEach($viewModel.tags, id: \.0) { $item in
                             if !item.1!.todos.contains(todoId) {
@@ -89,7 +94,8 @@ struct TagsInTodoView: View {
                         
                     }
                     
-                }
+                }.navigationTitle("Tags")
+                
             }
         }
     }

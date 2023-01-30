@@ -11,7 +11,7 @@ import FirebaseFirestoreSwift
 import Combine
 
 
-class ProjectListViewModel: ObservableObject {
+class ProjectListViewModel: GenericTodoViewModel {
     
     let projectId: String
     private var cancelables: [AnyCancellable] = []
@@ -20,15 +20,13 @@ class ProjectListViewModel: ObservableObject {
     
     
     @Published var filter: FilterType = .all
-    @Published var error: Error?
-    @Published var showAlert = false
     @Published var progress: Double = 0.0
-    @Published var todoList: [(String, Todo)] = []
     @Published var project: Project?
     private var db = Firestore.firestore()
     
     init(projectId: String){
         self.projectId = projectId
+        super.init()
         
         setupBindings()
         loadProject()
@@ -36,9 +34,9 @@ class ProjectListViewModel: ObservableObject {
     }
     
     func setupBindings(){
-//        $filter.receive(on: DispatchQueue.main).sink { filter in
-//            self.loadList(filter: filter)
-//        }.store(in: &cancelables)
+        $filter.receive(on: DispatchQueue.main).sink { filter in
+            self.loadList(filter: filter)
+        }.store(in: &cancelables)
         
         $todoList.receive(on: DispatchQueue.main).sink{
             list in

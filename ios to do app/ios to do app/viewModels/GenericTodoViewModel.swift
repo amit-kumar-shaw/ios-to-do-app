@@ -14,21 +14,139 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
+
+/// This view model is the basis for the TodayViewModel, UpcomingViewModel and TodoListView model. It has a filtered and unfiltered list of todos and provides a saving functionality as well as a method that clones recurring todos if necessary
 class GenericTodoViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var error: Error?
     @Published var todoList: [(String, Todo)] = []
     @Published var unfilteredTodoList: [(String, Todo)] = []
+    
+    @Published var selection = Set<String>()
+    
+    @Published var showMoveToProject = false
+    @Published var showChangeDueDate = false
+    @Published var showChangePriority = false
+    
     private var querySubscription: ListenerRegistration?
 
     init() {
         self.loadUnfilteredList()
     }
     
+    /// should reload all todo lists and should therefore also be overidden by subclasses
     func refresh() {
         self.loadUnfilteredList()
     }
     
+    func selectionMoveToProject(projectId: String?){
+        let db = Firestore.firestore()
+        
+        
+        
+        guard !selection.isEmpty else {
+            return
+        }
+        
+        let selectedEntries = todoList.filter { (id, todo) in
+            selection.contains(id)
+        }
+        
+        
+        db.runTransaction { transaction, error in
+            let refrences = selectedEntries.map { (id, _) in
+                
+                db.document("/todos/\(id)")
+            }
+            
+            for d in refrences{
+                transaction.updateData(["projectId" : projectId ?? ""], forDocument: d)
+            }
+            return nil
+        } completion: {_,_ in
+            print("successfully saved changes")
+        }
+
+        
+    }
+    
+    func selectionChangeDueDate(newDueDate: Date){
+        let db = Firestore.firestore()
+        
+        
+        
+        guard !selection.isEmpty else {
+            return
+        }
+        
+        let selectedEntries = todoList.filter { (id, todo) in
+            selection.contains(id)
+        }
+        
+        
+        db.runTransaction { transaction, error in
+            let refrences = selectedEntries.map { (id, _) in
+                
+                db.document("/todos/\(id)")
+            }
+            
+            for d in refrences{
+                transaction.updateData(["dueDate" : newDueDate.ISO8601Format()], forDocument: d)
+            }
+            
+            return nil
+        } completion: {_,err in
+            guard err != nil else {
+                print("saved chages!");
+                return
+            }
+            
+            self.error = err;
+            self.showAlert = true
+        }
+
+        
+    }
+    
+    func selectionChangePriority(newPriority: Priority){
+        let db = Firestore.firestore()
+        
+        
+        
+        guard !selection.isEmpty else {
+            return
+        }
+        
+        let selectedEntries = todoList.filter { (id, todo) in
+            selection.contains(id)
+        }
+        
+        
+        db.runTransaction { transaction, error in
+            let refrences = selectedEntries.map { (id, _) in
+                
+                db.document("/todos/\(id)")
+            }
+            
+            for d in refrences{
+                transaction.updateData(["priority" : newPriority.rawValue], forDocument: d)
+            }
+            
+            return nil
+        } completion: {_,err in
+            guard err != nil else {
+                print("saved chages!");
+                return
+            }
+            
+            self.error = err;
+            self.showAlert = true
+        }
+
+    }
+    
+    
+    /// loads all todos for the current user and saves them as self.unfilteredTodoList.  This list is mainly needed because of the cloneRecurringTodoIfNecessary-function.
     func loadUnfilteredList(){
         querySubscription?.remove()
         
@@ -64,6 +182,11 @@ class GenericTodoViewModel: ObservableObject {
         
     }
     
+    
+    /// Recurring todos should be duplicated when marking them as done. This function takes care of this and also makes sure that a todo can't be duplicated twice if the checkmark is toggled mutiple times
+    /// - Parameters:
+    ///   - entityId: id of the todo that might be clonsed
+    ///   - todo: the todo object that might be cloned
     func cloneRecurringTodoIfNecessary(entityId : String, todo : Todo) {
         
         // only clone when todo is marked done and is recurring
@@ -145,6 +268,11 @@ class GenericTodoViewModel: ObservableObject {
         
     }
     
+    
+    /// This function saves a specific todo to the firestore database. It's mainly used to save the current state of "isCompleted" when the checkmark is pressed.
+    /// - Parameters:
+    ///   - entityId: the id of the todo that should be saved
+    ///   - todo: the todo object that should be saved
     func saveTodo(entityId : String, todo : Todo) {
         let db = Firestore.firestore()
         do {

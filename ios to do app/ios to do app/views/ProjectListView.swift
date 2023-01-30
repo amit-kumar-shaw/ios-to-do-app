@@ -5,40 +5,53 @@
 //  Created by Cristi Conecini on 24.01.23.
 //
 
+// ProjectListView.swift
+// ios to do app
+//
+// Created by Cristi Conecini on 24.01.23.
+
 import SwiftUI
 
+/// The ProjectListView is a View that displays the list of to-dos for a given project, and allows you to perform various operations on the to-dos such as edit, add, and filter.
 struct ProjectListView: View {
+    /// The `tintColor` is the color used for various visual elements in the view, such as the add button.
     @Environment(\.tintColor) var tintColor
     
+    /// The `editMode` environment determines whether the view is in editing mode or not.
+    @Environment(\.editMode) var editMode
+    
+    /// The `viewModel` is an `ObservedObject` that contains the logic and data for the view.
     @ObservedObject var viewModel: ProjectListViewModel
+    
+    /// The `projectId` parameter specifies the ID of the project for which the list of to-dos is being displayed.
     var projectId: String
+    
+    /// The `showModal` state property determines whether the quick to-do creation modal is shown or not.
     @State private var showModal = false
+    
+    /// The `selectedFilter` state property determines the selected filter type for the list of to-dos.
     @State var selectedFilter: FilterType = .all
     
+    /// The `init` method initializes the view with a given `projectId`.
     init(projectId: String){
         self.projectId = projectId
         viewModel = ProjectListViewModel(projectId: projectId)
     }
     
+    /// The `body` property defines the content and layout of the view.
     var body: some View {
         VStack {
-            List{
+            List(selection: $viewModel.selection){
                 Section{
                     header
                 }
                 Section{
-                    ForEach($viewModel.todoList, id: \.0, editActions: .all){
+                    ForEach($viewModel.todoList, id: \.0, editActions: .delete){
                         $item in
-                        NavigationLink(destination: TodoDetail(entityId: item.0)){
-                            HStack {
-                                Text(item.1.task)
-                                Spacer()
-                                Checkbox(isChecked: $item.1.isCompleted, onToggle: {
-                                    viewModel.saveTodo(entityId: item.0, Todo: item.1)
-                                }
-                                )
+                            TodoRow(item: $item).onChange(of: item.1.isCompleted) { newValue in
+                                viewModel.saveTodo(entityId: item.0, todo: item.1)
+                                viewModel.cloneRecurringTodoIfNecessary(entityId: item.0, todo: item.1)
                             }
-                        }
                     }
                     if showModal {
                         CreateQuickTodoView(projectId: self.projectId, show: $showModal)
@@ -52,25 +65,59 @@ struct ProjectListView: View {
                     }
                 }
             }
-            .overlay(content: emptyView)
             
-            //TodoList(selectedFilter, self.project.0).listStyle(.inset)
             
             HStack {
-                Picker(selection: $viewModel.filter, label: Text("Filter"), content: {
-                    ForEach(FilterType.allCases, id: \.self) { v in
-                        Text(v.localizedName).tag(v)
+                
+                if editMode?.wrappedValue == EditMode.active {
+                    Spacer()
+                    /// The `VerticalLabelButton` is a button that displays a label and an icon vertically.
+                    ///
+                    /// - Parameters:
+                    ///   - label: The text displayed on the button.
+                    ///   - systemImage: The system image displayed on the button.
+                    ///   - action: The action to perform when the button is tapped.
+                    VerticalLabelButton("Project", systemImage: "folder.fill", action: {
+                        viewModel.showMoveToProject = true
+                    }).sheet(isPresented: $viewModel.showMoveToProject) {
+                        SelectProjectView { projectId, _ in
+                            viewModel.selectionMoveToProject(projectId: projectId)
+                        }
+                    }.disabled(viewModel.selection.count == 0)
+                    Spacer()
+                    VerticalLabelButton("Priority", systemImage: "exclamationmark.circle.fill") {
+                        viewModel.showChangePriority = true
+                    }.sheet(isPresented: $viewModel.showChangePriority) {
+                        SelectPriorityView(priority: .medium) { newPriority in
+                            viewModel.selectionChangePriority(newPriority: newPriority)
+                        }
+                    }.disabled(viewModel.selection.count == 0)
+                    Spacer()
+                    VerticalLabelButton("Due date", systemImage: "calendar.badge.clock") {
+                        viewModel.showChangeDueDate = true
+                    }.sheet(isPresented: $viewModel.showChangeDueDate) {
+                        SelectDueDateView(date: Date()) { newDate in
+                            viewModel.selectionChangeDueDate(newDueDate: newDate)
+                        }
+                    }.disabled(viewModel.selection.count == 0)
+                    Spacer()
+                } else {
+                    Picker(selection: $viewModel.filter, label: Text("Filter"), content: {
+                        ForEach(FilterType.allCases, id: \.self) { v in
+                            Text(v.localizedName).tag(v)
+                        }
+                    }).onChange(of: viewModel.filter) { newFilter in
+                        viewModel.loadList(filter: newFilter)
                     }
-                }).onChange(of: viewModel.filter) { newFilter in
-                    viewModel.loadList(filter: newFilter)
-                }
-                NavigationLink {
-                    CreateTodoView(projectId: projectId)
-                } label: {
-                    Text("Add").padding()
+                    Spacer()
+                    NavigationLink {
+                        CreateTodoView(projectId: projectId)
+                    } label: {
+                        Text("Add")
+                    }
                 }
             }
-            .padding()
+            .padding(.horizontal,20)
         }.alert("Error: \(self.viewModel.error?.localizedDescription ?? "")", isPresented: $viewModel.showAlert) {
             Button("Ok", role: .cancel){
                 self.viewModel.showAlert = false;
@@ -78,7 +125,7 @@ struct ProjectListView: View {
             }
         }.toolbar {
             EditButton()
-        }.navigationTitle(viewModel.project?.projectName ?? "Project Title")
+        }.navigationTitle(viewModel.project?.projectName ?? "Project")
     }
     
     var header: some View {
@@ -90,24 +137,6 @@ struct ProjectListView: View {
             }.frame(width: UIScreen.main.bounds.width)
     }
     
-    func emptyView()-> AnyView {
-        
-        if viewModel.todoList.isEmpty {
-                switch(viewModel.filter){
-                case .all: return AnyView(VStack{
-                    
-                    NavigationLink {
-                        CreateTodoView(projectId: projectId)
-                    } label: {
-                        Label("New Todo", systemImage: "plus")
-                    }.buttonStyle(.bordered)
-                })
-                case .incomplete: return AnyView(Text("No incomplete todos"))
-                case .completed: return AnyView(Text("No completed todos"))
-                }
-        }
-        return AnyView(EmptyView())
-    }
 }
 
 struct ProjectListView_Previews: PreviewProvider {

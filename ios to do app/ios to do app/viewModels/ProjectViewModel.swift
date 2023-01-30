@@ -28,6 +28,8 @@ class ProjectViewModel : ObservableObject {
     @Published var showAlert = false
     @Published var showReminderEditor = false
     
+    @Published var selection: String?
+    
     
     private var cancelables: [AnyCancellable] = []
     

@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
+/// View to display search results of matching Projects and Todos
 struct SearchView: View {
     
     @Binding var searchText: String
@@ -17,72 +18,30 @@ struct SearchView: View {
     
     
     var body: some View {
-
             
-            
-            Section(header: Text("Projects").font(.headline).foregroundColor(.accentColor)) {
-                ForEach($projectViewModel.projects, id: \.0) { $item in
-                    
-                    if let _ = item.1!.projectName!.range(of: searchText, options: .caseInsensitive) {
-                        NavigationLink(destination: ProjectListView(projectId: item.0)) {
-                            ProjectListRow(project: (item.0, $item.1))
-                        }
-                    }
-                }.headerProminence(.standard)
-            }.padding(.bottom)
-        
-            
-            
-            Section(header: Text("Todos").font(.headline).foregroundColor(.accentColor)) {
+        /// List all the matching projects
+        Section(header: Text("Projects").font(.headline).foregroundColor(.accentColor)) {
+            ForEach($projectViewModel.projects, id: \.0) { $item in
                 
-                
-                ForEach($todoViewModel.todoList, id: \.0, editActions: .all){
-                    $item in
-                    if item.1.task.range(of: searchText, options: .caseInsensitive) != nil {
-                        
-                        //self.onNavigateToTodo(item.0)
-                        
-                        NavigationLink(destination: TodoDetail(entityId: item.0)){
-                 
-                            HStack {
-                                    Text(item.1.task)
-                                    Spacer()
-                                    Button(action: {}) {
-                                        Checkbox(isChecked: ($item.1.isCompleted), onToggle: {
-                                            todoViewModel.saveTodo(entityId: item.0, todo: item.1)
-                                        })
-                                    }
-                                    
-                                }
-                        
-                        
-                        }
+                if let _ = item.1!.projectName!.range(of: searchText, options: .caseInsensitive) {
+                    NavigationLink(destination: ProjectListView(projectId: item.0)) {
+                        ProjectListRow(project: (item.0, $item.1))
                     }
                 }
+            }.headerProminence(.standard)
+        }.padding(.bottom)
+            
+        
+        /// List all the matching Todos
+        Section(header: Text("Todos").font(.headline).foregroundColor(.accentColor)) {
+            
+            
+            ForEach($todoViewModel.todoList, id: \.0, editActions: .all){
+                $item in
+                if item.1.task.range(of: searchText, options: .caseInsensitive) != nil {
+                        TodoRow(item: $item)
+                }
             }
-        
-            
-          
-            
-//            Section(header: Text("Todos")) {
-//                ForEach($todoViewModel.todoList, id: \.0) { $item in
-//                        if let range = item.1!.task!.range(of: searchText, options: .caseInsensitive) {
-//                            NavigationLink(destination: ProjectListView(projectId: item.0)) {
-//                            ProjectListRow(project: item.1!)
-//                        }
-//
-//                    }
-//                }
-//            }
-                
-            
-  
-        
+        }
     }
 }
-
-//struct SearchView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SearchView(searchText: "")
-//    }
-//}

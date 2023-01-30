@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 import SwiftUI
 
-
+/// Model for a Tag
 class Tag: ObservableObject, Codable {
     
     @Published var userId: String?
