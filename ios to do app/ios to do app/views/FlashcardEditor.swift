@@ -6,14 +6,22 @@
 //
 
 import SwiftUI
+
+/// View to add a new Flashcard
 struct FlashcardEditor: View {
     @ObservedObject private var flashcard: Flashcard
     @ObservedObject var viewModel: TodoEditorViewModel
-
+    
+    /// Creates an instance with the given viewModel.
+    ///
+    /// - Parameters:
+    ///   - viewModel: ViewModel of the Todo
     init (viewModel: TodoEditorViewModel) {
         self.flashcard = Flashcard()
         self.viewModel = viewModel
     }
+    
+    /// Adds the flashcard to todo
     func saveFlashcard() {
         viewModel.addFlashcard(flashcard: flashcard)
         viewModel.toggleFlashcardEditor()

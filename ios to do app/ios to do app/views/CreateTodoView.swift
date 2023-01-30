@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-/// View which allows the creation of todos
+/// View which allows the creation of todos with details
 struct CreateTodoView: View {
     @Environment(\.presentationMode) var presentation
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
@@ -202,7 +202,8 @@ private var reminderDateFormatter: DateFormatter {
     formatter.timeStyle = .short
     return formatter
 }
-    
+
+/// View which allows the creation of todos quickly with task name
 struct CreateQuickTodoView: View {
     @Environment(\.tintColor) var tintColor
         
