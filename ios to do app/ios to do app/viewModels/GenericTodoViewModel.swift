@@ -228,7 +228,7 @@ class GenericTodoViewModel: ObservableObject {
     ///   - entityId: id of the todo that might be clonsed
     ///   - todo: the todo object that might be cloned
     func cloneRecurringTodoIfNecessary(entityId : String, todo : Todo) {
-        semaphore.wait()
+        // semaphore.wait()
         // only clone when todo is marked done and is recurring
         if !todo.isCompleted || todo.recurring == .none {
             return
@@ -300,7 +300,7 @@ class GenericTodoViewModel: ObservableObject {
         // done
         self.refresh()
         self.objectWillChange.send()
-        semaphore.signal()
+        //        semaphore.signal()
         
     }
     
